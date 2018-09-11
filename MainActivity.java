@@ -319,16 +319,16 @@ public class MainActivity extends AppCompatActivity {
         Intent skipButtonIntent = new Intent(this, ActionReceiver.class);
         skipButtonIntent.putExtra("action", "Skip");
 
-        Intent startPauseButtonIntent = new Intent(this, ActionReceiver.class);
-        startPauseButtonIntent.putExtra("action", "StartPause");
+        Intent pauseResumeButtonIntent = new Intent(this, ActionReceiver.class);
+        pauseResumeButtonIntent.putExtra("action", "PauseResume");
 
         Intent stopButtonIntent = new Intent(this, ActionReceiver.class);
         stopButtonIntent.putExtra("action", "Stop");
 
         PendingIntent skipButtonPendingIntent = PendingIntent.getBroadcast(this, 1,
                 skipButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent startPauseButtonPendingIntent = PendingIntent.getBroadcast(this, 2,
-                startPauseButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pauseResumeButtonPendingIntent = PendingIntent.getBroadcast(this, 2,
+                pauseResumeButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent stopButtonPendingIntent = PendingIntent.getBroadcast(this, 3,
                 stopButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -339,8 +339,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setOngoing(true)
                 .setShowWhen(false)
+                .addAction(R.drawable.ic_play_button, getString(R.string.start), pauseResumeButtonPendingIntent)
                 .addAction(R.drawable.ic_skip_button, getString(R.string.skip), skipButtonPendingIntent)
-                .addAction(R.drawable.ic_play_button, getString(R.string.start), startPauseButtonPendingIntent)
                 .addAction(R.drawable.ic_stop_button, getString(R.string.stop), stopButtonPendingIntent);
 
         Intent intent = new Intent(this, MainActivity.class);
