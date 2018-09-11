@@ -319,7 +319,18 @@ public class MainActivity extends AppCompatActivity {
         Intent skipButtonIntent = new Intent(this, ActionReceiver.class);
         skipButtonIntent.putExtra("action", "Skip");
 
-        PendingIntent skipButtonPendingIntent = PendingIntent.getBroadcast(this, 1, skipButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent startPauseButtonIntent = new Intent(this, ActionReceiver.class);
+        startPauseButtonIntent.putExtra("action", "StartPause");
+
+        Intent stopButtonIntent = new Intent(this, ActionReceiver.class);
+        stopButtonIntent.putExtra("action", "Stop");
+
+        PendingIntent skipButtonPendingIntent = PendingIntent.getBroadcast(this, 1,
+                skipButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent startPauseButtonPendingIntent = PendingIntent.getBroadcast(this, 2,
+                startPauseButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent stopButtonPendingIntent = PendingIntent.getBroadcast(this, 3,
+                stopButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_TIMER)
                 .setSmallIcon(R.drawable.ic_logo)
@@ -328,9 +339,9 @@ public class MainActivity extends AppCompatActivity {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setOngoing(true)
                 .setShowWhen(false)
-                .addAction(R.drawable.ic_skip_button, getString(R.string.skip), skipButtonPendingIntent);
-//                .addAction(R.drawable.ic_play_button, getString(R.string.start), startPauseButtonPendingIntent)
-//                .addAction(R.drawable.ic_stop_button, getString(R.string.stop), stopButtonPendingIntent);
+                .addAction(R.drawable.ic_skip_button, getString(R.string.skip), skipButtonPendingIntent)
+                .addAction(R.drawable.ic_play_button, getString(R.string.start), startPauseButtonPendingIntent)
+                .addAction(R.drawable.ic_stop_button, getString(R.string.stop), stopButtonPendingIntent);
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);

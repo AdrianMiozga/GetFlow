@@ -6,25 +6,22 @@ import android.content.Intent;
 import android.util.Log;
 
 public class ActionReceiver extends BroadcastReceiver {
+    private static final String TAG = ActionReceiver.class.getSimpleName();
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra("action");
 
-        Log.d("Wentura", "" + intent.getStringExtra("action"));
-
-        Intent intentMainActivity = new Intent(context, MainActivity.class);
-        intent.putExtra("attachMedia", true);
-        context.startActivity(intentMainActivity);
-
         switch (action) {
             case "Skip":
-                Log.d("Log", "Skip");
+                Log.d(TAG, "Skip");
                 break;
             case "StartPause":
-                Log.d("Log", "StartPause");
+                Log.d(TAG, "StartPause");
                 break;
             case "Stop":
-                Log.d("Log", "Stop");
+//                TimerUtils.stopTimer();
+                Log.d(TAG, "Stop");
                 break;
         }
         Intent closeNotificationTray = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
