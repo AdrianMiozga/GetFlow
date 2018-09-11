@@ -241,16 +241,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void startTimer(long timeInMilliseconds) {
         timerIsRunning = true;
+
         countDownTimer = new CountDownTimer(timeInMilliseconds, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 if (isBreakState) {
                     breakLeftInMilliseconds = millisUntilFinished;
-                    updateTimer(breakLeftInMilliseconds);
                 } else {
                     workLeftInMilliseconds = millisUntilFinished;
-                    updateTimer(workLeftInMilliseconds);
                 }
+                updateTimer(millisUntilFinished);
                 showTimeLeftNotification(millisUntilFinished);
             }
 

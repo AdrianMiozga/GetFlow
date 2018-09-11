@@ -10,7 +10,6 @@ public class TimerUtils {
         countDownTimer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
             }
 
             @Override

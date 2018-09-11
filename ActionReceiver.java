@@ -16,7 +16,7 @@ public class ActionReceiver extends BroadcastReceiver {
             case "Skip":
                 Log.d(TAG, "Skip");
                 break;
-            case "StartPause":
+            case "PauseResume":
                 Log.d(TAG, "PauseResume");
                 break;
             case "Stop":
