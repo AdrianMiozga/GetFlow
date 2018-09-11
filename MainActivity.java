@@ -19,7 +19,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -67,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getStringExtra(ActionReceiver.BUTTON_ACTION);
-            Log.d(TAG, "action: " + action);
             switch (action) {
                 case "Skip":
                     skipTimer();
@@ -92,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d(TAG, "onCreate");
         countdownText = findViewById(R.id.countdown_text_view);
         startPauseButton = findViewById(R.id.start_pause_button);
         stopButton = findViewById(R.id.stop_button);
@@ -294,13 +291,11 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 cancelAllNotifications();
                 if (isBreakState) {
-                    Log.d(TAG, "isBreakState");
                     updateTimerTextView(getWorkStartFromInMilliseconds());
                     showEndNotification();
                     isBreakState = false;
                     breakStarted = false;
                 } else {
-                    Log.d(TAG, "!isBreakState");
                     toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
                     updateTimerTextView(getBreakStartFromInMilliseconds());
                     showEndNotification();
