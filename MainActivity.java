@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
@@ -15,6 +17,7 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -60,6 +63,30 @@ public class MainActivity extends AppCompatActivity {
     private boolean breakStarted;
     private boolean timeLeftNotificationFirstTime = true;
 
+    private BroadcastReceiver statusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getStringExtra(ActionReceiver.BUTTON_ACTION);
+            Log.d(TAG, "action: " + action);
+            switch (action) {
+                case "Skip":
+                    skipTimer();
+                    break;
+                case "PauseResume":
+                    startPauseTimer();
+                    if (isBreakState) {
+                        showTimeLeftNotification(breakLeftInMilliseconds);
+                    } else {
+                        showTimeLeftNotification(workLeftInMilliseconds);
+                    }
+                    break;
+                case "Stop":
+                    stopTimer();
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
         skipButton.setVisibility(View.INVISIBLE);
         workBreakIcon.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.INVISIBLE);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                statusReceiver, new IntentFilter(ActionReceiver.BUTTON_CLICKED));
 
         createNotificationChannel(TIMER_COMPLETED);
         createNotificationChannel(TIMER);
@@ -111,12 +141,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
+        super.onDestroy();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         toggleKeepScreenOn();
         if (!workStarted && !isBreakState) {
             workLeftInMilliseconds = getWorkStartFromInMilliseconds();
-            updateTimer(getWorkStartFromInMilliseconds());
+            updateTimerTextView(getWorkStartFromInMilliseconds());
         }
         if (!breakStarted) {
             breakLeftInMilliseconds = getBreakStartFromInMilliseconds();
@@ -125,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void skipTimer() {
         if (isBreakState) {
-            updateTimer(getWorkStartFromInMilliseconds());
+            updateTimerTextView(getWorkStartFromInMilliseconds());
             countDownTimer.cancel();
             startTimer(getWorkStartFromInMilliseconds());
             ImageView imageView = findViewById(R.id.work_break_icon);
@@ -133,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             toggleDoNotDisturb(this, RINGER_MODE_SILENT);
             isBreakState = false;
         } else {
-            updateTimer(getBreakStartFromInMilliseconds());
+            updateTimerTextView(getBreakStartFromInMilliseconds());
             countDownTimer.cancel();
             startTimer(getBreakStartFromInMilliseconds());
             ImageView imageView = findViewById(R.id.work_break_icon);
@@ -223,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         startPauseButton.setVisibility(View.VISIBLE);
         skipButton.setVisibility(View.INVISIBLE);
         pauseTimer();
-        updateTimer(getWorkStartFromInMilliseconds());
+        updateTimerTextView(getWorkStartFromInMilliseconds());
         setImageButtonResource(BUTTON_START);
         breakLeftInMilliseconds = getBreakStartFromInMilliseconds();
         workLeftInMilliseconds = getWorkStartFromInMilliseconds();
@@ -250,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     workLeftInMilliseconds = millisUntilFinished;
                 }
-                updateTimer(millisUntilFinished);
+                updateTimerTextView(millisUntilFinished);
                 showTimeLeftNotification(millisUntilFinished);
             }
 
@@ -259,14 +295,14 @@ public class MainActivity extends AppCompatActivity {
                 cancelAllNotifications();
                 if (isBreakState) {
                     Log.d(TAG, "isBreakState");
-                    updateTimer(getWorkStartFromInMilliseconds());
+                    updateTimerTextView(getWorkStartFromInMilliseconds());
                     showEndNotification();
                     isBreakState = false;
                     breakStarted = false;
                 } else {
                     Log.d(TAG, "!isBreakState");
                     toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
-                    updateTimer(getBreakStartFromInMilliseconds());
+                    updateTimerTextView(getBreakStartFromInMilliseconds());
                     showEndNotification();
                     isBreakState = true;
                     workStarted = false;
@@ -296,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         return timeLeftText;
     }
 
-    private void updateTimer(long timeInMilliseconds) {
+    private void updateTimerTextView(long timeInMilliseconds) {
         countdownText.setText(convertMilliseconds(timeInMilliseconds));
     }
 
@@ -338,9 +374,17 @@ public class MainActivity extends AppCompatActivity {
                 .setContentTitle("Pomodoro")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setOngoing(true)
-                .setShowWhen(false)
-                .addAction(R.drawable.ic_play_button, getString(R.string.start), pauseResumeButtonPendingIntent)
-                .addAction(R.drawable.ic_skip_button, getString(R.string.skip), skipButtonPendingIntent)
+                .setShowWhen(false);
+
+        if (timerIsRunning) {
+            mBuilder.addAction(R.drawable.ic_play_button, getString(R.string.pause),
+                    pauseResumeButtonPendingIntent);
+        } else {
+            mBuilder.addAction(R.drawable.ic_play_button, getString(R.string.resume),
+                    pauseResumeButtonPendingIntent);
+        }
+
+        mBuilder.addAction(R.drawable.ic_skip_button, getString(R.string.skip), skipButtonPendingIntent)
                 .addAction(R.drawable.ic_stop_button, getString(R.string.stop), stopButtonPendingIntent);
 
         Intent intent = new Intent(this, MainActivity.class);

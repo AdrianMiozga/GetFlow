@@ -3,28 +3,24 @@ package com.wentura.pomodoroapp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.support.v4.content.LocalBroadcastManager;
 
 public class ActionReceiver extends BroadcastReceiver {
     private static final String TAG = ActionReceiver.class.getSimpleName();
+    public static final String BUTTON_CLICKED = "BUTTON_CLICKED";
+    public static final String BUTTON_ACTION = "BUTTON_ACTION";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra("action");
 
-        switch (action) {
-            case "Skip":
-                Log.d(TAG, "Skip");
-                break;
-            case "PauseResume":
-                Log.d(TAG, "PauseResume");
-                break;
-            case "Stop":
-//                TimerUtils.stopTimer();
-                Log.d(TAG, "Stop");
-                break;
+        Intent localIntent = new Intent(BUTTON_CLICKED);
+        localIntent.putExtra(BUTTON_ACTION, action);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(localIntent);
+
+        if (action.equals("Stop")) {
+            Intent closeNotificationTray = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            context.sendBroadcast(closeNotificationTray);
         }
-        Intent closeNotificationTray = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        context.sendBroadcast(closeNotificationTray);
     }
 }
