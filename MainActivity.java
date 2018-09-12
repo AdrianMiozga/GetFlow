@@ -373,6 +373,37 @@ public class MainActivity extends AppCompatActivity {
                 .setOngoing(true)
                 .setShowWhen(false);
 
+        addButtonsToNotification(mBuilder);
+        createIntentToOpenApp(mBuilder);
+        setNotificationContent(millisUntilFinished, mBuilder);
+        displayTimeLeftNotification(mBuilder);
+    }
+
+    private void displayTimeLeftNotification(NotificationCompat.Builder mBuilder) {
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+        notificationManagerCompat.notify(TIME_LEFT_NOTIFICATION, mBuilder.build());
+    }
+
+    private void setNotificationContent(long millisUntilFinished, NotificationCompat.Builder mBuilder) {
+        if (!timeLeftNotificationFirstTime) {
+            if (isBreakState) {
+                mBuilder.setContentText("Break time left: " + calculateTimeLeft(millisUntilFinished));
+            } else {
+                mBuilder.setContentText("Work time left: " + calculateTimeLeft(millisUntilFinished));
+            }
+        }
+    }
+
+    private void createIntentToOpenApp(NotificationCompat.Builder mBuilder) {
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        mBuilder.setContentIntent(pendingIntent);
+    }
+
+    private void addButtonsToNotification(NotificationCompat.Builder mBuilder) {
         if (timerIsRunning) {
             mBuilder.addAction(R.drawable.ic_play_button, getString(R.string.pause),
                     createButtonPendingIntent(ButtonConstants.BUTTON_PAUSE_RESUME));
@@ -385,27 +416,6 @@ public class MainActivity extends AppCompatActivity {
                 createButtonPendingIntent(ButtonConstants.BUTTON_SKIP))
                 .addAction(R.drawable.ic_stop_button, getString(R.string.stop),
                         createButtonPendingIntent(ButtonConstants.BUTTON_STOP));
-
-        // Intent for opening app when user clicks notification
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-
-        mBuilder.setContentIntent(pendingIntent);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-        notificationManagerCompat.notify(TIME_LEFT_NOTIFICATION, mBuilder.build());
-
-        if (!timeLeftNotificationFirstTime) {
-            if (isBreakState) {
-                mBuilder.setContentText("Break time left: " + calculateTimeLeft(millisUntilFinished));
-                notificationManagerCompat.notify(TIME_LEFT_NOTIFICATION, mBuilder.build());
-            } else {
-                mBuilder.setContentText("Work time left: " + calculateTimeLeft(millisUntilFinished));
-                notificationManagerCompat.notify(TIME_LEFT_NOTIFICATION, mBuilder.build());
-            }
-        }
     }
 
     private PendingIntent createButtonPendingIntent(String actionValue) {
