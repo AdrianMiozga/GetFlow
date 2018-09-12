@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -34,7 +35,7 @@ import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String CHANNEL_TIMER_COMPLETED = "Pomodoro Timer Completed";
     private static final String CHANNEL_TIMER = "Pomodoro Timer";
     private static final String DEFAULT_WORK_TIME = "25";
@@ -44,8 +45,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int BUTTON_PAUSE = 1;
     private static final int ON_FINISH_NOTIFICATION = 0;
     private static final int TIME_LEFT_NOTIFICATION = 1;
-    private static final int TIMER_COMPLETED = 0;
-    private static final int TIMER = 1;
+    private static final int TIMER_COMPLETED_CHANNEL_ID = 0;
+    private static final int TIMER_CHANNEL_ID = 1;
+
+    private static final int PENDING_INTENT_OPEN_APP_REQUEST_CODE = 0;
+    private static final int PENDING_INTENT_SKIP_REQUEST_CODE = 1;
+    private static final int PENDING_INTENT_PAUSE_RESUME_REQUEST_CODE = 2;
+    private static final int PENDING_INTENT_STOP_REQUEST_CODE = 3;
 
     private TextView countdownText;
     private ImageButton startPauseButton;
@@ -65,20 +71,20 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver statusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getStringExtra(ActionReceiver.BUTTON_ACTION);
+            String action = intent.getStringExtra(ButtonConstants.BUTTON_ACTION);
             switch (action) {
-                case "Skip":
+                case ButtonConstants.BUTTON_SKIP:
                     skipTimer();
                     break;
-                case "PauseResume":
+                case ButtonConstants.BUTTON_PAUSE_RESUME:
                     startPauseTimer();
                     if (isBreakState) {
-                        showTimeLeftNotification(breakLeftInMilliseconds);
+                        buildTimeLeftNotification(breakLeftInMilliseconds);
                     } else {
-                        showTimeLeftNotification(workLeftInMilliseconds);
+                        buildTimeLeftNotification(workLeftInMilliseconds);
                     }
                     break;
-                case "Stop":
+                case ButtonConstants.BUTTON_STOP:
                     stopTimer();
                     break;
             }
@@ -95,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         stopButton = findViewById(R.id.stop_button);
         workBreakIcon = findViewById(R.id.work_break_icon);
         skipButton = findViewById(R.id.skip_button);
+
         skipButton.setVisibility(View.INVISIBLE);
         workBreakIcon.setVisibility(View.INVISIBLE);
         stopButton.setVisibility(View.INVISIBLE);
@@ -102,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 statusReceiver, new IntentFilter(ActionReceiver.BUTTON_CLICKED));
 
-        createNotificationChannel(TIMER_COMPLETED);
-        createNotificationChannel(TIMER);
+        createNotificationChannel(TIMER_COMPLETED_CHANNEL_ID);
+        createNotificationChannel(TIMER_CHANNEL_ID);
 
         startPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -236,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setImageResource(R.drawable.coffee_icon);
             } else {
                 startTimer(workLeftInMilliseconds);
-                showTimeLeftNotification(workLeftInMilliseconds);
+                buildTimeLeftNotification(workLeftInMilliseconds);
                 workStarted = true;
                 toggleDoNotDisturb(this, RINGER_MODE_SILENT);
                 ImageView imageView = findViewById(R.id.work_break_icon);
@@ -284,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
                     workLeftInMilliseconds = millisUntilFinished;
                 }
                 updateTimerTextView(millisUntilFinished);
-                showTimeLeftNotification(millisUntilFinished);
+                buildTimeLeftNotification(millisUntilFinished);
             }
 
             @Override
@@ -313,22 +320,33 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
-    private String convertMilliseconds(long milliseconds) {
-        int minutes = (int) (milliseconds / 60000);
-        int seconds = (int) (milliseconds % 60000 / 1000);
-        String timeLeftText;
+    private String calculateTimeLeft(long milliseconds) {
+        return formatTime(getMinutes(milliseconds), getSeconds(milliseconds));
+    }
 
-        timeLeftText = "" + minutes;
-        timeLeftText += ":";
+    @NonNull
+    private String formatTime(int minutes, int seconds) {
+        String timeLeft;
+
+        timeLeft = "" + minutes;
+        timeLeft += ":";
         if (seconds < 10) {
-            timeLeftText += "0";
+            timeLeft += "0";
         }
-        timeLeftText += "" + seconds;
-        return timeLeftText;
+        timeLeft += "" + seconds;
+        return timeLeft;
+    }
+
+    private int getSeconds(long milliseconds) {
+        return (int) (milliseconds % 60000 / 1000);
+    }
+
+    private int getMinutes(long milliseconds) {
+        return (int) (milliseconds / 60000);
     }
 
     private void updateTimerTextView(long timeInMilliseconds) {
-        countdownText.setText(convertMilliseconds(timeInMilliseconds));
+        countdownText.setText(calculateTimeLeft(timeInMilliseconds));
     }
 
     private void pauseTimer() {
@@ -346,23 +364,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showTimeLeftNotification(long millisUntilFinished) {
-        Intent skipButtonIntent = new Intent(this, ActionReceiver.class);
-        skipButtonIntent.putExtra("action", "Skip");
-
-        Intent pauseResumeButtonIntent = new Intent(this, ActionReceiver.class);
-        pauseResumeButtonIntent.putExtra("action", "PauseResume");
-
-        Intent stopButtonIntent = new Intent(this, ActionReceiver.class);
-        stopButtonIntent.putExtra("action", "Stop");
-
-        PendingIntent skipButtonPendingIntent = PendingIntent.getBroadcast(this, 1,
-                skipButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pauseResumeButtonPendingIntent = PendingIntent.getBroadcast(this, 2,
-                pauseResumeButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent stopButtonPendingIntent = PendingIntent.getBroadcast(this, 3,
-                stopButtonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+    private void buildTimeLeftNotification(long millisUntilFinished) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_TIMER)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setColor(getColor(R.color.colorPrimary))
@@ -373,17 +375,22 @@ public class MainActivity extends AppCompatActivity {
 
         if (timerIsRunning) {
             mBuilder.addAction(R.drawable.ic_play_button, getString(R.string.pause),
-                    pauseResumeButtonPendingIntent);
+                    createButtonPendingIntent(ButtonConstants.BUTTON_PAUSE_RESUME));
         } else {
             mBuilder.addAction(R.drawable.ic_play_button, getString(R.string.resume),
-                    pauseResumeButtonPendingIntent);
+                    createButtonPendingIntent(ButtonConstants.BUTTON_PAUSE_RESUME));
         }
 
-        mBuilder.addAction(R.drawable.ic_skip_button, getString(R.string.skip), skipButtonPendingIntent)
-                .addAction(R.drawable.ic_stop_button, getString(R.string.stop), stopButtonPendingIntent);
+        mBuilder.addAction(R.drawable.ic_skip_button, getString(R.string.skip),
+                createButtonPendingIntent(ButtonConstants.BUTTON_SKIP))
+                .addAction(R.drawable.ic_stop_button, getString(R.string.stop),
+                        createButtonPendingIntent(ButtonConstants.BUTTON_STOP));
 
+        // Intent for opening app when user clicks notification
         Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
         mBuilder.setContentIntent(pendingIntent);
 
@@ -392,13 +399,38 @@ public class MainActivity extends AppCompatActivity {
 
         if (!timeLeftNotificationFirstTime) {
             if (isBreakState) {
-                mBuilder.setContentText("Break time left: " + convertMilliseconds(millisUntilFinished));
+                mBuilder.setContentText("Break time left: " + calculateTimeLeft(millisUntilFinished));
                 notificationManagerCompat.notify(TIME_LEFT_NOTIFICATION, mBuilder.build());
             } else {
-                mBuilder.setContentText("Work time left: " + convertMilliseconds(millisUntilFinished));
+                mBuilder.setContentText("Work time left: " + calculateTimeLeft(millisUntilFinished));
                 notificationManagerCompat.notify(TIME_LEFT_NOTIFICATION, mBuilder.build());
             }
         }
+    }
+
+    private PendingIntent createButtonPendingIntent(String actionValue) {
+        return PendingIntent.getBroadcast(this, getRequestCode(actionValue),
+                createButtonIntent(actionValue), PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private int getRequestCode(String actionValue) {
+        switch (actionValue) {
+            case ButtonConstants.BUTTON_SKIP:
+                return PENDING_INTENT_SKIP_REQUEST_CODE;
+            case ButtonConstants.BUTTON_PAUSE_RESUME:
+                return PENDING_INTENT_PAUSE_RESUME_REQUEST_CODE;
+            case ButtonConstants.BUTTON_STOP:
+                return PENDING_INTENT_STOP_REQUEST_CODE;
+            default:
+                return -1;
+        }
+    }
+
+    @NonNull
+    private Intent createButtonIntent(String actionValue) {
+        Intent buttonIntent = new Intent(this, ActionReceiver.class);
+        buttonIntent.putExtra(ButtonConstants.BUTTON_ACTION, actionValue);
+        return buttonIntent;
     }
 
     private void showEndNotification() {
@@ -426,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNotificationChannel(int notificationId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (notificationId == TIMER_COMPLETED) {
+            if (notificationId == TIMER_COMPLETED_CHANNEL_ID) {
                 CharSequence name = "Pomodoro Timer Completed";
                 int importance = NotificationManager.IMPORTANCE_HIGH;
                 NotificationChannel channel = new NotificationChannel(CHANNEL_TIMER_COMPLETED, name, importance);
@@ -434,7 +466,7 @@ public class MainActivity extends AppCompatActivity {
                 NotificationManager notificationManager = getSystemService(NotificationManager.class);
                 assert notificationManager != null;
                 notificationManager.createNotificationChannel(channel);
-            } else if (notificationId == TIMER) {
+            } else if (notificationId == TIMER_CHANNEL_ID) {
                 CharSequence name = "Pomodoro Timer";
                 int importance = NotificationManager.IMPORTANCE_LOW;
                 NotificationChannel channel = new NotificationChannel(CHANNEL_TIMER, name, importance);

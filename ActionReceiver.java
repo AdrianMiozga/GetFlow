@@ -8,17 +8,16 @@ import android.support.v4.content.LocalBroadcastManager;
 public class ActionReceiver extends BroadcastReceiver {
     private static final String TAG = ActionReceiver.class.getSimpleName();
     public static final String BUTTON_CLICKED = "BUTTON_CLICKED";
-    public static final String BUTTON_ACTION = "BUTTON_ACTION";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String action = intent.getStringExtra("action");
+        String action = intent.getStringExtra(ButtonConstants.BUTTON_ACTION);
 
         Intent localIntent = new Intent(BUTTON_CLICKED);
-        localIntent.putExtra(BUTTON_ACTION, action);
+        localIntent.putExtra(ButtonConstants.BUTTON_ACTION, action);
         LocalBroadcastManager.getInstance(context).sendBroadcast(localIntent);
 
-        if (action.equals("Stop")) {
+        if (action.equals(ButtonConstants.BUTTON_STOP)) {
             Intent closeNotificationTray = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             context.sendBroadcast(closeNotificationTray);
         }
