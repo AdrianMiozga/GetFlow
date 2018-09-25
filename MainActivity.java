@@ -281,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 cancelAllNotifications();
+                showEndNotification();
                 if (isBreakState) {
                     updateTimerTextView(getMillisecondsFromSettings(WORK_DURATION_SETTING));
                     isBreakState = false;
@@ -291,7 +292,6 @@ public class MainActivity extends AppCompatActivity {
                     isBreakState = true;
                     workStarted = false;
                 }
-                showEndNotification();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 timerIsRunning = false;
