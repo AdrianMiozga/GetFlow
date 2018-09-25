@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startTimer(getMillisecondsFromSettings(BREAK_DURATION_SETTINGS));
             toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
-            workBreakIcon.setImageResource(R.drawable.coffee_icon);
+            workBreakIcon.setImageResource(R.drawable.break_icon);
             isBreakState = true;
         }
         startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             if (isBreakState) {
                 startTimer(breakLeftInMilliseconds);
                 breakStarted = true;
-                workBreakIcon.setImageResource(R.drawable.coffee_icon);
+                workBreakIcon.setImageResource(R.drawable.break_icon);
             } else {
                 startTimer(workLeftInMilliseconds);
                 toggleDoNotDisturb(this, RINGER_MODE_SILENT);
@@ -285,11 +285,13 @@ public class MainActivity extends AppCompatActivity {
                 showEndNotification();
                 if (isBreakState) {
                     updateTimerTextView(getMillisecondsFromSettings(WORK_DURATION_SETTING));
+                    workBreakIcon.setBackgroundResource(R.drawable.work_icon);
                     isBreakState = false;
                     breakStarted = false;
                 } else {
                     toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
                     updateTimerTextView(getMillisecondsFromSettings(BREAK_DURATION_SETTINGS));
+                    workBreakIcon.setBackgroundResource(R.drawable.break_icon);
                     isBreakState = true;
                     workStarted = false;
                 }
@@ -298,7 +300,6 @@ public class MainActivity extends AppCompatActivity {
                 timerIsRunning = false;
                 timeLeftNotificationFirstTime = true;
                 startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
-                workBreakIcon.setVisibility(View.INVISIBLE);
                 skipButton.setVisibility(View.INVISIBLE);
             }
         }.start();
