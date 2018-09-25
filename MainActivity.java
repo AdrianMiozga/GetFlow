@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         countDownTimer.cancel();
         if (isBreakState) {
             startTimer(getMillisecondsFromSettings(WORK_DURATION_SETTING));
+            breakLeftInMilliseconds = getMillisecondsFromSettings(BREAK_DURATION_SETTINGS);
             toggleDoNotDisturb(this, RINGER_MODE_SILENT);
             workBreakIcon.setImageResource(R.drawable.work_icon);
             isBreakState = false;
