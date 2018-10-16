@@ -146,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+        notificationManager.cancelAll();
         super.onDestroy();
     }
 
