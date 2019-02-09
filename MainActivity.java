@@ -190,7 +190,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.d(TAG, "onSaveInstanceState: ");
-        outState.putBoolean("isWorkStarted", viewModel.isWorkStarted());
+        outState.putBoolean("isWorkStarted", true);
+        Log.d(TAG, "onSaveInstanceState: isWorkStarted = " + outState.getBoolean("isWorkStarted"));
     }
 
     @Override
@@ -338,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 updateTimerTextView(millisUntilFinished);
                 buildTimeLeftNotification(millisUntilFinished);
-                Log.d(TAG, "onTick: " + viewModel.isWorkStarted());
+                // Log.d(TAG, "onTick: " + viewModel.isWorkStarted());
             }
 
             @Override
@@ -440,7 +441,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void createIntentToOpenApp(NotificationCompat.Builder mBuilder) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
