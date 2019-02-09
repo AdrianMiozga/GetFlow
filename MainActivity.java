@@ -58,15 +58,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton stopButton;
     private ImageButton skipButton;
     private ImageView workBreakIcon;
-//    private CountDownTimer countDownTimer;
-
-//    private long workLeftInMilliseconds;
-//    private long breakLeftInMilliseconds;
-//    private boolean timerIsRunning;
-//    private boolean isBreakState;
-//    private boolean workStarted;
-//    private boolean breakStarted;
-//    private boolean timeLeftNotificationFirstTime = true;
 
     private MyViewModel viewModel;
 
@@ -106,10 +97,18 @@ public class MainActivity extends AppCompatActivity {
         workBreakIcon = findViewById(R.id.work_break_icon);
         skipButton = findViewById(R.id.skip_button);
 
+        Log.d(TAG, "onCreate: " + viewModel.isWorkStarted());
+
+        if (savedInstanceState != null) {
+            Log.d(TAG, "onCreate: savedInstanceState != null");
+            Log.d(TAG, "onCreate: " + savedInstanceState.getBoolean("isWorkStarted"));
+        }
+
         if (!viewModel.isWorkStarted() && !viewModel.isBreakStarted()) {
             skipButton.setVisibility(View.INVISIBLE);
             workBreakIcon.setVisibility(View.INVISIBLE);
             stopButton.setVisibility(View.INVISIBLE);
+            Log.d(TAG, "onCreate: !viewModel.isWorkStarted() && !viewModel.isBreakStarted()");
         }
 
         if (viewModel.isTimerIsRunning()) {
@@ -188,6 +187,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: ");
+        outState.putBoolean("isWorkStarted", viewModel.isWorkStarted());
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         toggleKeepScreenOn();
@@ -196,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
         cancelAllNotifications();
         if (viewModel.getCountDownTimer() != null) {
@@ -221,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
             viewModel.setBreakState(true);
             viewModel.setBreakStarted(true);
             viewModel.setWorkStarted(false);
+            Log.d(TAG, "skipTimer: work");
         }
         startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
     }
@@ -231,10 +239,16 @@ public class MainActivity extends AppCompatActivity {
         if (durationSetting.equals(WORK_DURATION_SETTING)) {
             value = sharedPreferences.getString(WORK_DURATION_SETTING, DEFAULT_WORK_TIME);
         }
+
         if (durationSetting.equals(BREAK_DURATION_SETTINGS)) {
             value = sharedPreferences.getString(BREAK_DURATION_SETTINGS, DEFAULT_BREAK_TIME);
         }
-        return (Integer.parseInt(value) * 60000);
+
+        if (value != null) {
+            return (Integer.parseInt(value) * 60000);
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -300,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.setWorkLeftInMilliseconds(getMillisecondsFromSettings(WORK_DURATION_SETTING));
         viewModel.setBreakState(false);
         viewModel.setWorkStarted(false);
+        Log.d(TAG, "stopTimer: work");
         viewModel.setBreakStarted(false);
         viewModel.setTimeLeftNotificationFirstTime(true);
         cancelAllNotifications();
@@ -323,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 updateTimerTextView(millisUntilFinished);
                 buildTimeLeftNotification(millisUntilFinished);
+                Log.d(TAG, "onTick: " + viewModel.isWorkStarted());
             }
 
             @Override
@@ -340,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
                     workBreakIcon.setBackgroundResource(R.drawable.break_icon);
                     viewModel.setBreakState(true);
                     viewModel.setWorkStarted(false);
+                    Log.d(TAG, "onFinish: work");
                 }
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
@@ -423,6 +440,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createIntentToOpenApp(NotificationCompat.Builder mBuilder) {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
