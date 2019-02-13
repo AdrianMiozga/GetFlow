@@ -31,8 +31,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        assert notificationManager != null;
-        if (!notificationManager.isNotificationPolicyAccessGranted()) {
+        if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
             SwitchPreference switchPreference = (SwitchPreference) findPreference(KEY_DO_NOT_DISTURB_SETTING);
             switchPreference.setChecked(false);
         }
@@ -49,8 +48,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         if (key.equals(KEY_DO_NOT_DISTURB_SETTING) && sharedPreferences.getBoolean(KEY_DO_NOT_DISTURB_SETTING, false)) {
             NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-            assert notificationManager != null;
-            if (!notificationManager.isNotificationPolicyAccessGranted()) {
+            if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage(R.string.dialog_access_policy_not_granted)
                         .setPositiveButton(R.string.dialog_go_to_settings, new DialogInterface.OnClickListener() {
