@@ -12,11 +12,10 @@ import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.wentura.pomodoroapp.Constants;
 import com.wentura.pomodoroapp.R;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String KEY_DO_NOT_DISTURB_SETTING = "do_not_disturb_setting";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +31,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
-            SwitchPreference switchPreference = (SwitchPreference) findPreference(KEY_DO_NOT_DISTURB_SETTING);
+            SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTINGS);
             switchPreference.setChecked(false);
         }
     }
@@ -45,7 +44,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
-        if (key.equals(KEY_DO_NOT_DISTURB_SETTING) && sharedPreferences.getBoolean(KEY_DO_NOT_DISTURB_SETTING, false)) {
+        if (key.equals(Constants.DO_NOT_DISTURB_SETTINGS) && sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTINGS, false)) {
             NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
@@ -61,7 +60,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.d("onResume", "Cancel");
-                                SwitchPreference switchPreference = (SwitchPreference) findPreference(KEY_DO_NOT_DISTURB_SETTING);
+                                SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTINGS);
                                 switchPreference.setChecked(false);
                             }
                         }).show();

@@ -12,33 +12,35 @@ class Notification {
 
     private Context context;
     private boolean timeLeftNotificationFirstTime;
-    private boolean timerIsRunning;
-    private boolean breakState;
-    private boolean notificationFromActivity;
+    private boolean isTimerRunning;
+    private boolean isBrakeState;
+    private boolean isNotificationOpenedFromActivity;
 
     void buildNotification(Context context, long millisUntilFinished,
                            boolean timeLeftNotificationFirstTime, boolean breakState,
-                           boolean timerIsRunning, boolean notificationFromActivity) {
+                           boolean timerIsRunning, boolean isNotificationOpenedFromActivity) {
         this.context = context;
         this.timeLeftNotificationFirstTime = timeLeftNotificationFirstTime;
-        this.timerIsRunning = timerIsRunning;
-        this.breakState = breakState;
-        this.notificationFromActivity = notificationFromActivity;
+        this.isTimerRunning = timerIsRunning;
+        this.isBrakeState = breakState;
+        this.isNotificationOpenedFromActivity = isNotificationOpenedFromActivity;
 
-        buildTimeLeftNotification(millisUntilFinished);
+        setupNotification(millisUntilFinished);
     }
 
-    private void buildTimeLeftNotification(long millisUntilFinished) {
+    private void setupNotification(long millisUntilFinished) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, Constants.CHANNEL_TIMER)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setColor(context.getColor(R.color.colorPrimary))
-                .setContentTitle("Pomodoro")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentTitle(Constants.POMODORO)
                 .setOngoing(true)
                 .setShowWhen(false);
 
         addButtonsToNotification(mBuilder);
+
         createIntentToOpenApp(mBuilder);
+
         setTimeLeftNotificationContent(millisUntilFinished, mBuilder);
         displayNotification(mBuilder);
     }
@@ -49,15 +51,15 @@ class Notification {
     }
 
     private void setTimeLeftNotificationContent(long millisUntilFinished, NotificationCompat.Builder mBuilder) {
-        if (!timeLeftNotificationFirstTime) {
-            if (breakState) {
-                mBuilder.setContentText(context.getString(R.string.break_time_left) + " " + calculateTimeLeft
-                        (millisUntilFinished));
-            } else {
-                mBuilder.setContentText(context.getString(R.string.work_time_left) + " " + calculateTimeLeft
-                        (millisUntilFinished));
-            }
+        // if (!timeLeftNotificationFirstTime) {
+        if (isBrakeState) {
+            mBuilder.setContentText(context.getString(R.string.break_time_left) + " " + calculateTimeLeft
+                    (millisUntilFinished));
+        } else {
+            mBuilder.setContentText(context.getString(R.string.work_time_left) + " " + calculateTimeLeft
+                    (millisUntilFinished));
         }
+        // }
     }
 
     private void createIntentToOpenApp(NotificationCompat.Builder mBuilder) {
@@ -86,7 +88,7 @@ class Notification {
     }
 
     private void addPauseResumeButton(NotificationCompat.Builder mBuilder) {
-        if (timerIsRunning) {
+        if (isTimerRunning) {
             mBuilder.addAction(R.drawable.ic_play_button, context.getString(R.string.pause),
                     createButtonPendingIntent(Constants.BUTTON_PAUSE_RESUME));
         } else {
@@ -141,10 +143,10 @@ class Notification {
     @NonNull
     private Intent createButtonIntent(String actionValue) {
         Intent buttonIntent;
-        if (notificationFromActivity) {
-            buttonIntent = new Intent(context, ActionReceiver.class);
+        if (isNotificationOpenedFromActivity) {
+            buttonIntent = new Intent(context, ActivityNotificationButtonReceiver.class);
         } else {
-            buttonIntent = new Intent(context, ActionReceiver2.class);
+            buttonIntent = new Intent(context, NonActivityNotificationButtonReceiver.class);
         }
         buttonIntent.putExtra(Constants.BUTTON_ACTION, actionValue);
         return buttonIntent;

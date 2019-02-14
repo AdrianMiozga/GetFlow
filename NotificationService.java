@@ -10,11 +10,11 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 public class NotificationService extends Service {
-    static final String TAG = "NotificationService";
+    static final String TAG = NotificationService.class.getSimpleName();
 
     private boolean timeLeftNotificationFirstTime;
-    private boolean timerIsRunning;
-    private boolean breakState;
+    private boolean isTimerRunning;
+    private boolean isBreakState;
     private long timeLeft;
     private CountDownTimer countDownTimer;
 
@@ -26,10 +26,10 @@ public class NotificationService extends Service {
 
         timeLeftNotificationFirstTime = preferences.getBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME,
                 true);
-        breakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
-        timerIsRunning = preferences.getBoolean(Constants.TIMER_IS_RUNNING, false);
+        isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+        isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
 
-        if (breakState) {
+        if (isBreakState) {
             timeLeft = preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
         } else {
             timeLeft = preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0);
@@ -47,7 +47,7 @@ public class NotificationService extends Service {
                 SharedPreferences.Editor preferences =
                         getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE).edit();
 
-                if (breakState) {
+                if (isBreakState) {
                     preferences.putLong(Constants.BREAK_LEFT_IN_MILLISECONDS, timeLeft);
                 } else {
                     preferences.putLong(Constants.WORK_LEFT_IN_MILLISECONDS, timeLeft);
@@ -56,13 +56,16 @@ public class NotificationService extends Service {
                 preferences.apply();
 
                 notification.buildNotification(getApplicationContext(), millisUntilFinished,
-                        timeLeftNotificationFirstTime, breakState, timerIsRunning, false);
+                        timeLeftNotificationFirstTime, isBreakState, isTimerRunning, false);
                 Log.d(TAG, "onTick: " + timeLeft);
             }
 
             @Override
             public void onFinish() {
-
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                Log.d(TAG, "onFinish: ");
             }
         }.start();
         return START_NOT_STICKY;

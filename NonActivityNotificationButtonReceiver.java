@@ -14,16 +14,16 @@ import static com.wentura.pomodoroapp.Constants.BREAK_DURATION_SETTINGS;
 import static com.wentura.pomodoroapp.Constants.BREAK_LEFT_IN_MILLISECONDS;
 import static com.wentura.pomodoroapp.Constants.IS_BREAK_STARTED;
 import static com.wentura.pomodoroapp.Constants.IS_BREAK_STATE;
+import static com.wentura.pomodoroapp.Constants.IS_TIMER_RUNNING;
 import static com.wentura.pomodoroapp.Constants.IS_WORK_STARTED;
 import static com.wentura.pomodoroapp.Constants.MY_PREFERENCES;
-import static com.wentura.pomodoroapp.Constants.TIMER_IS_RUNNING;
 import static com.wentura.pomodoroapp.Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME;
 import static com.wentura.pomodoroapp.Constants.WORK_DURATION_SETTING;
 import static com.wentura.pomodoroapp.Constants.WORK_LEFT_IN_MILLISECONDS;
 
-public class ActionReceiver2 extends BroadcastReceiver {
+public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
 
-    private static final String TAG = ActionReceiver2.class.getSimpleName();
+    private static final String TAG = NonActivityNotificationButtonReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,7 +44,7 @@ public class ActionReceiver2 extends BroadcastReceiver {
 
                 editPreferences.putBoolean(IS_WORK_STARTED, false);
                 editPreferences.putBoolean(IS_BREAK_STARTED, false);
-                editPreferences.putBoolean(TIMER_IS_RUNNING, false);
+                editPreferences.putBoolean(IS_TIMER_RUNNING, false);
                 editPreferences.putBoolean(IS_BREAK_STARTED, false);
                 editPreferences.putBoolean(TIME_LEFT_NOTIFICATION_FIRST_TIME, true);
                 editPreferences.apply();
@@ -76,7 +76,7 @@ public class ActionReceiver2 extends BroadcastReceiver {
                             Integer.parseInt(settings.getString(WORK_DURATION_SETTING, "0")) * 60000);
                     Log.d(TAG, "onReceive: !breakState");
                 }
-                editPreferences.putBoolean(TIMER_IS_RUNNING, true);
+                editPreferences.putBoolean(IS_TIMER_RUNNING, true);
                 editPreferences.apply();
 
                 Intent startService = new Intent(context, NotificationService.class);
@@ -87,7 +87,7 @@ public class ActionReceiver2 extends BroadcastReceiver {
                 SharedPreferences preferences =
                         context.getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
 
-                boolean timerIsRunning = preferences.getBoolean(Constants.TIMER_IS_RUNNING, false);
+                boolean timerIsRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
                 boolean breakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
                 long workLeftInMilliseconds =
                         preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0);
@@ -96,7 +96,7 @@ public class ActionReceiver2 extends BroadcastReceiver {
                 boolean timeLeftNotificationFirstTime = preferences.getBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME,
                         false);
                 if (timerIsRunning) {
-                    editPreferences.putBoolean(TIMER_IS_RUNNING, false);
+                    editPreferences.putBoolean(IS_TIMER_RUNNING, false);
 
                     Notification notification = new Notification();
 
@@ -112,7 +112,7 @@ public class ActionReceiver2 extends BroadcastReceiver {
                     Intent stopService = new Intent(context, NotificationService.class);
                     context.stopService(stopService);
                 } else {
-                    editPreferences.putBoolean(TIMER_IS_RUNNING, true);
+                    editPreferences.putBoolean(IS_TIMER_RUNNING, true);
                     Intent startService = new Intent(context, NotificationService.class);
                     context.startService(startService);
                 }
