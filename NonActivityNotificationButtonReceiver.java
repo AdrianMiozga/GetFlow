@@ -93,8 +93,7 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                         preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0);
                 long breakLeftInMilliseconds =
                         preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
-                boolean timeLeftNotificationFirstTime = preferences.getBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME,
-                        false);
+
                 if (timerIsRunning) {
                     editPreferences.putBoolean(IS_TIMER_RUNNING, false);
 
@@ -102,11 +101,9 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
 
                     if (breakState) {
                         notification.buildNotification(context, breakLeftInMilliseconds,
-                                timeLeftNotificationFirstTime,
                                 true, false, false);
                     } else {
                         notification.buildNotification(context, workLeftInMilliseconds,
-                                timeLeftNotificationFirstTime,
                                 false, false, false);
                     }
                     Intent stopService = new Intent(context, NotificationService.class);

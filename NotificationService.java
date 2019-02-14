@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 public class NotificationService extends Service {
     static final String TAG = NotificationService.class.getSimpleName();
 
-    private boolean timeLeftNotificationFirstTime;
     private boolean isTimerRunning;
     private boolean isBreakState;
     private long timeLeft;
@@ -24,7 +23,7 @@ public class NotificationService extends Service {
         SharedPreferences preferences = getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
         Log.d(TAG, "onStartCommand: ");
 
-        timeLeftNotificationFirstTime = preferences.getBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME,
+        preferences.getBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME,
                 true);
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
         isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
@@ -56,7 +55,7 @@ public class NotificationService extends Service {
                 preferences.apply();
 
                 notification.buildNotification(getApplicationContext(), millisUntilFinished,
-                        timeLeftNotificationFirstTime, isBreakState, isTimerRunning, false);
+                        isBreakState, isTimerRunning, false);
                 Log.d(TAG, "onTick: " + timeLeft);
             }
 

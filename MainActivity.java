@@ -339,10 +339,10 @@ public class MainActivity extends AppCompatActivity {
             pauseTimer();
             if (isBreakState) {
                 notification.buildNotification(this, breakLeftInMilliseconds,
-                        timeLeftNotificationFirstTime, true, isTimerRunning, true);
+                        true, isTimerRunning, true);
             } else {
                 notification.buildNotification(this, workLeftInMilliseconds,
-                        timeLeftNotificationFirstTime, false, isTimerRunning, true);
+                        false, isTimerRunning, true);
             }
         } else {
             workBreakIcon.setVisibility(View.VISIBLE);
@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
                 startTimer(workLeftInMilliseconds);
                 toggleDoNotDisturb(this, RINGER_MODE_SILENT);
                 notification.buildNotification(this, workLeftInMilliseconds,
-                        timeLeftNotificationFirstTime, isBreakState, isTimerRunning, true);
+                        isBreakState, isTimerRunning, true);
                 isWorkStarted = true;
                 workBreakIcon.setImageResource(R.drawable.work_icon);
             }
@@ -400,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 updateTimerTextView(millisUntilFinished);
                 notification.buildNotification(getApplicationContext(), millisUntilFinished,
-                        timeLeftNotificationFirstTime, isBreakState, isTimerRunning, true);
+                        isBreakState, isTimerRunning, true);
             }
 
             @Override
