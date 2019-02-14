@@ -19,7 +19,6 @@ import static com.wentura.pomodoroapp.Constants.IS_BREAK_STATE;
 import static com.wentura.pomodoroapp.Constants.IS_TIMER_RUNNING;
 import static com.wentura.pomodoroapp.Constants.IS_WORK_STARTED;
 import static com.wentura.pomodoroapp.Constants.MY_PREFERENCES;
-import static com.wentura.pomodoroapp.Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME;
 import static com.wentura.pomodoroapp.Constants.WORK_DURATION_SETTING;
 import static com.wentura.pomodoroapp.Constants.WORK_LEFT_IN_MILLISECONDS;
 
@@ -48,9 +47,8 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(IS_BREAK_STARTED, false);
                 editPreferences.putBoolean(IS_TIMER_RUNNING, false);
                 editPreferences.putBoolean(IS_BREAK_STATE, false);
-                editPreferences.putBoolean(TIME_LEFT_NOTIFICATION_FIRST_TIME, true);
                 editPreferences.apply();
-                UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 break;
             }
             case Constants.BUTTON_SKIP: {
@@ -72,7 +70,7 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                             Integer.parseInt(settings.getString(BREAK_DURATION_SETTINGS,
                                     Constants.DEFAULT_BREAK_TIME)) * 60000);
                     Log.d(TAG, "onReceive: breakState");
-                    UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
+                    Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
                     editPreferences.putBoolean(IS_BREAK_STARTED, true);
                     editPreferences.putBoolean(IS_WORK_STARTED, false);
@@ -81,7 +79,7 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                             Integer.parseInt(settings.getString(WORK_DURATION_SETTING,
                                     Constants.DEFAULT_WORK_TIME)) * 60000);
                     Log.d(TAG, "onReceive: !breakState");
-                    UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                    Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
                 editPreferences.putBoolean(IS_TIMER_RUNNING, true);
                 editPreferences.apply();
@@ -113,7 +111,7 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                     } else {
                         notification.buildNotification(context, workLeftInMilliseconds,
                                 false, false, false);
-                        UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                        Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                     }
                     Intent stopService = new Intent(context, NotificationService.class);
                     context.stopService(stopService);
@@ -122,7 +120,7 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                     Intent startService = new Intent(context, NotificationService.class);
                     context.startService(startService);
                     if (!isBreakState) {
-                        UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
+                        Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                     }
                 }
                 editPreferences.apply();

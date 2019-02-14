@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NotificationService.class);
         this.stopService(intent);
 
-        toggleKeepScreenOn();
+        Utility.toggleKeepScreenOn(this);
         loadData();
         setupUI();
     }
@@ -223,8 +222,6 @@ public class MainActivity extends AppCompatActivity {
         workLeftInMilliseconds = preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0);
         breakLeftInMilliseconds = preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
-        timeLeftNotificationFirstTime = preferences.getBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME,
-                true);
         isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
     }
 
@@ -248,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
         preferences.putLong(Constants.BREAK_LEFT_IN_MILLISECONDS, breakLeftInMilliseconds);
         preferences.putBoolean(Constants.IS_TIMER_RUNNING, isTimerRunning);
         preferences.putBoolean(Constants.IS_BREAK_STATE, isBreakState);
-        preferences.putBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME, timeLeftNotificationFirstTime);
         preferences.apply();
     }
 
@@ -271,14 +267,14 @@ public class MainActivity extends AppCompatActivity {
             startTimer(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
             breakLeftInMilliseconds = getMillisecondsFromSettings
                     (Constants.BREAK_DURATION_SETTINGS);
-            UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
+            Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
             workBreakIcon.setImageResource(R.drawable.work_icon);
             isBreakState = false;
             isBreakStarted = false;
             isWorkStarted = true;
         } else {
             startTimer(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS));
-            UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
+            Utility.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
             workBreakIcon.setImageResource(R.drawable.break_icon);
             isBreakState = true;
             isBreakStarted = true;
@@ -349,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
                 workBreakIcon.setImageResource(R.drawable.break_icon);
             } else {
                 startTimer(workLeftInMilliseconds);
-                UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
+                Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
                 notification.buildNotification(this, workLeftInMilliseconds,
                         isBreakState, isTimerRunning, true);
                 isWorkStarted = true;
@@ -411,7 +407,7 @@ public class MainActivity extends AppCompatActivity {
                     isBreakStarted = false;
                     Log.d(TAG, "onFinish: isBreakState");
                 } else {
-                    UtilityClass.toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
+                    Utility.toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
                     updateTimerTextView(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS));
                     workBreakIcon.setBackgroundResource(R.drawable.break_icon);
                     isBreakState = true;
@@ -428,9 +424,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateTimerTextView(long timeInMilliseconds) {
-        countdownText.setText(UtilityClass.formatTime(this, timeInMilliseconds));
+        countdownText.setText(Utility.formatTime(this, timeInMilliseconds));
 
-        Log.d(TAG, "updateTimerTextView: " + UtilityClass.formatTime(this, timeInMilliseconds));
+        Log.d(TAG, "updateTimerTextView: " + Utility.formatTime(this, timeInMilliseconds));
     }
 
     private void pauseTimer() {
@@ -439,7 +435,7 @@ public class MainActivity extends AppCompatActivity {
             countDownTimer.cancel();
         }
         isTimerRunning = false;
-        UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
+        Utility.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
         startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
     }
 
@@ -498,14 +494,5 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isAndroidAtLeastOreo() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    }
-
-    private void toggleKeepScreenOn() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPreferences.getBoolean(Constants.KEEP_SCREEN_ON_SETTINGS, false)) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
     }
 }

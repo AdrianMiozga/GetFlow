@@ -23,8 +23,6 @@ public class NotificationService extends Service {
         SharedPreferences preferences = getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
         Log.d(TAG, "onStartCommand: ");
 
-        preferences.getBoolean(Constants.TIME_LEFT_NOTIFICATION_FIRST_TIME,
-                true);
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
         isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
 

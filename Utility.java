@@ -1,14 +1,16 @@
 package com.wentura.pomodoroapp;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
+import android.view.WindowManager;
 
 import java.util.concurrent.TimeUnit;
 
-class UtilityClass {
+class Utility {
 
     static void toggleDoNotDisturb(Context context, int mode) {
         SharedPreferences sharedPreferences =
@@ -33,5 +35,15 @@ class UtilityClass {
         return String.format(context.getString(R.string.timeFormat),
                 TimeUnit.MILLISECONDS.toMinutes(milliseconds),
                 TimeUnit.MILLISECONDS.toSeconds(milliseconds % 60000));
+    }
+
+    static void toggleKeepScreenOn(Context context) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        if (sharedPreferences.getBoolean(Constants.KEEP_SCREEN_ON_SETTINGS, false)) {
+            ((Activity) context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 }
