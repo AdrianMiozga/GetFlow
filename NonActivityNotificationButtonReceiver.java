@@ -10,6 +10,8 @@ import android.util.Log;
 import androidx.core.app.NotificationManagerCompat;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.media.AudioManager.RINGER_MODE_NORMAL;
+import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static com.wentura.pomodoroapp.Constants.BREAK_DURATION_SETTINGS;
 import static com.wentura.pomodoroapp.Constants.BREAK_LEFT_IN_MILLISECONDS;
 import static com.wentura.pomodoroapp.Constants.IS_BREAK_STARTED;
@@ -45,9 +47,10 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(IS_WORK_STARTED, false);
                 editPreferences.putBoolean(IS_BREAK_STARTED, false);
                 editPreferences.putBoolean(IS_TIMER_RUNNING, false);
-                editPreferences.putBoolean(IS_BREAK_STARTED, false);
+                editPreferences.putBoolean(IS_BREAK_STATE, false);
                 editPreferences.putBoolean(TIME_LEFT_NOTIFICATION_FIRST_TIME, true);
                 editPreferences.apply();
+                UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 break;
             }
             case Constants.BUTTON_SKIP: {
@@ -66,15 +69,19 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(IS_WORK_STARTED, true);
                     editPreferences.putBoolean(IS_BREAK_STATE, false);
                     editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                            Integer.parseInt(settings.getString(BREAK_DURATION_SETTINGS, "0")) * 60000);
+                            Integer.parseInt(settings.getString(BREAK_DURATION_SETTINGS,
+                                    Constants.DEFAULT_BREAK_TIME)) * 60000);
                     Log.d(TAG, "onReceive: breakState");
+                    UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
                     editPreferences.putBoolean(IS_BREAK_STARTED, true);
                     editPreferences.putBoolean(IS_WORK_STARTED, false);
                     editPreferences.putBoolean(IS_BREAK_STATE, true);
                     editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
-                            Integer.parseInt(settings.getString(WORK_DURATION_SETTING, "0")) * 60000);
+                            Integer.parseInt(settings.getString(WORK_DURATION_SETTING,
+                                    Constants.DEFAULT_WORK_TIME)) * 60000);
                     Log.d(TAG, "onReceive: !breakState");
+                    UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
                 editPreferences.putBoolean(IS_TIMER_RUNNING, true);
                 editPreferences.apply();
@@ -87,24 +94,26 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                 SharedPreferences preferences =
                         context.getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
 
-                boolean timerIsRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
-                boolean breakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+                boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
+                boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
                 long workLeftInMilliseconds =
                         preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0);
                 long breakLeftInMilliseconds =
                         preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
 
-                if (timerIsRunning) {
+                Log.d(TAG, "onReceive: isTimerRunning " + isTimerRunning);
+                if (isTimerRunning) {
                     editPreferences.putBoolean(IS_TIMER_RUNNING, false);
 
                     Notification notification = new Notification();
 
-                    if (breakState) {
+                    if (isBreakState) {
                         notification.buildNotification(context, breakLeftInMilliseconds,
                                 true, false, false);
                     } else {
                         notification.buildNotification(context, workLeftInMilliseconds,
                                 false, false, false);
+                        UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                     }
                     Intent stopService = new Intent(context, NotificationService.class);
                     context.stopService(stopService);
@@ -112,6 +121,9 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(IS_TIMER_RUNNING, true);
                     Intent startService = new Intent(context, NotificationService.class);
                     context.startService(startService);
+                    if (!isBreakState) {
+                        UtilityClass.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
+                    }
                 }
                 editPreferences.apply();
                 break;

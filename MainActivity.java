@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -28,7 +27,6 @@ import android.widget.TextView;
 
 import com.wentura.pomodoroapp.settings.SettingsActivity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -141,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
+        stopButton.setVisibility(View.INVISIBLE);
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager != null) {
             StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
@@ -237,11 +236,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onPause: countCancel");
         }
 
-        if (isTimerRunning) {
-            Intent intent = new Intent(this, NotificationService.class);
-            this.startService(intent);
-            Log.d(TAG, "onPause: isTimerRunning");
-        }
+        Intent intent = new Intent(this, NotificationService.class);
+        this.startService(intent);
 
         SharedPreferences.Editor preferences =
                 getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE).edit();
@@ -275,14 +271,14 @@ public class MainActivity extends AppCompatActivity {
             startTimer(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
             breakLeftInMilliseconds = getMillisecondsFromSettings
                     (Constants.BREAK_DURATION_SETTINGS);
-            toggleDoNotDisturb(this, RINGER_MODE_SILENT);
+            UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
             workBreakIcon.setImageResource(R.drawable.work_icon);
             isBreakState = false;
             isBreakStarted = false;
             isWorkStarted = true;
         } else {
             startTimer(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS));
-            toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
+            UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
             workBreakIcon.setImageResource(R.drawable.break_icon);
             isBreakState = true;
             isBreakStarted = true;
@@ -333,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startPauseTimer() {
+        Log.d(TAG, "startPauseTimer: ");
         stopButton.setVisibility(View.VISIBLE);
         skipButton.setVisibility(View.VISIBLE);
         if (isTimerRunning) {
@@ -352,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                 workBreakIcon.setImageResource(R.drawable.break_icon);
             } else {
                 startTimer(workLeftInMilliseconds);
-                toggleDoNotDisturb(this, RINGER_MODE_SILENT);
+                UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
                 notification.buildNotification(this, workLeftInMilliseconds,
                         isBreakState, isTimerRunning, true);
                 isWorkStarted = true;
@@ -414,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
                     isBreakStarted = false;
                     Log.d(TAG, "onFinish: isBreakState");
                 } else {
-                    toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
+                    UtilityClass.toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
                     updateTimerTextView(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS));
                     workBreakIcon.setBackgroundResource(R.drawable.break_icon);
                     isBreakState = true;
@@ -430,35 +427,10 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
-    private String calculateTimeLeft(long milliseconds) {
-        return formatTime(getMinutes(milliseconds), getSeconds(milliseconds));
-    }
-
-    @NonNull
-    private String formatTime(int minutes, int seconds) {
-        String timeLeft;
-
-        timeLeft = "" + minutes;
-        timeLeft += ":";
-        if (seconds < 10) {
-            timeLeft += "0";
-        }
-        timeLeft += "" + seconds;
-        return timeLeft;
-    }
-
-    private int getSeconds(long milliseconds) {
-        return (int) (milliseconds % 60000 / 1000);
-    }
-
-    private int getMinutes(long milliseconds) {
-        return (int) (milliseconds / 60000);
-    }
-
     private void updateTimerTextView(long timeInMilliseconds) {
-        countdownText.setText(calculateTimeLeft(timeInMilliseconds));
+        countdownText.setText(UtilityClass.formatTime(this, timeInMilliseconds));
 
-        Log.d(TAG, "updateTimerTextView: " + calculateTimeLeft(timeInMilliseconds));
+        Log.d(TAG, "updateTimerTextView: " + UtilityClass.formatTime(this, timeInMilliseconds));
     }
 
     private void pauseTimer() {
@@ -467,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
             countDownTimer.cancel();
         }
         isTimerRunning = false;
-        toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
+        UtilityClass.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
         startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
     }
 
@@ -526,24 +498,6 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isAndroidAtLeastOreo() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    }
-
-    private void toggleDoNotDisturb(Context context, int mode) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTINGS, false)) {
-            setRingerMode(context, mode);
-        }
-    }
-
-    private void setRingerMode(Context context, int mode) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (notificationManager != null && notificationManager.isNotificationPolicyAccessGranted()) {
-            AudioManager audioManager = context.getSystemService(AudioManager.class);
-            if (audioManager != null) {
-                audioManager.setRingerMode(mode);
-            }
-        }
     }
 
     private void toggleKeepScreenOn() {
