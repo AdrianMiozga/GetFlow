@@ -55,8 +55,10 @@ public class NotificationService extends Service {
 
                     preferences.apply();
 
-                    notification.buildNotification(getApplicationContext(), millisUntilFinished,
-                            isBreakState, isTimerRunning, false);
+                    startForeground(Constants.TIME_LEFT_NOTIFICATION,
+                            (notification.buildNotification(getApplicationContext(), millisUntilFinished,
+                                    isBreakState, isTimerRunning, false).build()));
+
                     Log.d(TAG, "onTick: " + timeLeft);
                 }
 
@@ -72,16 +74,18 @@ public class NotificationService extends Service {
             SharedPreferences sharedPreferences =
                     getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
             if (isBreakState) {
-                notification.buildNotification(getApplicationContext(),
+                startForeground(Constants.TIME_LEFT_NOTIFICATION,
+                        (notification.buildNotification(getApplicationContext(),
                         sharedPreferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0),
-                        isBreakState, isTimerRunning, false);
+                                isBreakState, isTimerRunning, false)).build());
             } else {
-                notification.buildNotification(getApplicationContext(),
+                startForeground(Constants.TIME_LEFT_NOTIFICATION,
+                        (notification.buildNotification(getApplicationContext(),
                         sharedPreferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0),
-                        isBreakState, isTimerRunning, false);
+                                isBreakState, isTimerRunning, false)).build());
             }
         }
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Nullable

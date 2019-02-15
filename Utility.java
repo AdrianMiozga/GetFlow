@@ -32,7 +32,7 @@ class Utility {
     }
 
     static String formatTime(Context context, long milliseconds) {
-        return String.format(context.getString(R.string.timeFormat),
+        return String.format(context.getString(R.string.time_format),
                 TimeUnit.MILLISECONDS.toMinutes(milliseconds),
                 TimeUnit.MILLISECONDS.toSeconds(milliseconds % 60000));
     }

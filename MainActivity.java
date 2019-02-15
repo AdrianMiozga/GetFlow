@@ -29,6 +29,7 @@ import com.wentura.pomodoroapp.settings.SettingsActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isBreakState = false;
     private boolean isWorkStarted = false;
     private boolean isBreakStarted = false;
-    private boolean timeLeftNotificationFirstTime = true;
     private boolean isTimerRunning = true;
     private long breakLeftInMilliseconds = 0;
     private long workLeftInMilliseconds = 0;
@@ -129,12 +129,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.d(TAG, "onResume: ");
 
-        Intent intent = new Intent(this, NotificationService.class);
-        this.stopService(intent);
-
         Utility.toggleKeepScreenOn(this);
         loadData();
         setupUI();
+
+        Intent intent = new Intent(this, NotificationService.class);
+        this.stopService(intent);
     }
 
     private void setupUI() {
@@ -233,8 +233,11 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onPause: countCancel");
         }
 
-        Intent intent = new Intent(this, NotificationService.class);
-        this.startService(intent);
+        if (isWorkStarted || isBreakStarted) {
+            Intent intent = new Intent(this, NotificationService.class);
+            ContextCompat.startForegroundService(this, intent);
+            Log.d(TAG, "onPause: isWorkStarted || isBreakStarted");
+        }
 
         SharedPreferences.Editor preferences =
                 getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE).edit();
@@ -258,7 +261,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void skipTimer() {
         Log.d(TAG, "skipTimer: ");
-        countDownTimer.cancel();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
         notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
@@ -355,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
             startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
         }
-        timeLeftNotificationFirstTime = false;
     }
 
     private void stopTimer() {
@@ -370,7 +374,6 @@ public class MainActivity extends AppCompatActivity {
         isBreakState = false;
         isWorkStarted = false;
         isBreakStarted = false;
-        timeLeftNotificationFirstTime = true;
         Log.d(TAG, "stopTimer: ");
         cancelAllNotifications();
     }
@@ -417,8 +420,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 isTimerRunning = false;
-                timeLeftNotificationFirstTime = true;
                 startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
+                countDownTimer = null;
             }
         }.start();
     }
@@ -445,7 +448,6 @@ public class MainActivity extends AppCompatActivity {
                 .setColor(getColor(R.color.colorPrimary))
                 .setContentTitle(getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true)
                 .setOngoing(true);
 
         createIntentToOpenApp(mBuilder);
