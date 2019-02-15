@@ -33,6 +33,9 @@ public class Constants {
     // Notification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";
     static final String CHANNEL_TIMER_COMPLETED = "Pomodoro Timer Completed";
+    // Preference Keys
+    public static final String WORK_DURATION = "work_duration";
+    public static final String BREAK_DURATION = "break_duration";
 
     static final String POMODORO = "Pomodoro";
 }

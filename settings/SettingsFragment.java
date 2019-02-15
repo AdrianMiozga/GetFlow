@@ -81,17 +81,17 @@ public class SettingsFragment extends PreferenceFragment
 
         String key = preference.getKey();
 
-        if (key.equals("break_duration") || key.equals("work_duration")) {
+        if (key.equals(Constants.BREAK_DURATION) || key.equals(Constants.WORK_DURATION)) {
             EditTextPreference editTextPreference = (EditTextPreference) findPreference(key);
             EditText editText = editTextPreference.getEditText();
 
-            if (key.equals("break_duration")) {
+            if (key.equals(Constants.BREAK_DURATION)) {
                 if (editText.getText().toString().equals("")) {
                     editText.setText(Constants.DEFAULT_BREAK_TIME);
                 }
             }
 
-            if (key.equals("work_duration")) {
+            if (key.equals(Constants.WORK_DURATION)) {
                 if (editText.getText().toString().equals("")) {
                     editText.setText(Constants.DEFAULT_WORK_TIME);
                 }
