@@ -27,6 +27,8 @@ import android.widget.TextView;
 import com.wentura.pomodoroapp.settings.SettingsActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
@@ -150,7 +152,13 @@ public class MainActivity extends AppCompatActivity {
                     if (isBreakState) {
                         updateTimerTextView(breakLeftInMilliseconds);
                     }
+
+                    if (!isWorkStarted && !isBreakStarted && !isBreakState) {
+                        switchToWaitingStateLayout();
+                    }
                     Log.d(TAG, "setupUI: StopVisible");
+                } else {
+                    stopButton.setVisibility(View.INVISIBLE);
                 }
             }
         }
@@ -198,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             workBreakIcon.setImageResource(R.drawable.break_icon);
             Log.d(TAG, "setupUI: isBreakStarted");
         } else {
-            breakLeftInMilliseconds = getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS);
+            breakLeftInMilliseconds = getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING);
             workBreakIcon.setImageResource(R.drawable.work_icon);
             Log.d(TAG, "setupUI: !isBreakStarted");
         }
@@ -271,14 +279,14 @@ public class MainActivity extends AppCompatActivity {
         if (isBreakState) {
             startTimer(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
             breakLeftInMilliseconds = getMillisecondsFromSettings
-                    (Constants.BREAK_DURATION_SETTINGS);
+                    (Constants.BREAK_DURATION_SETTING);
             Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
             workBreakIcon.setImageResource(R.drawable.work_icon);
             isBreakState = false;
             isBreakStarted = false;
             isWorkStarted = true;
         } else {
-            startTimer(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS));
+            startTimer(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING));
             Utility.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
             workBreakIcon.setImageResource(R.drawable.break_icon);
             isBreakState = true;
@@ -296,8 +304,8 @@ public class MainActivity extends AppCompatActivity {
             value = sharedPreferences.getString(Constants.WORK_DURATION_SETTING, Constants.DEFAULT_WORK_TIME);
         }
 
-        if (durationSetting.equals(Constants.BREAK_DURATION_SETTINGS)) {
-            value = sharedPreferences.getString(Constants.BREAK_DURATION_SETTINGS, Constants.DEFAULT_BREAK_TIME);
+        if (durationSetting.equals(Constants.BREAK_DURATION_SETTING)) {
+            value = sharedPreferences.getString(Constants.BREAK_DURATION_SETTING, Constants.DEFAULT_BREAK_TIME);
         }
 
         if (value != null) {
@@ -348,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
                 startTimer(breakLeftInMilliseconds);
                 isBreakStarted = true;
                 workBreakIcon.setImageResource(R.drawable.break_icon);
+                Log.d(TAG, "startPauseTimer: !isTimerRunning && isBreakState");
             } else {
                 startTimer(workLeftInMilliseconds);
                 Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
@@ -355,6 +364,8 @@ public class MainActivity extends AppCompatActivity {
                         isBreakState, isTimerRunning, true);
                 isWorkStarted = true;
                 workBreakIcon.setImageResource(R.drawable.work_icon);
+                switchToNormalLayout();
+                Log.d(TAG, "startPauseTimer: !isTimerRunning && !isBreakState");
             }
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
             notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
@@ -363,13 +374,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopTimer() {
+        switchToNormalLayout();
         stopButton.setVisibility(View.INVISIBLE);
         startPauseButton.setVisibility(View.VISIBLE);
         skipButton.setVisibility(View.INVISIBLE);
         pauseTimer();
         workBreakIcon.setImageResource(R.drawable.work_icon);
         updateTimerTextView(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
-        breakLeftInMilliseconds = getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS);
+        breakLeftInMilliseconds = getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING);
         workLeftInMilliseconds = getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING);
         isBreakState = false;
         isWorkStarted = false;
@@ -405,25 +417,41 @@ public class MainActivity extends AppCompatActivity {
                 showEndNotification();
                 if (isBreakState) {
                     updateTimerTextView(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
-                    workBreakIcon.setBackgroundResource(R.drawable.work_icon);
+                    breakLeftInMilliseconds =
+                            getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING);
+                    workBreakIcon.setImageResource(R.drawable.work_icon);
                     isBreakState = false;
                     isBreakStarted = false;
                     Log.d(TAG, "onFinish: isBreakState");
+
+                    skipButton.setVisibility(View.GONE);
+
+                    switchToWaitingStateLayout();
                 } else {
                     Utility.toggleDoNotDisturb(getApplicationContext(), RINGER_MODE_NORMAL);
-                    updateTimerTextView(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTINGS));
-                    workBreakIcon.setBackgroundResource(R.drawable.break_icon);
+                    updateTimerTextView(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING));
+                    workLeftInMilliseconds = getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING);
+                    workBreakIcon.setImageResource(R.drawable.break_icon);
                     isBreakState = true;
                     isWorkStarted = false;
                     Log.d(TAG, "onFinish: !isBreakState");
                 }
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
                 isTimerRunning = false;
                 startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
-                countDownTimer = null;
             }
         }.start();
+    }
+
+    private void switchToWaitingStateLayout() {
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(getApplicationContext(), R.layout.waiting_state_layout);
+        constraintSet.applyTo((ConstraintLayout) findViewById(R.id.constraint_layout));
+    }
+
+    private void switchToNormalLayout() {
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(getApplicationContext(), R.layout.activity_main);
+        constraintSet.applyTo((ConstraintLayout) findViewById(R.id.constraint_layout));
     }
 
     private void updateTimerTextView(long timeInMilliseconds) {

@@ -38,7 +38,7 @@ public class SettingsFragment extends PreferenceFragment
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
-            SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTINGS);
+            SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTING);
             switchPreference.setChecked(false);
         }
     }
@@ -51,7 +51,7 @@ public class SettingsFragment extends PreferenceFragment
 
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
-        if (key.equals(Constants.DO_NOT_DISTURB_SETTINGS) && sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTINGS, false)) {
+        if (key.equals(Constants.DO_NOT_DISTURB_SETTING) && sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTING, false)) {
             NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
@@ -67,7 +67,7 @@ public class SettingsFragment extends PreferenceFragment
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Log.d("onResume", "Cancel");
-                                SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTINGS);
+                                SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTING);
                                 switchPreference.setChecked(false);
                             }
                         }).show();

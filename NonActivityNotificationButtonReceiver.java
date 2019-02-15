@@ -12,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import static android.content.Context.MODE_PRIVATE;
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
-import static com.wentura.pomodoroapp.Constants.BREAK_DURATION_SETTINGS;
+import static com.wentura.pomodoroapp.Constants.BREAK_DURATION_SETTING;
 import static com.wentura.pomodoroapp.Constants.BREAK_LEFT_IN_MILLISECONDS;
 import static com.wentura.pomodoroapp.Constants.IS_BREAK_STARTED;
 import static com.wentura.pomodoroapp.Constants.IS_BREAK_STATE;
@@ -67,7 +67,7 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(IS_WORK_STARTED, true);
                     editPreferences.putBoolean(IS_BREAK_STATE, false);
                     editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                            Integer.parseInt(settings.getString(BREAK_DURATION_SETTINGS,
+                            Integer.parseInt(settings.getString(BREAK_DURATION_SETTING,
                                     Constants.DEFAULT_BREAK_TIME)) * 60000);
                     Log.d(TAG, "onReceive: breakState");
                     Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);

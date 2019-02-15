@@ -15,7 +15,7 @@ class Utility {
     static void toggleDoNotDisturb(Context context, int mode) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
-        if (sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTINGS, false)) {
+        if (sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTING, false)) {
             setRingerMode(context, mode);
         }
     }
@@ -40,7 +40,7 @@ class Utility {
     static void toggleKeepScreenOn(Context context) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
-        if (sharedPreferences.getBoolean(Constants.KEEP_SCREEN_ON_SETTINGS, false)) {
+        if (sharedPreferences.getBoolean(Constants.KEEP_SCREEN_ON_SETTING, false)) {
             ((Activity) context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else {
             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
