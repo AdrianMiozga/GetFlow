@@ -28,8 +28,8 @@ public class Constants {
     static final String BUTTON_SKIP = "button_skip";
     static final String BUTTON_PAUSE_RESUME = "button_pause_resume";
     // Defaults
-    static final String DEFAULT_WORK_TIME = "25";
-    static final String DEFAULT_BREAK_TIME = "5";
+    public static final String DEFAULT_WORK_TIME = "25";
+    public static final String DEFAULT_BREAK_TIME = "5";
     // Notification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";
     static final String CHANNEL_TIMER_COMPLETED = "Pomodoro Timer Completed";
