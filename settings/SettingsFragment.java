@@ -7,15 +7,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.wentura.pomodoroapp.Constants;
 import com.wentura.pomodoroapp.R;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String TAG = SettingsFragment.class.getSimpleName();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,5 +73,19 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                         }).show();
             }
         }
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        Log.d(TAG, "onPreferenceTreeClick: ");
+
+        String key = preference.getKey();
+
+        if (key.equals("break_duration") || key.equals("work_duration")) {
+            EditTextPreference editTextPreference = (EditTextPreference) findPreference(key);
+            EditText editText = editTextPreference.getEditText();
+            editText.requestFocus();
+        }
+        return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 }
