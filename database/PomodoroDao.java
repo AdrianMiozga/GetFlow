@@ -19,7 +19,7 @@ public interface PomodoroDao {
     @Query("UPDATE Pomodoro SET CompletedBreaks = :completedBreaks WHERE Date (:date)")
     void updateCompletedBreaks(int completedBreaks, String date);
 
-    @Query("SELECT Date FROM Pomodoro ORDER BY Date LIMIT 1")
+    @Query("SELECT Date FROM Pomodoro ORDER BY Date DESC LIMIT 1")
     String getLatestDate();
 
     @Query("SELECT CompletedWorks FROM Pomodoro WHERE Date (:date)")
