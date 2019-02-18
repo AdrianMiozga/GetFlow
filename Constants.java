@@ -38,4 +38,6 @@ public class Constants {
     public static final String BREAK_DURATION = "break_duration";
 
     static final String POMODORO = "Pomodoro";
+
+    public static final String DATABASE_NAME = "Pomodoro.db";
 }

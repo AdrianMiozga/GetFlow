@@ -8,6 +8,9 @@ import android.media.AudioManager;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 class Utility {
@@ -45,5 +48,12 @@ class Utility {
         } else {
             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+    }
+
+    static String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        return simpleDateFormat.format(calendar.getTime());
     }
 }

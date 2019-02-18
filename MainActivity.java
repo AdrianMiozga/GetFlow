@@ -24,6 +24,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wentura.pomodoroapp.database.Database;
+import com.wentura.pomodoroapp.database.Pomodoro;
 import com.wentura.pomodoroapp.settings.SettingsActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton skipButton;
     private ImageView workBreakIcon;
     private TextView countdownText;
+    private Database database;
 
     private boolean isBreakState = false;
     private boolean isWorkStarted = false;
@@ -86,6 +89,17 @@ public class MainActivity extends AppCompatActivity {
         skipButton = findViewById(R.id.skip_button);
 
         notification = new Notification();
+
+//        database = Database.getInstance(getApplicationContext());
+//
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-17", 1, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-16", 1, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-15", 23, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-14", 1, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-13", 6, 6));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-12", 15, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-11", 5, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-10", 3, 2));
 
         Log.d(TAG, "onCreate: ");
 
@@ -328,12 +342,20 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings:
                 startSettingsActivity();
                 return true;
+            case R.id.statistics:
+                startStatisticsActivity();
+                return true;
         }
         return false;
     }
 
     private void startSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void startStatisticsActivity() {
+        Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
     }
 
@@ -415,6 +437,32 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 cancelAllNotifications();
                 showEndNotification();
+
+                database = Database.getInstance(getApplicationContext());
+                String currentDate = Utility.getCurrentDate();
+
+                if (database.pomodoroDao().getLatestDate() != null) {
+                    if (database.pomodoroDao().getLatestDate().equals(currentDate)) {
+                        if (isBreakState) {
+                            database.pomodoroDao().updateCompletedBreaks(database.pomodoroDao().getCompletedBreaks(currentDate) + 1, currentDate);
+                        } else {
+                            database.pomodoroDao().updateCompletedWorks(database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);
+                        }
+                    } else {
+                        if (isBreakState) {
+                            database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1));
+                        } else {
+                            database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0));
+                        }
+                    }
+                } else {
+                    if (isBreakState) {
+                        database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1));
+                    } else {
+                        database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0));
+                    }
+                }
+
                 if (isBreakState) {
                     updateTimerTextView(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
                     breakLeftInMilliseconds =
@@ -444,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void switchToWaitingStateLayout() {
         ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(getApplicationContext(), R.layout.waiting_state_layout);
+        constraintSet.clone(getApplicationContext(), R.layout.activity_main_waiting_state);
         constraintSet.applyTo((ConstraintLayout) findViewById(R.id.constraint_layout));
     }
 
