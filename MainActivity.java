@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        SharedPreferences preferences = getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         isWorkStarted = preferences.getBoolean(Constants.IS_WORK_STARTED, false);
         isBreakStarted = preferences.getBoolean(Constants.IS_BREAK_STARTED, false);
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         SharedPreferences.Editor preferences =
-                getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE).edit();
+                PreferenceManager.getDefaultSharedPreferences(this).edit();
 
         preferences.putBoolean(Constants.IS_WORK_STARTED, isWorkStarted);
         preferences.putBoolean(Constants.IS_BREAK_STARTED, isBreakStarted);

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -20,7 +21,7 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        SharedPreferences preferences = getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d(TAG, "onStartCommand: ");
 
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
@@ -45,7 +46,7 @@ public class NotificationService extends Service {
                     timeLeft = millisUntilFinished;
 
                     SharedPreferences.Editor preferences =
-                            getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE).edit();
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
 
                     if (isBreakState) {
                         preferences.putLong(Constants.BREAK_LEFT_IN_MILLISECONDS, timeLeft);
@@ -72,7 +73,7 @@ public class NotificationService extends Service {
             }.start();
         } else {
             SharedPreferences sharedPreferences =
-                    getSharedPreferences(Constants.MY_PREFERENCES, MODE_PRIVATE);
+                    PreferenceManager.getDefaultSharedPreferences(this);
             if (isBreakState) {
                 startForeground(Constants.TIME_LEFT_NOTIFICATION,
                         (notification.buildNotification(getApplicationContext(),
