@@ -1,8 +1,8 @@
-package com.wentura.pomodoroapp.database;
+package com.wentura.pomodoro.database;
 
 import android.content.Context;
 
-import com.wentura.pomodoroapp.Constants;
+import com.wentura.pomodoro.Constants;
 
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -16,7 +16,7 @@ public abstract class Database extends RoomDatabase {
             throw new RuntimeException("Use getInstance() method to get the single instance of " +
                     "this class.");
         }
-        return Room.databaseBuilder(context, Database.class, Constants.DATABASE_NAME).allowMainThreadQueries().build();
+        return Room.databaseBuilder(context, Database.class, Constants.DATABASE_NAME).build();
     }
 
     public static Database getInstance(Context context) {

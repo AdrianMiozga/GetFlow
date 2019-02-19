@@ -1,4 +1,4 @@
-package com.wentura.pomodoroapp;
+package com.wentura.pomodoro;
 
 import android.app.PendingIntent;
 import android.content.Context;

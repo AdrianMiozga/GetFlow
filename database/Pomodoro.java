@@ -1,4 +1,4 @@
-package com.wentura.pomodoroapp.database;
+package com.wentura.pomodoro.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

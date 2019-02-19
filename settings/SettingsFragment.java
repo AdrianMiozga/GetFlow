@@ -1,6 +1,5 @@
-package com.wentura.pomodoroapp.settings;
+package com.wentura.pomodoro.settings;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,8 +15,10 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.wentura.pomodoroapp.Constants;
-import com.wentura.pomodoroapp.R;
+import com.wentura.pomodoro.Constants;
+import com.wentura.pomodoro.R;
+
+import androidx.appcompat.app.AlertDialog;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {

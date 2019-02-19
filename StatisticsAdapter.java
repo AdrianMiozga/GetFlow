@@ -1,4 +1,4 @@
-package com.wentura.pomodoroapp;
+package com.wentura.pomodoro;
 
 import android.content.Context;
 import android.view.LayoutInflater;

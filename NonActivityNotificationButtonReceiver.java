@@ -1,4 +1,4 @@
-package com.wentura.pomodoroapp;
+package com.wentura.pomodoro;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,15 +12,15 @@ import androidx.core.app.NotificationManagerCompat;
 import static android.content.Context.MODE_PRIVATE;
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
-import static com.wentura.pomodoroapp.Constants.BREAK_DURATION_SETTING;
-import static com.wentura.pomodoroapp.Constants.BREAK_LEFT_IN_MILLISECONDS;
-import static com.wentura.pomodoroapp.Constants.IS_BREAK_STARTED;
-import static com.wentura.pomodoroapp.Constants.IS_BREAK_STATE;
-import static com.wentura.pomodoroapp.Constants.IS_TIMER_RUNNING;
-import static com.wentura.pomodoroapp.Constants.IS_WORK_STARTED;
-import static com.wentura.pomodoroapp.Constants.MY_PREFERENCES;
-import static com.wentura.pomodoroapp.Constants.WORK_DURATION_SETTING;
-import static com.wentura.pomodoroapp.Constants.WORK_LEFT_IN_MILLISECONDS;
+import static com.wentura.pomodoro.Constants.BREAK_DURATION_SETTING;
+import static com.wentura.pomodoro.Constants.BREAK_LEFT_IN_MILLISECONDS;
+import static com.wentura.pomodoro.Constants.IS_BREAK_STARTED;
+import static com.wentura.pomodoro.Constants.IS_BREAK_STATE;
+import static com.wentura.pomodoro.Constants.IS_TIMER_RUNNING;
+import static com.wentura.pomodoro.Constants.IS_WORK_STARTED;
+import static com.wentura.pomodoro.Constants.MY_PREFERENCES;
+import static com.wentura.pomodoro.Constants.WORK_DURATION_SETTING;
+import static com.wentura.pomodoro.Constants.WORK_LEFT_IN_MILLISECONDS;
 
 public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
 

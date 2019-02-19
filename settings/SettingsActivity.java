@@ -1,4 +1,4 @@
-package com.wentura.pomodoroapp.settings;
+package com.wentura.pomodoro.settings;
 
 import android.os.Bundle;
 

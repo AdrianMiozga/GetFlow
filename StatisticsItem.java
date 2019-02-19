@@ -1,6 +1,6 @@
-package com.wentura.pomodoroapp;
+package com.wentura.pomodoro;
 
-public class StatisticsItem {
+public class StatisticsItem implements Comparable<StatisticsItem> {
     private String Date;
     private int CompletedWorks;
     private int CompletedBreaks;
@@ -21,5 +21,10 @@ public class StatisticsItem {
 
     String getDate() {
         return Date;
+    }
+
+    @Override
+    public int compareTo(StatisticsItem statisticsItem) {
+        return getDate().compareTo(statisticsItem.getDate());
     }
 }

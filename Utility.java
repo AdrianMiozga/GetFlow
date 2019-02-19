@@ -1,4 +1,4 @@
-package com.wentura.pomodoroapp;
+package com.wentura.pomodoro;
 
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -52,6 +52,14 @@ class Utility {
 
     static String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
+    static String subtractDaysFromCurrentDate(int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -days);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         return simpleDateFormat.format(calendar.getTime());

@@ -1,6 +1,5 @@
-package com.wentura.pomodoroapp;
+package com.wentura.pomodoro;
 
-import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -24,10 +24,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wentura.pomodoroapp.database.Database;
-import com.wentura.pomodoroapp.database.Pomodoro;
-import com.wentura.pomodoroapp.settings.SettingsActivity;
+import com.wentura.pomodoro.database.Database;
+import com.wentura.pomodoro.database.Pomodoro;
+import com.wentura.pomodoro.settings.SettingsActivity;
 
+import java.lang.ref.WeakReference;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -94,11 +97,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-17", 1, 2));
 //        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-16", 1, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-15", 23, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-06", 23, 2));
 //        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-14", 1, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-13", 6, 6));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-01", 6, 6));
 //        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-12", 15, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-11", 5, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2018-02-11", 5, 2));
 //        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-10", 3, 2));
 
         Log.d(TAG, "onCreate: ");
@@ -155,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupUI() {
         stopButton.setVisibility(View.INVISIBLE);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (notificationManager != null) {
             StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
 
@@ -178,12 +182,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (isTimerRunning && !isBreakState) {
-            startTimer(workLeftInMilliseconds);
+            startTimer(this, workLeftInMilliseconds);
             Log.d(TAG, "setupUI: isTimerRunning && !isBreakState");
         }
 
         if (isTimerRunning && isBreakState) {
-            startTimer(breakLeftInMilliseconds);
+            startTimer(this, breakLeftInMilliseconds);
             Log.d(TAG, "setupUI: isTimerRunning && isBreakState");
         }
 
@@ -291,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
 
         if (isBreakState) {
-            startTimer(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
+            startTimer(this, getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
             breakLeftInMilliseconds = getMillisecondsFromSettings
                     (Constants.BREAK_DURATION_SETTING);
             Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
@@ -300,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
             isBreakStarted = false;
             isWorkStarted = true;
         } else {
-            startTimer(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING));
+            startTimer(this, getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING));
             Utility.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
             workBreakIcon.setImageResource(R.drawable.break_icon);
             isBreakState = true;
@@ -375,12 +379,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             workBreakIcon.setVisibility(View.VISIBLE);
             if (isBreakState) {
-                startTimer(breakLeftInMilliseconds);
+                startTimer(this, breakLeftInMilliseconds);
                 isBreakStarted = true;
                 workBreakIcon.setImageResource(R.drawable.break_icon);
                 Log.d(TAG, "startPauseTimer: !isTimerRunning && isBreakState");
             } else {
-                startTimer(workLeftInMilliseconds);
+                startTimer(this, workLeftInMilliseconds);
                 Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
                 notification.buildNotification(this, workLeftInMilliseconds,
                         isBreakState, isTimerRunning, true);
@@ -417,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.cancelAll();
     }
 
-    private void startTimer(long timeInMilliseconds) {
+    private void startTimer(final MainActivity context, long timeInMilliseconds) {
         isTimerRunning = true;
 
         countDownTimer = new CountDownTimer(timeInMilliseconds, 1000) {
@@ -437,32 +441,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 cancelAllNotifications();
                 showEndNotification();
-
-                database = Database.getInstance(getApplicationContext());
-                String currentDate = Utility.getCurrentDate();
-
-                if (database.pomodoroDao().getLatestDate() != null) {
-                    if (database.pomodoroDao().getLatestDate().equals(currentDate)) {
-                        if (isBreakState) {
-                            database.pomodoroDao().updateCompletedBreaks(database.pomodoroDao().getCompletedBreaks(currentDate) + 1, currentDate);
-                        } else {
-                            database.pomodoroDao().updateCompletedWorks(database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);
-                        }
-                    } else {
-                        if (isBreakState) {
-                            database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1));
-                        } else {
-                            database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0));
-                        }
-                    }
-                } else {
-                    if (isBreakState) {
-                        database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1));
-                    } else {
-                        database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0));
-                    }
-                }
-
+                database = Database.getInstance(context);
                 if (isBreakState) {
                     updateTimerTextView(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
                     breakLeftInMilliseconds =
@@ -473,6 +452,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onFinish: isBreakState");
 
                     skipButton.setVisibility(View.GONE);
+                    new UpdateDatabaseBreaks(context).execute();
 
                     switchToWaitingStateLayout();
                 } else {
@@ -483,11 +463,56 @@ public class MainActivity extends AppCompatActivity {
                     isBreakState = true;
                     isWorkStarted = false;
                     Log.d(TAG, "onFinish: !isBreakState");
+                    new UpdateDatabaseWorks(context).execute();
                 }
                 isTimerRunning = false;
                 startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
             }
         }.start();
+    }
+
+    private static class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MainActivity> weakReference;
+
+        UpdateDatabaseBreaks(MainActivity context) {
+            this.weakReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String currentDate = Utility.getCurrentDate();
+
+            if (weakReference.get().database.pomodoroDao().getLatestDate() != null) {
+                weakReference.get().database.pomodoroDao().updateCompletedBreaks(weakReference.get().database.pomodoroDao().getCompletedBreaks(currentDate) + 1, currentDate);
+            } else {
+                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1));
+            }
+            return null;
+        }
+    }
+
+    private static class UpdateDatabaseWorks extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MainActivity> weakReference;
+
+        UpdateDatabaseWorks(MainActivity context) {
+            this.weakReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String currentDate = Utility.getCurrentDate();
+
+            Log.d(TAG, "doInBackground: currentDate " + currentDate);
+
+            if (weakReference.get().database.pomodoroDao().getLatestDate() != null) {
+                Log.d(TAG, "doInBackground: database.pomodoroDao().getLatestDate() != null");
+                weakReference.get().database.pomodoroDao().updateCompletedWorks(weakReference.get().database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);
+            } else {
+                Log.d(TAG, "doInBackground: database.pomodoroDao().getLatestDate() == null");
+                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0));
+            }
+            return null;
+        }
     }
 
     private void switchToWaitingStateLayout() {

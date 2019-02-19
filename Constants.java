@@ -1,4 +1,4 @@
-package com.wentura.pomodoroapp;
+package com.wentura.pomodoro;
 
 public class Constants {
     // SharedPreferences Keys

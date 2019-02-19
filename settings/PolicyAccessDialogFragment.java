@@ -1,13 +1,13 @@
-package com.wentura.pomodoroapp.settings;
+package com.wentura.pomodoro.settings;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.wentura.pomodoroapp.R;
+import com.wentura.pomodoro.R;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 public class PolicyAccessDialogFragment extends DialogFragment {
