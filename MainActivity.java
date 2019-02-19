@@ -149,9 +149,31 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onResume: ");
 
         Utility.toggleKeepScreenOn(this);
+
         loadData();
         setupUI();
+        stopNotificationService();
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        String key = intent.getStringExtra(Constants.UPDATE_DATABASE_INTENT);
+        if (key != null) {
+            database = Database.getInstance(this);
+            switch (key) {
+                case Constants.UPDATE_BREAKS:
+                    new UpdateDatabaseBreaks(this).execute();
+                    break;
+                case Constants.UPDATE_WORKS:
+                    new UpdateDatabaseWorks(this).execute();
+                    break;
+            }
+        }
+    }
+
+    private void stopNotificationService() {
         Intent intent = new Intent(this, NotificationService.class);
         this.stopService(intent);
     }
@@ -168,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     stopButton.setVisibility(View.VISIBLE);
 
                     if (isBreakState) {
+                        Log.d(TAG, "setupUI: isBreakState");
                         updateTimerTextView(breakLeftInMilliseconds);
                     }
 

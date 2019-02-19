@@ -21,7 +21,11 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        final SharedPreferences.Editor preferenceEditor =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+
         Log.d(TAG, "onStartCommand: ");
 
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
@@ -45,16 +49,13 @@ public class NotificationService extends Service {
                 public void onTick(long millisUntilFinished) {
                     timeLeft = millisUntilFinished;
 
-                    SharedPreferences.Editor preferences =
-                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
-
                     if (isBreakState) {
-                        preferences.putLong(Constants.BREAK_LEFT_IN_MILLISECONDS, timeLeft);
+                        preferenceEditor.putLong(Constants.BREAK_LEFT_IN_MILLISECONDS, timeLeft);
                     } else {
-                        preferences.putLong(Constants.WORK_LEFT_IN_MILLISECONDS, timeLeft);
+                        preferenceEditor.putLong(Constants.WORK_LEFT_IN_MILLISECONDS, timeLeft);
                     }
 
-                    preferences.apply();
+                    preferenceEditor.apply();
 
                     startForeground(Constants.TIME_LEFT_NOTIFICATION,
                             (notification.buildNotification(getApplicationContext(), millisUntilFinished,
@@ -65,24 +66,37 @@ public class NotificationService extends Service {
 
                 @Override
                 public void onFinish() {
+                    preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
+                    preferenceEditor.putBoolean(Constants.IS_BREAK_STARTED, false);
+                    preferenceEditor.putBoolean(Constants.IS_WORK_STARTED, false);
+                    if (isBreakState) {
+                        preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, false);
+                    } else {
+                        preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
+                    }
+                    preferenceEditor.apply();
+
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    if (isBreakState) {
+                        intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_BREAKS);
+                    } else {
+                        intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_WORKS);
+                    }
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     Log.d(TAG, "onFinish: ");
                 }
             }.start();
         } else {
-            SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(this);
             if (isBreakState) {
                 startForeground(Constants.TIME_LEFT_NOTIFICATION,
                         (notification.buildNotification(getApplicationContext(),
-                        sharedPreferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0),
+                                preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0),
                                 isBreakState, isTimerRunning, false)).build());
             } else {
                 startForeground(Constants.TIME_LEFT_NOTIFICATION,
                         (notification.buildNotification(getApplicationContext(),
-                        sharedPreferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0),
+                                preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0),
                                 isBreakState, isTimerRunning, false)).build());
             }
         }

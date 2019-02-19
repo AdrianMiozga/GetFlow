@@ -40,4 +40,8 @@ public class Constants {
     static final String POMODORO = "Pomodoro";
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
+    // Intent
+    static final String UPDATE_DATABASE_INTENT = "update_database";
+    static final String UPDATE_WORKS = "update_works";
+    static final String UPDATE_BREAKS = "update_breaks";
 }
