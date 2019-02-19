@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         String key = intent.getStringExtra(Constants.UPDATE_DATABASE_INTENT);
         if (key != null) {
             database = Database.getInstance(this);
+            showEndNotification();
             switch (key) {
                 case Constants.UPDATE_BREAKS:
                     new UpdateDatabaseBreaks(this).execute();
