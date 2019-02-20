@@ -36,10 +36,10 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
 
         Context context = holder.dateTextView.getContext();
 
-        holder.completedWorksTextView.setText(context.getResources().getString(R.string.completed_works,
+        holder.worksNumberTextView.setText(context.getResources().getString(R.string.completed_works,
                 statisticsItem.getCompletedWorks()));
 
-        holder.completedBreaksTextView.setText(context.getResources().getString(R.string.completed_breaks,
+        holder.breaksNumberTextView.setText(context.getResources().getString(R.string.completed_breaks,
                 statisticsItem.getCompletedBreaks()));
 
         holder.dateTextView.setText(statisticsItem.getDate());
@@ -52,15 +52,15 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView dateTextView;
-        TextView completedWorksTextView;
-        TextView completedBreaksTextView;
+        TextView worksNumberTextView;
+        TextView breaksNumberTextView;
 
         ViewHolder(View view) {
             super(view);
 
             dateTextView = view.findViewById(R.id.date);
-            completedBreaksTextView = view.findViewById(R.id.completed_breaks);
-            completedWorksTextView = view.findViewById(R.id.completed_works);
+            breaksNumberTextView = view.findViewById(R.id.works_number);
+            worksNumberTextView = view.findViewById(R.id.breaks_number);
         }
     }
 }

@@ -13,15 +13,15 @@ class Notification {
     private Context context;
     private boolean isTimerRunning;
     private boolean isBrakeState;
-    private boolean isNotificationOpenedFromActivity;
+    private boolean isNotificationCreatedFromActivity;
 
     NotificationCompat.Builder buildNotification(Context context, long millisUntilFinished,
-                                                 boolean breakState, boolean timerIsRunning, boolean isNotificationOpenedFromActivity) {
+                                                 boolean breakState, boolean timerIsRunning,
+                                                 boolean isNotificationCreatedFromActivity) {
         this.context = context;
         this.isTimerRunning = timerIsRunning;
         this.isBrakeState = breakState;
-        this.isNotificationOpenedFromActivity = isNotificationOpenedFromActivity;
-
+        this.isNotificationCreatedFromActivity = isNotificationCreatedFromActivity;
         return setupNotification(millisUntilFinished);
     }
 
@@ -111,13 +111,14 @@ class Notification {
 
     @NonNull
     private Intent createButtonIntent(String actionValue) {
-        Intent buttonIntent;
-        if (isNotificationOpenedFromActivity) {
-            buttonIntent = new Intent(context, ActivityNotificationButtonReceiver.class);
-        } else {
-            buttonIntent = new Intent(context, NonActivityNotificationButtonReceiver.class);
-        }
+        Intent buttonIntent = new Intent(context, NotificationButtonReceiver.class);
         buttonIntent.putExtra(Constants.BUTTON_ACTION, actionValue);
+
+        if (isNotificationCreatedFromActivity) {
+            buttonIntent.putExtra(Constants.IS_NOTIFICATION_OPENED_FROM_ACTIVITY, true);
+        } else {
+            buttonIntent.putExtra(Constants.IS_NOTIFICATION_OPENED_FROM_ACTIVITY, false);
+        }
         return buttonIntent;
     }
 }

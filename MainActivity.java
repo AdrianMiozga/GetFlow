@@ -341,17 +341,17 @@ public class MainActivity extends AppCompatActivity {
 
     private long getMillisecondsFromSettings(String durationSetting) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String value = null;
+        String milliseconds = null;
         if (durationSetting.equals(Constants.WORK_DURATION_SETTING)) {
-            value = sharedPreferences.getString(Constants.WORK_DURATION_SETTING, Constants.DEFAULT_WORK_TIME);
+            milliseconds = sharedPreferences.getString(Constants.WORK_DURATION_SETTING, Constants.DEFAULT_WORK_TIME);
         }
 
         if (durationSetting.equals(Constants.BREAK_DURATION_SETTING)) {
-            value = sharedPreferences.getString(Constants.BREAK_DURATION_SETTING, Constants.DEFAULT_BREAK_TIME);
+            milliseconds = sharedPreferences.getString(Constants.BREAK_DURATION_SETTING, Constants.DEFAULT_BREAK_TIME);
         }
 
-        if (value != null) {
-            return (Integer.parseInt(value) * 60000);
+        if (milliseconds != null) {
+            return (Integer.parseInt(milliseconds) * 60000);
         } else {
             return 0;
         }
