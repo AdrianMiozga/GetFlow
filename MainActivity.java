@@ -80,6 +80,56 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private static int getLastWorkSessionDuration(WeakReference<MainActivity> weakReference) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(weakReference.get());
+
+        int lastWorkSessionDuration = sharedPreferences.getInt(Constants.LAST_WORK_SESSION_DURATION, 0);
+
+        Log.d(TAG, "getLastWorkSessionDuration: lastWorkSessionDuration " + lastWorkSessionDuration);
+
+        if (lastWorkSessionDuration == 0) {
+            return Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
+                    Constants.DEFAULT_WORK_TIME));
+        } else {
+            return lastWorkSessionDuration;
+        }
+    }
+
+    private static int getLastBreakSessionDuration(WeakReference<MainActivity> weakReference) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(weakReference.get());
+
+        int lastBreakSessionDuration =
+                sharedPreferences.getInt(Constants.LAST_BREAK_SESSION_DURATION, 0);
+
+        Log.d(TAG, "getLastBreakSessionDuration: lastBreakSessionDuration " + lastBreakSessionDuration);
+
+        if (lastBreakSessionDuration == 0) {
+            return Integer.parseInt(sharedPreferences.getString(Constants.BREAK_DURATION_SETTING,
+                    Constants.DEFAULT_BREAK_TIME));
+        } else {
+            return lastBreakSessionDuration;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+
+        Utility.toggleKeepScreenOn(this);
+
+        loadData();
+        setupUI();
+        stopNotificationService();
+    }
+
+    private void stopNotificationService() {
+        Intent intent = new Intent(this, NotificationService.class);
+        this.stopService(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
 
 //        database = Database.getInstance(getApplicationContext());
 //
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-17", 1, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-16", 1, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-06", 23, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-14", 1, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-01", 6, 6));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-12", 15, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2018-02-11", 5, 2));
-//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-10", 3, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-17", 1, 2, 240, 50));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-16", 1, 2, 5, 5));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-06", 23, 2, 2, 2));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-14", 1, 2, 3, 3));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-01", 6, 6, 4, 4));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-12", 15, 2, 5, 5));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2018-02-11", 5, 2, 6, 6));
+//        database.pomodoroDao().insertPomodoro(new Pomodoro("2019-02-10", 3, 2, 7, 7));
 
         Log.d(TAG, "onCreate: ");
 
@@ -141,127 +191,6 @@ public class MainActivity extends AppCompatActivity {
                 skipTimer();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-
-        Utility.toggleKeepScreenOn(this);
-
-        loadData();
-        setupUI();
-        stopNotificationService();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        String key = intent.getStringExtra(Constants.UPDATE_DATABASE_INTENT);
-        if (key != null) {
-            database = Database.getInstance(this);
-            showEndNotification();
-            switch (key) {
-                case Constants.UPDATE_BREAKS:
-                    new UpdateDatabaseBreaks(this).execute();
-                    break;
-                case Constants.UPDATE_WORKS:
-                    new UpdateDatabaseWorks(this).execute();
-                    break;
-            }
-        }
-    }
-
-    private void stopNotificationService() {
-        Intent intent = new Intent(this, NotificationService.class);
-        this.stopService(intent);
-    }
-
-    private void setupUI() {
-        stopButton.setVisibility(View.INVISIBLE);
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
-
-            for (StatusBarNotification notification : notifications) {
-                if (notification.getId() == Constants.ON_FINISH_NOTIFICATION || notification.getId() == Constants.TIME_LEFT_NOTIFICATION) {
-                    stopButton.setVisibility(View.VISIBLE);
-
-                    if (isBreakState) {
-                        Log.d(TAG, "setupUI: isBreakState");
-                        updateTimerTextView(breakLeftInMilliseconds);
-                    }
-
-                    if (!isWorkStarted && !isBreakStarted && !isBreakState) {
-                        switchToWaitingStateLayout();
-                    }
-                    Log.d(TAG, "setupUI: StopVisible");
-                } else {
-                    stopButton.setVisibility(View.INVISIBLE);
-                }
-            }
-        }
-
-        if (isTimerRunning && !isBreakState) {
-            startTimer(this, workLeftInMilliseconds);
-            Log.d(TAG, "setupUI: isTimerRunning && !isBreakState");
-        }
-
-        if (isTimerRunning && isBreakState) {
-            startTimer(this, breakLeftInMilliseconds);
-            Log.d(TAG, "setupUI: isTimerRunning && isBreakState");
-        }
-
-        if (!isWorkStarted && !isBreakStarted && !isBreakState) {
-            skipButton.setVisibility(View.INVISIBLE);
-            Log.d(TAG, "setupUI: !isWorkStarted && !isBreakStarted && !isBreakState");
-        }
-
-        if (isTimerRunning) {
-            startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
-            Log.d(TAG, "setupUI: isTimerRunning");
-        } else {
-            startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
-            Log.d(TAG, "setupUI: !isTimerRunning");
-        }
-
-        if (isWorkStarted && !isTimerRunning) {
-            updateTimerTextView(workLeftInMilliseconds);
-            Log.d(TAG, "setupUI: isWorkStarted && !isTimerRunning");
-        }
-
-        if (isBreakStarted && !isTimerRunning) {
-            updateTimerTextView(breakLeftInMilliseconds);
-            Log.d(TAG, "setupUI: isBreakStarted && !isTimerRunning");
-        }
-
-        if (!isWorkStarted && !isBreakState) {
-            workLeftInMilliseconds = getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING);
-            updateTimerTextView(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
-            Log.d(TAG, "setupUI: !isWorkStarted && !isBreakState");
-        }
-
-        if (isBreakStarted) {
-            workBreakIcon.setImageResource(R.drawable.break_icon);
-            Log.d(TAG, "setupUI: isBreakStarted");
-        } else {
-            breakLeftInMilliseconds = getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING);
-            workBreakIcon.setImageResource(R.drawable.work_icon);
-            Log.d(TAG, "setupUI: !isBreakStarted");
-        }
-
-        if (isBreakState) {
-            workBreakIcon.setImageResource(R.drawable.break_icon);
-            Log.d(TAG, "setupUI: isBreakState");
-        }
-
-        if (isWorkStarted) {
-            workBreakIcon.setImageResource(R.drawable.work_icon);
-            Log.d(TAG, "setupUI: isWorkStarted");
-        }
     }
 
     private void loadData() {
@@ -309,34 +238,25 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
     }
 
-    private void skipTimer() {
-        Log.d(TAG, "skipTimer: ");
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
-
-        if (isBreakState) {
-            startTimer(this, getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
-            breakLeftInMilliseconds = getMillisecondsFromSettings
-                    (Constants.BREAK_DURATION_SETTING);
-            Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
-            workBreakIcon.setImageResource(R.drawable.work_icon);
-            isBreakState = false;
-            isBreakStarted = false;
-            isWorkStarted = true;
-        } else {
-            startTimer(this, getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING));
-            Utility.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
-            workBreakIcon.setImageResource(R.drawable.break_icon);
-            isBreakState = true;
-            isBreakStarted = true;
-            isWorkStarted = false;
-            Log.d(TAG, "skipTimer: work");
+        String key = intent.getStringExtra(Constants.UPDATE_DATABASE_INTENT);
+        if (key != null) {
+            database = Database.getInstance(this);
+            showEndNotification();
+            switch (key) {
+                case Constants.UPDATE_BREAKS:
+                    new UpdateDatabaseBreaks(this).execute();
+                    Log.d(TAG, "onNewIntent: updateDatabaseBreaks");
+                    break;
+                case Constants.UPDATE_WORKS:
+                    new UpdateDatabaseWorks(this).execute();
+                    Log.d(TAG, "onNewIntent: updateDatabaseWorks");
+                    break;
+            }
         }
-        startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
     }
 
     private long getMillisecondsFromSettings(String durationSetting) {
@@ -387,39 +307,93 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void startPauseTimer() {
-        Log.d(TAG, "startPauseTimer: ");
-        stopButton.setVisibility(View.VISIBLE);
-        skipButton.setVisibility(View.VISIBLE);
+    private void setupUI() {
+        stopButton.setVisibility(View.INVISIBLE);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
+
+            for (StatusBarNotification notification : notifications) {
+                if (notification.getId() == Constants.ON_FINISH_NOTIFICATION || notification.getId() == Constants.TIME_LEFT_NOTIFICATION) {
+                    stopButton.setVisibility(View.VISIBLE);
+
+                    if (isBreakState) {
+                        Log.d(TAG, "setupUI: isBreakState");
+                        updateTimerTextView(breakLeftInMilliseconds);
+                    }
+
+                    if (!isWorkStarted && !isBreakStarted && !isBreakState) {
+                        switchToWaitingStateLayout();
+                    }
+                    Log.d(TAG, "setupUI: StopVisible");
+                } else {
+                    stopButton.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+
+        if (isTimerRunning && !isBreakState) {
+            startTimer(this, workLeftInMilliseconds);
+            Log.d(TAG, "setupUI: isTimerRunning && !isBreakState");
+        }
+
+        if (isTimerRunning && isBreakState) {
+            startTimer(this, breakLeftInMilliseconds);
+            Log.d(TAG, "setupUI: isTimerRunning && isBreakState");
+        }
+
+        if (!isBreakStarted && isBreakState) {
+            updateTimerTextView(getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING));
+            Log.d(TAG, "setupUI: !isBreakStarted && isBreakState");
+        }
+
+        if (!isWorkStarted && !isBreakStarted && !isBreakState) {
+            skipButton.setVisibility(View.INVISIBLE);
+            Log.d(TAG, "setupUI: !isWorkStarted && !isBreakStarted && !isBreakState");
+        }
+
         if (isTimerRunning) {
-            pauseTimer();
-            if (isBreakState) {
-                timerNotification.buildNotification(this, breakLeftInMilliseconds,
-                        true, isTimerRunning, true);
-            } else {
-                timerNotification.buildNotification(this, workLeftInMilliseconds,
-                        false, isTimerRunning, true);
-            }
-        } else {
-            workBreakIcon.setVisibility(View.VISIBLE);
-            if (isBreakState) {
-                startTimer(this, breakLeftInMilliseconds);
-                isBreakStarted = true;
-                workBreakIcon.setImageResource(R.drawable.break_icon);
-                Log.d(TAG, "startPauseTimer: !isTimerRunning && isBreakState");
-            } else {
-                startTimer(this, workLeftInMilliseconds);
-                Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
-                timerNotification.buildNotification(this, workLeftInMilliseconds,
-                        isBreakState, isTimerRunning, true);
-                isWorkStarted = true;
-                workBreakIcon.setImageResource(R.drawable.work_icon);
-                switchToNormalLayout();
-                Log.d(TAG, "startPauseTimer: !isTimerRunning && !isBreakState");
-            }
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-            notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
             startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
+            Log.d(TAG, "setupUI: isTimerRunning");
+        } else {
+            startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
+            Log.d(TAG, "setupUI: !isTimerRunning");
+        }
+
+        if (isWorkStarted && !isTimerRunning) {
+            updateTimerTextView(workLeftInMilliseconds);
+            Log.d(TAG, "setupUI: isWorkStarted && !isTimerRunning");
+        }
+
+        if (isBreakStarted && !isTimerRunning) {
+            updateTimerTextView(breakLeftInMilliseconds);
+            Log.d(TAG, "setupUI: isBreakStarted && !isTimerRunning");
+        }
+
+        if (!isWorkStarted && !isBreakState) {
+            workLeftInMilliseconds = getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING);
+            updateTimerTextView(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
+            Log.d(TAG, "setupUI: !isWorkStarted && !isBreakState");
+        }
+
+        if (isBreakStarted) {
+            workBreakIcon.setImageResource(R.drawable.break_icon);
+            Log.d(TAG, "setupUI: isBreakStarted");
+        } else {
+            breakLeftInMilliseconds = getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING);
+            workBreakIcon.setImageResource(R.drawable.work_icon);
+            Log.d(TAG, "setupUI: !isBreakStarted");
+        }
+
+        if (isBreakState) {
+            workBreakIcon.setImageResource(R.drawable.break_icon);
+            Log.d(TAG, "setupUI: isBreakState");
+        }
+
+        if (isWorkStarted) {
+            workBreakIcon.setImageResource(R.drawable.work_icon);
+            Log.d(TAG, "setupUI: isWorkStarted");
         }
     }
 
@@ -495,6 +469,91 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
+    private void skipTimer() {
+        Log.d(TAG, "skipTimer: ");
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+        notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (isBreakState) {
+            startTimer(this, getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
+            breakLeftInMilliseconds = getMillisecondsFromSettings
+                    (Constants.BREAK_DURATION_SETTING);
+            editor.putInt(Constants.LAST_WORK_SESSION_DURATION,
+                    Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
+                            Constants.DEFAULT_BREAK_TIME)));
+            Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
+            workBreakIcon.setImageResource(R.drawable.work_icon);
+            isBreakState = false;
+            isBreakStarted = false;
+            isWorkStarted = true;
+        } else {
+            startTimer(this, getMillisecondsFromSettings(Constants.BREAK_DURATION_SETTING));
+            workLeftInMilliseconds = getMillisecondsFromSettings
+                    (Constants.WORK_DURATION_SETTING);
+            editor.putInt(Constants.LAST_BREAK_SESSION_DURATION,
+                    Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
+                            Constants.DEFAULT_BREAK_TIME)));
+            Utility.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
+            workBreakIcon.setImageResource(R.drawable.break_icon);
+            isBreakState = true;
+            isBreakStarted = true;
+            isWorkStarted = false;
+            Log.d(TAG, "skipTimer: work");
+        }
+        editor.apply();
+        startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
+    }
+
+    private void startPauseTimer() {
+        Log.d(TAG, "startPauseTimer: ");
+        stopButton.setVisibility(View.VISIBLE);
+        skipButton.setVisibility(View.VISIBLE);
+        SharedPreferences.Editor editor =
+                PreferenceManager.getDefaultSharedPreferences(this).edit();
+        if (isTimerRunning) {
+            pauseTimer();
+            if (isBreakState) {
+                timerNotification.buildNotification(this, breakLeftInMilliseconds,
+                        true, isTimerRunning, true);
+            } else {
+                timerNotification.buildNotification(this, workLeftInMilliseconds,
+                        false, isTimerRunning, true);
+            }
+        } else {
+            workBreakIcon.setVisibility(View.VISIBLE);
+            if (isBreakState) {
+                startTimer(this, breakLeftInMilliseconds);
+                isBreakStarted = true;
+                workBreakIcon.setImageResource(R.drawable.break_icon);
+                editor.putInt(Constants.LAST_BREAK_SESSION_DURATION,
+                        (int) breakLeftInMilliseconds / 60000);
+                Log.d(TAG, "startPauseTimer: !isTimerRunning && isBreakState, " +
+                        "breakLeftInMilliseconds / 60000 = " + (int) breakLeftInMilliseconds / 60000);
+            } else {
+                startTimer(this, workLeftInMilliseconds);
+                Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
+                timerNotification.buildNotification(this, workLeftInMilliseconds,
+                        isBreakState, isTimerRunning, true);
+                isWorkStarted = true;
+                workBreakIcon.setImageResource(R.drawable.work_icon);
+                switchToNormalLayout();
+                editor.putInt(Constants.LAST_WORK_SESSION_DURATION, (int) workLeftInMilliseconds / 60000);
+                Log.d(TAG, "startPauseTimer: !isTimerRunning && !isBreakState, " +
+                        "workLeftInMilliseconds / 60000 = " + (int) workLeftInMilliseconds / 60000);
+            }
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+            notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
+            startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
+        }
+        editor.apply();
+    }
+
     private static class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
         private WeakReference<MainActivity> weakReference;
 
@@ -508,8 +567,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (weakReference.get().database.pomodoroDao().getLatestDate().equals(currentDate)) {
                 weakReference.get().database.pomodoroDao().updateCompletedBreaks(weakReference.get().database.pomodoroDao().getCompletedBreaks(currentDate) + 1, currentDate);
+                weakReference.get().database.pomodoroDao().updateCompletedBreaksTime(weakReference.get().database.pomodoroDao().getCompletedBreaksTime(currentDate) + getLastBreakSessionDuration(weakReference), currentDate);
             } else {
-                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1));
+                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1, 0, getLastBreakSessionDuration(weakReference)));
             }
             return null;
         }
@@ -531,9 +591,10 @@ public class MainActivity extends AppCompatActivity {
             if (weakReference.get().database.pomodoroDao().getLatestDate().equals(currentDate)) {
                 Log.d(TAG, "doInBackground: database.pomodoroDao().getLatestDate() != null");
                 weakReference.get().database.pomodoroDao().updateCompletedWorks(weakReference.get().database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);
+                weakReference.get().database.pomodoroDao().updateCompletedWorksTime(weakReference.get().database.pomodoroDao().getCompletedWorksTime(currentDate) + getLastWorkSessionDuration(weakReference), currentDate);
             } else {
                 Log.d(TAG, "doInBackground: database.pomodoroDao().getLatestDate() == null");
-                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0));
+                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0, getLastWorkSessionDuration(weakReference), 0));
             }
             return null;
         }

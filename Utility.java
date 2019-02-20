@@ -42,6 +42,12 @@ class Utility {
                 TimeUnit.MILLISECONDS.toSeconds(milliseconds % 60000));
     }
 
+    static String formatStatisticsTime(Context context, long milliseconds) {
+        return String.format(context.getString(R.string.time_format_statistics),
+                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+                TimeUnit.MILLISECONDS.toSeconds(milliseconds % 60000));
+    }
+
     static void toggleKeepScreenOn(Context context) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);

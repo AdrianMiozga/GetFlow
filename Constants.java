@@ -3,6 +3,10 @@ package com.wentura.pomodoro;
 public class Constants {
     // SharedPreferences Keys
     public static final String DO_NOT_DISTURB_SETTING = "do_not_disturb";
+    public static final String WORK_DURATION = "work_duration";
+    public static final String BREAK_DURATION = "break_duration";
+    static final String LAST_WORK_SESSION_DURATION = "last_work_session_duration";
+    static final String LAST_BREAK_SESSION_DURATION = "last_work_session_duration";
     static final String KEEP_SCREEN_ON_SETTING = "keep_screen_on";
     static final String BREAK_DURATION_SETTING = "break_duration";
     static final String WORK_DURATION_SETTING = "work_duration";
@@ -12,7 +16,6 @@ public class Constants {
     static final String BREAK_LEFT_IN_MILLISECONDS = "break_left_in_milliseconds";
     static final String IS_TIMER_RUNNING = "is_timer_running";
     static final String IS_BREAK_STATE = "is_break_state";
-    static final String MY_PREFERENCES = "my_preferences";
     // TimerNotification Ids
     static final int ON_FINISH_NOTIFICATION = 0;
     static final int TIME_LEFT_NOTIFICATION = 1;
@@ -33,9 +36,6 @@ public class Constants {
     // TimerNotification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";
     static final String CHANNEL_TIMER_COMPLETED = "Pomodoro Timer Completed";
-    // Preference Keys
-    public static final String WORK_DURATION = "work_duration";
-    public static final String BREAK_DURATION = "break_duration";
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
     // Intents

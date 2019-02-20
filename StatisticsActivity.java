@@ -39,7 +39,7 @@ public class StatisticsActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
             if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
                 statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                        0, 0));
+                        0, 0, 0, 0));
             }
             days++;
         }
@@ -90,6 +90,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
             createDatesWithoutPomodoros(statisticsItems);
             formatDates(statisticsItems);
+
+            statisticsItems.get(0).setDate(statisticsActivity.getString(R.string.today));
 
             StatisticsAdapter statisticsAdapter = new StatisticsAdapter(statisticsItems);
 

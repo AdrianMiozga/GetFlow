@@ -43,6 +43,10 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
                 statisticsItem.getCompletedBreaks()));
 
         holder.dateTextView.setText(statisticsItem.getDate());
+
+        holder.completedWorksTimeTextView.setText(context.getResources().getString(R.string.completed_work_time, Utility.formatStatisticsTime(context, statisticsItem.getCompletedWorksTime() * 1000)));
+
+        holder.completedBreaksTimeTextView.setText(context.getResources().getString(R.string.total_break_time, Utility.formatStatisticsTime(context, statisticsItem.getCompletedBreaksTime() * 1000)));
     }
 
     @Override
@@ -54,13 +58,17 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
         TextView dateTextView;
         TextView worksNumberTextView;
         TextView breaksNumberTextView;
+        TextView completedWorksTimeTextView;
+        TextView completedBreaksTimeTextView;
 
         ViewHolder(View view) {
             super(view);
 
             dateTextView = view.findViewById(R.id.date);
-            breaksNumberTextView = view.findViewById(R.id.works_number);
-            worksNumberTextView = view.findViewById(R.id.breaks_number);
+            breaksNumberTextView = view.findViewById(R.id.breaks_number);
+            worksNumberTextView = view.findViewById(R.id.works_number);
+            completedBreaksTimeTextView = view.findViewById(R.id.total_break_time);
+            completedWorksTimeTextView = view.findViewById(R.id.completed_work_time);
         }
     }
 }

@@ -35,12 +35,6 @@ class TimerNotification {
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setShowWhen(false);
 
-        builder.addAction(R.drawable.ic_stop_button, context.getString(R.string.stop),
-                createButtonPendingIntent(Constants.BUTTON_STOP));
-
-        builder.addAction(R.drawable.ic_skip_button, context.getString(R.string.skip),
-                createButtonPendingIntent(Constants.BUTTON_SKIP));
-
         if (isTimerRunning) {
             builder.addAction(R.drawable.ic_play_button, context.getString(R.string.pause),
                     createButtonPendingIntent(Constants.BUTTON_PAUSE_RESUME));
@@ -48,6 +42,12 @@ class TimerNotification {
             builder.addAction(R.drawable.ic_play_button, context.getString(R.string.resume),
                     createButtonPendingIntent(Constants.BUTTON_PAUSE_RESUME));
         }
+
+        builder.addAction(R.drawable.ic_skip_button, context.getString(R.string.skip),
+                createButtonPendingIntent(Constants.BUTTON_SKIP));
+
+        builder.addAction(R.drawable.ic_stop_button, context.getString(R.string.stop),
+                createButtonPendingIntent(Constants.BUTTON_STOP));
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
