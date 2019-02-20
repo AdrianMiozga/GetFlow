@@ -422,17 +422,27 @@ public class MainActivity extends AppCompatActivity {
     private void startTimer(final MainActivity context, long timeInMilliseconds) {
         isTimerRunning = true;
 
+        final NotificationCompat.Builder builder =
+                timerNotification.buildNotification(context, 0,
+                        isBreakState, true, true);
+
+        final NotificationManagerCompat notificationManagerCompat =
+                NotificationManagerCompat.from(context);
+
         countDownTimer = new CountDownTimer(timeInMilliseconds, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 if (isBreakState) {
                     breakLeftInMilliseconds = millisUntilFinished;
+                    builder.setContentText(context.getString(R.string.break_time_left,
+                            Utility.formatTime(context, millisUntilFinished)));
                 } else {
                     workLeftInMilliseconds = millisUntilFinished;
+                    builder.setContentText(context.getString(R.string.work_time_left,
+                            Utility.formatTime(context, millisUntilFinished)));
                 }
                 updateTimerTextView(millisUntilFinished);
-                timerNotification.buildNotification(getApplicationContext(), millisUntilFinished,
-                        isBreakState, isTimerRunning, true);
+                notificationManagerCompat.notify(Constants.TIME_LEFT_NOTIFICATION, builder.build());
             }
 
             @Override
@@ -518,13 +528,18 @@ public class MainActivity extends AppCompatActivity {
                 PreferenceManager.getDefaultSharedPreferences(this).edit();
         if (isTimerRunning) {
             pauseTimer();
+            NotificationCompat.Builder builder;
             if (isBreakState) {
-                timerNotification.buildNotification(this, breakLeftInMilliseconds,
+                builder = timerNotification.buildNotification(this,
+                        breakLeftInMilliseconds,
                         true, isTimerRunning, true);
             } else {
-                timerNotification.buildNotification(this, workLeftInMilliseconds,
+                builder = timerNotification.buildNotification(this, workLeftInMilliseconds,
                         false, isTimerRunning, true);
             }
+            NotificationManagerCompat notificationManagerCompat =
+                    NotificationManagerCompat.from(this);
+            notificationManagerCompat.notify(Constants.TIME_LEFT_NOTIFICATION, builder.build());
         } else {
             workBreakIcon.setVisibility(View.VISIBLE);
             if (isBreakState) {

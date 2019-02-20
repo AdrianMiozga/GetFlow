@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -108,27 +109,33 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                     long breakLeftInMilliseconds =
                             preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
 
-                    Log.d(TAG, "onReceive: isTimerRunning " + isTimerRunning);
+                    Log.d(TAG, "onReceive: isTimerRunning");
                     if (isTimerRunning) {
                         stopNotificationService(context);
                         editPreferences.putBoolean(IS_TIMER_RUNNING, false);
 
                         TimerNotification timerNotification = new TimerNotification();
 
+                        NotificationCompat.Builder builder;
                         if (isBreakState) {
-                            timerNotification.buildNotification(context, breakLeftInMilliseconds,
-                                    true, false, false).build();
+                            builder = timerNotification.buildNotification(context,
+                                    breakLeftInMilliseconds,
+                                    true, false, false);
                             editPreferences.putInt(Constants.LAST_BREAK_SESSION_DURATION,
                                     (int) breakLeftInMilliseconds / 60000);
 
                             Log.d(TAG, "onReceive: isBreakState");
                         } else {
-                            timerNotification.buildNotification(context, workLeftInMilliseconds,
-                                    false, false, false).build();
+                            builder = timerNotification.buildNotification(context,
+                                    workLeftInMilliseconds,
+                                    false, false, false);
                             editPreferences.putInt(Constants.LAST_WORK_SESSION_DURATION, (int) workLeftInMilliseconds / 60000);
                             Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                             Log.d(TAG, "onReceive: !isBreakState");
                         }
+                        NotificationManagerCompat notificationManagerCompat =
+                                NotificationManagerCompat.from(context);
+                        notificationManagerCompat.notify(Constants.TIME_LEFT_NOTIFICATION, builder.build());
                     } else {
                         startNotificationService(context);
                         editPreferences.putBoolean(IS_TIMER_RUNNING, true);

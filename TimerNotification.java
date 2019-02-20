@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 class TimerNotification {
 
@@ -57,13 +56,12 @@ class TimerNotification {
         builder.setContentIntent(pendingIntent);
 
         if (isBrakeState) {
-            builder.setContentText(context.getString(R.string.break_time_left) + " " + Utility.formatTime(context, millisUntilFinished));
+            builder.setContentText(context.getString(R.string.break_time_left,
+                    Utility.formatTime(context, millisUntilFinished)));
         } else {
-            builder.setContentText(context.getString(R.string.work_time_left) + " " + Utility.formatTime(context, millisUntilFinished));
+            builder.setContentText(context.getString(R.string.work_time_left,
+                    Utility.formatTime(context, millisUntilFinished)));
         }
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(Constants.TIME_LEFT_NOTIFICATION, builder.build());
         return builder;
     }
 

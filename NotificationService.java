@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 public class NotificationService extends Service {
     static final String TAG = NotificationService.class.getSimpleName();
@@ -43,21 +44,24 @@ public class NotificationService extends Service {
 
         if (isTimerRunning) {
             countDownTimer = new CountDownTimer(timeLeft, 1000) {
+                NotificationCompat.Builder builder =
+                        timerNotification.buildNotification(getApplicationContext(), 0, isBreakState,
+                                isTimerRunning, false);
                 @Override
                 public void onTick(long millisUntilFinished) {
                     timeLeft = millisUntilFinished;
 
                     if (isBreakState) {
                         preferenceEditor.putLong(Constants.BREAK_LEFT_IN_MILLISECONDS, timeLeft);
+                        builder.setContentText(getApplicationContext().getString(R.string.break_time_left, Utility.formatTime(getApplicationContext(), millisUntilFinished)));
                     } else {
                         preferenceEditor.putLong(Constants.WORK_LEFT_IN_MILLISECONDS, timeLeft);
+                        builder.setContentText(getApplicationContext().getString(R.string.work_time_left, Utility.formatTime(getApplicationContext(), millisUntilFinished)));
                     }
 
                     preferenceEditor.apply();
 
-                    startForeground(Constants.TIME_LEFT_NOTIFICATION,
-                            (timerNotification.buildNotification(getApplicationContext(), millisUntilFinished,
-                                    isBreakState, isTimerRunning, false).build()));
+                    startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
 
                     Log.d(TAG, "onTick: " + timeLeft);
                 }
@@ -86,17 +90,19 @@ public class NotificationService extends Service {
                 }
             }.start();
         } else {
+            NotificationCompat.Builder builder;
             if (isBreakState) {
-                startForeground(Constants.TIME_LEFT_NOTIFICATION,
-                        (timerNotification.buildNotification(getApplicationContext(),
-                                preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0),
-                                isBreakState, isTimerRunning, false)).build());
+                builder = timerNotification.buildNotification(getApplicationContext(),
+                        preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0),
+                        isBreakState, isTimerRunning, false);
+                Log.d(TAG, "onStartCommand: isBreakState");
             } else {
-                startForeground(Constants.TIME_LEFT_NOTIFICATION,
-                        (timerNotification.buildNotification(getApplicationContext(),
-                                preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0),
-                                isBreakState, isTimerRunning, false)).build());
+                builder = timerNotification.buildNotification(getApplicationContext(),
+                        preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0),
+                        isBreakState, isTimerRunning, false);
+                Log.d(TAG, "onStartCommand: !isBreakState");
             }
+            startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
         }
         return START_STICKY;
     }
