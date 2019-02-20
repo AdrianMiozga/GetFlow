@@ -50,11 +50,9 @@ class Notification {
 
     private void setTimeLeftNotificationContent(long millisUntilFinished, NotificationCompat.Builder builder) {
         if (isBrakeState) {
-            builder.setContentText(context.getString(R.string.break_time_left) + " " + calculateTimeLeft
-                    (millisUntilFinished));
+            builder.setContentText(context.getString(R.string.break_time_left) + " " + Utility.formatTime(context, millisUntilFinished));
         } else {
-            builder.setContentText(context.getString(R.string.work_time_left) + " " + calculateTimeLeft
-                    (millisUntilFinished));
+            builder.setContentText(context.getString(R.string.work_time_left) + " " + Utility.formatTime(context, millisUntilFinished));
         }
     }
 
@@ -109,31 +107,6 @@ class Notification {
             default:
                 return -1;
         }
-    }
-
-    private String calculateTimeLeft(long milliseconds) {
-        return formatTime(getMinutes(milliseconds), getSeconds(milliseconds));
-    }
-
-    @NonNull
-    private String formatTime(int minutes, int seconds) {
-        String timeLeft;
-
-        timeLeft = "" + minutes;
-        timeLeft += ":";
-        if (seconds < 10) {
-            timeLeft += "0";
-        }
-        timeLeft += "" + seconds;
-        return timeLeft;
-    }
-
-    private int getSeconds(long milliseconds) {
-        return (int) (milliseconds % 60000 / 1000);
-    }
-
-    private int getMinutes(long milliseconds) {
-        return (int) (milliseconds / 60000);
     }
 
     @NonNull
