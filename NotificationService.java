@@ -14,7 +14,6 @@ import androidx.core.app.NotificationCompat;
 public class NotificationService extends Service {
     static final String TAG = NotificationService.class.getSimpleName();
 
-    private boolean isTimerRunning;
     private boolean isBreakState;
     private long timeLeft;
     private CountDownTimer countDownTimer;
@@ -28,7 +27,7 @@ public class NotificationService extends Service {
         Log.d(TAG, "onStartCommand: ");
 
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
-        isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
+        boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
 
         if (isBreakState) {
             timeLeft = preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
@@ -46,7 +45,7 @@ public class NotificationService extends Service {
             countDownTimer = new CountDownTimer(timeLeft, 1000) {
                 NotificationCompat.Builder builder =
                         timerNotification.buildNotification(getApplicationContext(), 0, isBreakState,
-                                isTimerRunning, false);
+                                true, false);
                 @Override
                 public void onTick(long millisUntilFinished) {
                     timeLeft = millisUntilFinished;
@@ -94,12 +93,12 @@ public class NotificationService extends Service {
             if (isBreakState) {
                 builder = timerNotification.buildNotification(getApplicationContext(),
                         preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0),
-                        isBreakState, isTimerRunning, false);
+                        isBreakState, false, false);
                 Log.d(TAG, "onStartCommand: isBreakState");
             } else {
                 builder = timerNotification.buildNotification(getApplicationContext(),
                         preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0),
-                        isBreakState, isTimerRunning, false);
+                        isBreakState, false, false);
                 Log.d(TAG, "onStartCommand: !isBreakState");
             }
             startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
