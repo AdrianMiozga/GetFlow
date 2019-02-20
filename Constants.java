@@ -13,7 +13,7 @@ public class Constants {
     static final String IS_TIMER_RUNNING = "is_timer_running";
     static final String IS_BREAK_STATE = "is_break_state";
     static final String MY_PREFERENCES = "my_preferences";
-    // Notification Ids
+    // TimerNotification Ids
     static final int ON_FINISH_NOTIFICATION = 0;
     static final int TIME_LEFT_NOTIFICATION = 1;
     // Pending Intent Request Codes
@@ -30,7 +30,7 @@ public class Constants {
     // Defaults
     public static final String DEFAULT_WORK_TIME = "25";
     public static final String DEFAULT_BREAK_TIME = "5";
-    // Notification Channels
+    // TimerNotification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";
     static final String CHANNEL_TIMER_COMPLETED = "Pomodoro Timer Completed";
     // Preference Keys

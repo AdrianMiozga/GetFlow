@@ -97,14 +97,14 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                         stopNotificationService(context);
                         editPreferences.putBoolean(IS_TIMER_RUNNING, false);
 
-                        Notification notification = new Notification();
+                        TimerNotification timerNotification = new TimerNotification();
 
                         if (isBreakState) {
-                            notification.buildNotification(context, breakLeftInMilliseconds,
+                            timerNotification.buildNotification(context, breakLeftInMilliseconds,
                                     true, false, false).build();
                             Log.d(TAG, "onReceive: isBreakState");
                         } else {
-                            notification.buildNotification(context, workLeftInMilliseconds,
+                            timerNotification.buildNotification(context, workLeftInMilliseconds,
                                     false, false, false).build();
                             Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                             Log.d(TAG, "onReceive: !isBreakState");

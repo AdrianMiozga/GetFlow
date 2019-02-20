@@ -39,7 +39,7 @@ public class NotificationService extends Service {
 
         Log.d(TAG, "onStartCommand: timeLeft " + timeLeft);
 
-        final Notification notification = new Notification();
+        final TimerNotification timerNotification = new TimerNotification();
 
         if (isTimerRunning) {
             countDownTimer = new CountDownTimer(timeLeft, 1000) {
@@ -56,7 +56,7 @@ public class NotificationService extends Service {
                     preferenceEditor.apply();
 
                     startForeground(Constants.TIME_LEFT_NOTIFICATION,
-                            (notification.buildNotification(getApplicationContext(), millisUntilFinished,
+                            (timerNotification.buildNotification(getApplicationContext(), millisUntilFinished,
                                     isBreakState, isTimerRunning, false).build()));
 
                     Log.d(TAG, "onTick: " + timeLeft);
@@ -88,12 +88,12 @@ public class NotificationService extends Service {
         } else {
             if (isBreakState) {
                 startForeground(Constants.TIME_LEFT_NOTIFICATION,
-                        (notification.buildNotification(getApplicationContext(),
+                        (timerNotification.buildNotification(getApplicationContext(),
                                 preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0),
                                 isBreakState, isTimerRunning, false)).build());
             } else {
                 startForeground(Constants.TIME_LEFT_NOTIFICATION,
-                        (notification.buildNotification(getApplicationContext(),
+                        (timerNotification.buildNotification(getApplicationContext(),
                                 preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0),
                                 isBreakState, isTimerRunning, false)).build());
             }

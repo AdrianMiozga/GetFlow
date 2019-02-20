@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private CountDownTimer countDownTimer;
-    private Notification notification;
+    private TimerNotification timerNotification;
     private ImageButton startPauseButton;
     private ImageButton stopButton;
     private ImageButton skipButton;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         workBreakIcon = findViewById(R.id.work_break_icon);
         skipButton = findViewById(R.id.skip_button);
 
-        notification = new Notification();
+        timerNotification = new TimerNotification();
 
 //        database = Database.getInstance(getApplicationContext());
 //
@@ -394,10 +394,10 @@ public class MainActivity extends AppCompatActivity {
         if (isTimerRunning) {
             pauseTimer();
             if (isBreakState) {
-                notification.buildNotification(this, breakLeftInMilliseconds,
+                timerNotification.buildNotification(this, breakLeftInMilliseconds,
                         true, isTimerRunning, true);
             } else {
-                notification.buildNotification(this, workLeftInMilliseconds,
+                timerNotification.buildNotification(this, workLeftInMilliseconds,
                         false, isTimerRunning, true);
             }
         } else {
@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 startTimer(this, workLeftInMilliseconds);
                 Utility.toggleDoNotDisturb(this, RINGER_MODE_SILENT);
-                notification.buildNotification(this, workLeftInMilliseconds,
+                timerNotification.buildNotification(this, workLeftInMilliseconds,
                         isBreakState, isTimerRunning, true);
                 isWorkStarted = true;
                 workBreakIcon.setImageResource(R.drawable.work_icon);
@@ -457,7 +457,7 @@ public class MainActivity extends AppCompatActivity {
                     workLeftInMilliseconds = millisUntilFinished;
                 }
                 updateTimerTextView(millisUntilFinished);
-                notification.buildNotification(getApplicationContext(), millisUntilFinished,
+                timerNotification.buildNotification(getApplicationContext(), millisUntilFinished,
                         isBreakState, isTimerRunning, true);
             }
 

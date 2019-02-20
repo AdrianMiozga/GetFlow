@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-class Notification {
+class TimerNotification {
 
     private Context context;
     private boolean isTimerRunning;
@@ -16,11 +16,11 @@ class Notification {
     private boolean isNotificationCreatedFromActivity;
 
     NotificationCompat.Builder buildNotification(Context context, long millisUntilFinished,
-                                                 boolean breakState, boolean timerIsRunning,
+                                                 boolean isBreakState, boolean isTimerRunning,
                                                  boolean isNotificationCreatedFromActivity) {
         this.context = context;
-        this.isTimerRunning = timerIsRunning;
-        this.isBrakeState = breakState;
+        this.isTimerRunning = isTimerRunning;
+        this.isBrakeState = isBreakState;
         this.isNotificationCreatedFromActivity = isNotificationCreatedFromActivity;
         return setupNotification(millisUntilFinished);
     }
