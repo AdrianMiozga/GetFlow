@@ -568,42 +568,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showEndNotification() {
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setColor(getColor(R.color.colorPrimary))
                 .setContentTitle(getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setOngoing(true);
 
-        createIntentToOpenApp(mBuilder);
-        showEndNotificationContent(mBuilder);
-        displayNotification(mBuilder);
-    }
-
-    private void showEndNotificationContent(NotificationCompat.Builder mBuilder) {
-        if (isBreakState) {
-            mBuilder.setContentText(getString(R.string.work_time));
-        } else {
-            mBuilder.setContentText(getString(R.string.break_time));
-        }
-    }
-
-    private void createIntentToOpenApp(NotificationCompat.Builder mBuilder) {
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 Constants.PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
-        mBuilder.setContentIntent(pendingIntent);
-    }
+        builder.setContentIntent(pendingIntent);
 
-    private void displayNotification(NotificationCompat.Builder mBuilder) {
+        if (isBreakState) {
+            builder.setContentText(getString(R.string.work_time));
+        } else {
+            builder.setContentText(getString(R.string.break_time));
+        }
+
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-        notificationManagerCompat.notify(Constants.ON_FINISH_NOTIFICATION, mBuilder.build());
+        notificationManagerCompat.notify(Constants.ON_FINISH_NOTIFICATION, builder.build());
     }
 
     private void setupNotificationChannels() {
-        if (isAndroidAtLeastOreo()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel timerCompletedChannel = new NotificationChannel(Constants.CHANNEL_TIMER_COMPLETED,
                     Constants.CHANNEL_TIMER_COMPLETED, NotificationManager.IMPORTANCE_HIGH);
             NotificationChannel timerChannel = new NotificationChannel(Constants.CHANNEL_TIMER,
@@ -617,9 +607,5 @@ public class MainActivity extends AppCompatActivity {
                 notificationManager.createNotificationChannel(timerChannel);
             }
         }
-    }
-
-    private boolean isAndroidAtLeastOreo() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 }
