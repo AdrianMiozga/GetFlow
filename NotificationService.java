@@ -22,9 +22,7 @@ public class NotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        final SharedPreferences.Editor preferenceEditor =
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+        final SharedPreferences.Editor preferenceEditor = preferences.edit();
 
         Log.d(TAG, "onStartCommand: ");
 

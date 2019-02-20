@@ -29,9 +29,7 @@ public class NonActivityNotificationButtonReceiver extends BroadcastReceiver {
         String action = intent.getStringExtra(Constants.BUTTON_ACTION);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        SharedPreferences.Editor editPreferences =
-                PreferenceManager.getDefaultSharedPreferences(context).edit();
+        SharedPreferences.Editor editPreferences = preferences.edit();
 
         switch (action) {
             case Constants.BUTTON_STOP: {

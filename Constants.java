@@ -36,12 +36,14 @@ public class Constants {
     // Preference Keys
     public static final String WORK_DURATION = "work_duration";
     public static final String BREAK_DURATION = "break_duration";
-
-    static final String POMODORO = "Pomodoro";
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
     // Intent
     static final String UPDATE_DATABASE_INTENT = "update_database";
     static final String UPDATE_WORKS = "update_works";
     static final String UPDATE_BREAKS = "update_breaks";
+    // Statistics
+    static final int HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE = 6;
+    // Other
+    static final String POMODORO = "Pomodoro";
 }

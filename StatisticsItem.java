@@ -1,5 +1,7 @@
 package com.wentura.pomodoro;
 
+import androidx.annotation.NonNull;
+
 public class StatisticsItem implements Comparable<StatisticsItem> {
     private String Date;
     private int CompletedWorks;
@@ -23,8 +25,12 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
         return Date;
     }
 
+    public void setDate(String date) {
+        Date = date;
+    }
+
     @Override
-    public int compareTo(StatisticsItem statisticsItem) {
+    public int compareTo(@NonNull StatisticsItem statisticsItem) {
         return getDate().compareTo(statisticsItem.getDate());
     }
 }

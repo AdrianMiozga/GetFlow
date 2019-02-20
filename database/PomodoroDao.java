@@ -28,6 +28,6 @@ public interface PomodoroDao {
     @Query("SELECT CompletedBreaks FROM Pomodoro WHERE Date = :date")
     int getCompletedBreaks(String date);
 
-    @Query("SELECT * FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate")
-    List<StatisticsItem> getAllBetweenDates(String startDate, String endDate);
+    @Query("SELECT * FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate ORDER BY Date DESC")
+    List<StatisticsItem> getAllDatesBetween(String startDate, String endDate);
 }

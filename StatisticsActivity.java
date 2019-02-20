@@ -7,7 +7,6 @@ import android.util.Log;
 import com.wentura.pomodoro.database.Database;
 
 import java.lang.ref.WeakReference;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -19,27 +18,6 @@ public class StatisticsActivity extends AppCompatActivity {
     private static final String TAG = StatisticsActivity.class.getSimpleName();
     private Database database;
 
-    private static void fillDatesWithoutPomodoros(List<StatisticsItem> statisticsItems) {
-        int days = 6;
-        int statisticItemsSize = statisticsItems.size();
-        String currentDate = Utility.getCurrentDate();
-
-        if (!statisticsItems.get(statisticItemsSize - 1).getDate().equals(currentDate)) {
-            statisticsItems.add(new StatisticsItem(currentDate,
-                    0, 0));
-        }
-
-        for (int i = 0; i < statisticItemsSize; i++) {
-            Log.d(TAG, "onCreate: " + statisticsItems.get(i).getDate());
-            Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
-            if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
-                statisticsItems.add(new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                        0, 0));
-                i--;
-            }
-            days--;
-        }
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +27,28 @@ public class StatisticsActivity extends AppCompatActivity {
         database = Database.getInstance(this);
 
         new LoadFromDatabase(this).execute();
+    }
+
+    // SQL database contains only records with at least one completed work or break sessions
+    // This method fills the rest of the days for consistent statistic showing
+    private static void createDatesWithoutPomodoros(List<StatisticsItem> statisticsItems) {
+        int days = 0;
+
+        for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE; i++) {
+            Log.d(TAG, "onCreate: " + statisticsItems.get(i).getDate());
+            Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
+            if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
+                statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
+                        0, 0));
+            }
+            days++;
+        }
+    }
+
+    private static void formatDates(List<StatisticsItem> statisticsItems) {
+        for (int i = 0; i < statisticsItems.size(); i++) {
+            statisticsItems.get(i).setDate(Utility.formatDate(statisticsItems.get(i).getDate()));
+        }
     }
 
     private static class LoadFromDatabase extends AsyncTask<Void, Void, Void> {
@@ -70,7 +70,7 @@ public class StatisticsActivity extends AppCompatActivity {
             }
 
             statisticsItems =
-                    statisticsActivity.database.pomodoroDao().getAllBetweenDates(Utility.subtractDaysFromCurrentDate(6),
+                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE),
                             Utility.getCurrentDate());
 
             return null;
@@ -88,9 +88,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
             Log.d(TAG, "onCreate: " + statisticsItems.size());
 
-            fillDatesWithoutPomodoros(statisticsItems);
-
-            Collections.sort(statisticsItems, Collections.<StatisticsItem>reverseOrder());
+            createDatesWithoutPomodoros(statisticsItems);
+            formatDates(statisticsItems);
 
             StatisticsAdapter statisticsAdapter = new StatisticsAdapter(statisticsItems);
 

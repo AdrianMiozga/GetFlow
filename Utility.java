@@ -8,8 +8,10 @@ import android.media.AudioManager;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -57,11 +59,29 @@ class Utility {
         return simpleDateFormat.format(calendar.getTime());
     }
 
+    /**
+     * Returns date in format 2019-02-20
+     */
     static String subtractDaysFromCurrentDate(int days) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -days);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    /**
+     * Changes date format from for example 2019-02-20 to February 20
+     */
+    static String formatDate(String date) {
+        SimpleDateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Date oldDate = null;
+        try {
+            oldDate = oldDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM dd", Locale.US);
+        return newDateFormat.format(oldDate);
     }
 }

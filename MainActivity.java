@@ -506,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             String currentDate = Utility.getCurrentDate();
 
-            if (weakReference.get().database.pomodoroDao().getLatestDate() != null) {
+            if (weakReference.get().database.pomodoroDao().getLatestDate().equals(currentDate)) {
                 weakReference.get().database.pomodoroDao().updateCompletedBreaks(weakReference.get().database.pomodoroDao().getCompletedBreaks(currentDate) + 1, currentDate);
             } else {
                 weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1));
@@ -528,7 +528,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG, "doInBackground: currentDate " + currentDate);
 
-            if (weakReference.get().database.pomodoroDao().getLatestDate() != null) {
+            if (weakReference.get().database.pomodoroDao().getLatestDate().equals(currentDate)) {
                 Log.d(TAG, "doInBackground: database.pomodoroDao().getLatestDate() != null");
                 weakReference.get().database.pomodoroDao().updateCompletedWorks(weakReference.get().database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);
             } else {
