@@ -3,12 +3,14 @@ package com.wentura.pomodoro;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 class TimerNotification {
 
+    private static final String TAG = TimerNotification.class.getSimpleName();
     private Context context;
     private boolean isTimerRunning;
     private boolean isBrakeState;
@@ -29,7 +31,7 @@ class TimerNotification {
                 .setSmallIcon(R.drawable.ic_logo)
                 .setColor(context.getColor(R.color.colorPrimary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentTitle(Constants.POMODORO)
+                .setContentTitle(context.getString(R.string.pomodoro))
                 .setOngoing(true)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setShowWhen(false);
@@ -48,12 +50,23 @@ class TimerNotification {
         builder.addAction(R.drawable.ic_stop_button, context.getString(R.string.stop),
                 createButtonPendingIntent(Constants.BUTTON_STOP));
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,
-                Constants.PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
+        if (!isNotificationCreatedFromActivity) {
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                    Constants.PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
 
-        builder.setContentIntent(pendingIntent);
+            builder.setContentIntent(pendingIntent);
+            Log.d(TAG, "setupNotification: isNotificationCreatedFromActivity");
+        } else {
+            Intent intent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                    Constants.PENDING_INTENT_TO_CLOSE_TRAY, intent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+
+            builder.setContentIntent(pendingIntent);
+        }
 
         if (isBrakeState) {
             builder.setContentText(context.getString(R.string.break_time_left,

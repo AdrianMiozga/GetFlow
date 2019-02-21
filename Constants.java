@@ -24,6 +24,7 @@ public class Constants {
     static final int PENDING_INTENT_SKIP_REQUEST_CODE = 1;
     static final int PENDING_INTENT_PAUSE_RESUME_REQUEST_CODE = 2;
     static final int PENDING_INTENT_STOP_REQUEST_CODE = 3;
+    static final int PENDING_INTENT_TO_CLOSE_TRAY = 4;
     // Buttons
     static final String BUTTON_CLICKED = "button_clicked";
     static final String BUTTON_ACTION = "button_action";
@@ -46,6 +47,4 @@ public class Constants {
             "is_notification_opened_from_activity";
     // Statistics
     static final int HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE = 6;
-    // Other
-    static final String POMODORO = "Pomodoro";
 }
