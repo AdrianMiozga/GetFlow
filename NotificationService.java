@@ -20,7 +20,10 @@ public class NotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
+        String action = null;
+        if (intent != null) {
+            action = intent.getStringExtra(Constants.NOTIFICATION_SERVICE);
+        }
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
@@ -41,7 +44,7 @@ public class NotificationService extends Service {
         }
         Log.d(TAG, "onStartCommand: timeLeft " + timeLeft);
 
-        if (action != null && action.equals(Constants.NOTIFICATION_SERVICE_PAUSE)) {
+        if (action != null && action.equals(Constants.NOTIFICATION_SERVICE)) {
             if (countDownTimer != null) {
                 countDownTimer.cancel();
             }
@@ -53,7 +56,7 @@ public class NotificationService extends Service {
                         Utility.formatTime(getApplicationContext(), timeLeft)));
             }
             startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
-            Log.d(TAG, "onStartCommand: NOTIFICATION_SERVICE_PAUSE");
+            Log.d(TAG, "onStartCommand: NOTIFICATION_SERVICE");
         } else {
             if (isTimerRunning) {
                 if (countDownTimer != null) {

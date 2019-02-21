@@ -50,23 +50,22 @@ class TimerNotification {
         builder.addAction(R.drawable.ic_stop_button, context.getString(R.string.stop),
                 createButtonPendingIntent(Constants.BUTTON_STOP));
 
-        if (!isNotificationCreatedFromActivity) {
+        if (isNotificationCreatedFromActivity) {
+            Intent intent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                    Constants.PENDING_INTENT_TO_CLOSE_TRAY, intent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+
+            builder.setContentIntent(pendingIntent);
+        } else {
             Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(context,
                     Constants.PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
 
             builder.setContentIntent(pendingIntent);
             Log.d(TAG, "setupNotification: isNotificationCreatedFromActivity");
-        } else {
-            Intent intent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(context,
-                    Constants.PENDING_INTENT_TO_CLOSE_TRAY, intent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-
-            builder.setContentIntent(pendingIntent);
         }
 
         if (isBrakeState) {

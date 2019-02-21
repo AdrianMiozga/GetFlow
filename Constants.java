@@ -45,6 +45,7 @@ public class Constants {
     static final String UPDATE_BREAKS = "update_breaks";
     static final String IS_NOTIFICATION_OPENED_FROM_ACTIVITY =
             "is_notification_opened_from_activity";
+    static final String NOTIFICATION_SERVICE = "notification_service_pause";
     static final String NOTIFICATION_SERVICE_PAUSE = "notification_service_pause";
     // Statistics
     static final int HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE = 6;

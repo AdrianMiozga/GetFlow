@@ -120,7 +120,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                             Log.d(TAG, "onReceive: !isBreakState");
                         }
                         Intent serviceIntent = new Intent(context, NotificationService.class);
-                        serviceIntent.setAction(Constants.NOTIFICATION_SERVICE_PAUSE);
+                        serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE,
+                                Constants.NOTIFICATION_SERVICE_PAUSE);
                         ContextCompat.startForegroundService(context, serviceIntent);
                     } else {
                         startNotificationService(context);
