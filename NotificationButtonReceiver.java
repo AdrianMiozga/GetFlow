@@ -7,8 +7,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
@@ -43,7 +42,6 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
             switch (action) {
                 case Constants.BUTTON_STOP: {
                     stopNotificationService(context);
-                    cancelAllNotifications(context);
 
                     editPreferences.putBoolean(IS_WORK_STARTED, false);
                     editPreferences.putBoolean(IS_BREAK_STARTED, false);
@@ -57,8 +55,6 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                     break;
                 }
                 case Constants.BUTTON_SKIP: {
-                    stopNotificationService(context);
-
                     boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
                     if (isBreakState) {
@@ -111,31 +107,21 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                     Log.d(TAG, "onReceive: isTimerRunning");
                     if (isTimerRunning) {
-                        stopNotificationService(context);
                         editPreferences.putBoolean(IS_TIMER_RUNNING, false);
 
-                        TimerNotification timerNotification = new TimerNotification();
-
-                        NotificationCompat.Builder builder;
                         if (isBreakState) {
-                            builder = timerNotification.buildNotification(context,
-                                    breakLeftInMilliseconds,
-                                    true, false, false);
                             editPreferences.putInt(Constants.LAST_BREAK_SESSION_DURATION,
                                     (int) breakLeftInMilliseconds / 60000);
 
                             Log.d(TAG, "onReceive: isBreakState");
                         } else {
-                            builder = timerNotification.buildNotification(context,
-                                    workLeftInMilliseconds,
-                                    false, false, false);
                             editPreferences.putInt(Constants.LAST_WORK_SESSION_DURATION, (int) workLeftInMilliseconds / 60000);
                             Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                             Log.d(TAG, "onReceive: !isBreakState");
                         }
-                        NotificationManagerCompat notificationManagerCompat =
-                                NotificationManagerCompat.from(context);
-                        notificationManagerCompat.notify(Constants.TIME_LEFT_NOTIFICATION, builder.build());
+                        Intent serviceIntent = new Intent(context, NotificationService.class);
+                        serviceIntent.setAction(Constants.NOTIFICATION_SERVICE_PAUSE);
+                        ContextCompat.startForegroundService(context, serviceIntent);
                     } else {
                         startNotificationService(context);
                         editPreferences.putBoolean(IS_TIMER_RUNNING, true);
@@ -150,11 +136,6 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
         }
     }
 
-    private void cancelAllNotifications(Context context) {
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.cancelAll();
-    }
-
     private void stopNotificationService(Context context) {
         Intent stopService = new Intent(context, NotificationService.class);
         context.stopService(stopService);
@@ -162,6 +143,6 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
     private void startNotificationService(Context context) {
         Intent startService = new Intent(context, NotificationService.class);
-        context.startService(startService);
+        ContextCompat.startForegroundService(context, startService);
     }
 }
