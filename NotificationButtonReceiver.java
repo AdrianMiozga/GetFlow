@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
@@ -122,7 +121,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                         Intent serviceIntent = new Intent(context, NotificationService.class);
                         serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE,
                                 Constants.NOTIFICATION_SERVICE_PAUSE);
-                        ContextCompat.startForegroundService(context, serviceIntent);
+                        context.startService(serviceIntent);
                     } else {
                         startNotificationService(context);
                         editPreferences.putBoolean(IS_TIMER_RUNNING, true);
@@ -144,6 +143,6 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
     private void startNotificationService(Context context) {
         Intent startService = new Intent(context, NotificationService.class);
-        ContextCompat.startForegroundService(context, startService);
+        context.startService(startService);
     }
 }

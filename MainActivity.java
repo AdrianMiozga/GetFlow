@@ -36,7 +36,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
@@ -214,7 +213,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (isWorkStarted || isBreakStarted) {
             Intent intent = new Intent(this, NotificationService.class);
-            ContextCompat.startForegroundService(this, intent);
+            startService(intent);
+//            ContextCompat.startForegroundService(this, intent);
             Log.d(TAG, "onPause: isWorkStarted || isBreakStarted");
         }
 
@@ -276,11 +276,6 @@ public class MainActivity extends AppCompatActivity {
             return 0;
         }
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        finishAffinity();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
