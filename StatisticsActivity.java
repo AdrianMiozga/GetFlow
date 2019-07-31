@@ -18,7 +18,6 @@ public class StatisticsActivity extends AppCompatActivity {
     private static final String TAG = StatisticsActivity.class.getSimpleName();
     private Database database;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +33,22 @@ public class StatisticsActivity extends AppCompatActivity {
     private static void createDatesWithoutPomodoros(List<StatisticsItem> statisticsItems) {
         int days = 0;
 
-        for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE; i++) {
-            Log.d(TAG, "onCreate: " + statisticsItems.get(i).getDate());
-            Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
-            if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
+        if (statisticsItems.isEmpty()) {
+            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE; i++) {
                 statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
                         0, 0, 0, 0));
+                days++;
             }
-            days++;
+        } else {
+            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE; i++) {
+                Log.d(TAG, "onCreate: " + statisticsItems.get(i).getDate());
+                Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
+                if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
+                    statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
+                            0, 0, 0, 0));
+                }
+                days++;
+            }
         }
     }
 
@@ -91,7 +98,9 @@ public class StatisticsActivity extends AppCompatActivity {
             createDatesWithoutPomodoros(statisticsItems);
             formatDates(statisticsItems);
 
-            statisticsItems.get(0).setDate(statisticsActivity.getString(R.string.today));
+            if (!statisticsItems.isEmpty()) {
+                statisticsItems.get(0).setDate(statisticsActivity.getString(R.string.today));
+            }
 
             StatisticsAdapter statisticsAdapter = new StatisticsAdapter(statisticsItems);
 
