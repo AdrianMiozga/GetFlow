@@ -4,15 +4,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.wentura.pomodoro.database.Database;
-
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.wentura.pomodoro.database.Database;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class StatisticsActivity extends AppCompatActivity {
     private static final String TAG = StatisticsActivity.class.getSimpleName();
