@@ -24,12 +24,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wentura.pomodoro.database.Database;
-import com.wentura.pomodoro.database.Pomodoro;
-import com.wentura.pomodoro.settings.SettingsActivity;
-
-import java.lang.ref.WeakReference;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -37,6 +31,12 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.wentura.pomodoro.database.Database;
+import com.wentura.pomodoro.database.Pomodoro;
+import com.wentura.pomodoro.settings.SettingsActivity;
+
+import java.lang.ref.WeakReference;
 
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
