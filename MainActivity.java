@@ -645,7 +645,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showEndNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
-                .setSmallIcon(R.drawable.ic_logo)
+                .setSmallIcon(R.drawable.work_icon)
                 .setColor(getColor(R.color.colorPrimary))
                 .setContentTitle(getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
