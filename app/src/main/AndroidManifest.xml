@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.wentura.pomodoro">
+
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <receiver android:name="com.wentura.pomodoro.NotificationButtonReceiver" />
+
+        <activity android:name="com.wentura.pomodoro.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wentura.pomodoro.settings.SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName="com.wentura.pomodoro.MainActivity"></activity>
+
+        <activity
+            android:name="com.wentura.pomodoro.StatisticsActivity"
+            android:label="Statistics"
+            android:parentActivityName="com.wentura.pomodoro.MainActivity"></activity>
+
+        <service android:name="com.wentura.pomodoro.NotificationService" />
+    </application>
+
+</manifest>
