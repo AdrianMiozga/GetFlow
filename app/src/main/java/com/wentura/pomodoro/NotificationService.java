@@ -1,5 +1,6 @@
 package com.wentura.pomodoro;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 public class NotificationService extends Service {
     static final String TAG = NotificationService.class.getSimpleName();
@@ -103,6 +105,7 @@ public class NotificationService extends Service {
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         Log.d(TAG, "onFinish: ");
+                        showEndNotification();
                     }
                 }.start();
             } else {
@@ -130,5 +133,30 @@ public class NotificationService extends Service {
             countDownTimer.cancel();
         }
         Log.d(TAG, "onDestroy: ");
+    }
+
+    private void showEndNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
+                .setSmallIcon(R.drawable.work_icon)
+                .setColor(getColor(R.color.colorPrimary))
+                .setContentTitle(getString(R.string.app_name))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setOngoing(true);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                Constants.PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        builder.setContentIntent(pendingIntent);
+
+        if (isBreakState) {
+            builder.setContentText(getString(R.string.work_time));
+        } else {
+            builder.setContentText(getString(R.string.break_time));
+        }
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+        notificationManagerCompat.notify(Constants.ON_FINISH_NOTIFICATION, builder.build());
     }
 }
