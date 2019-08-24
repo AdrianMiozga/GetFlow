@@ -24,12 +24,12 @@
         <activity
             android:name="com.wentura.pomodoro.settings.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName="com.wentura.pomodoro.MainActivity"></activity>
+            android:parentActivityName="com.wentura.pomodoro.MainActivity" />
 
         <activity
             android:name="com.wentura.pomodoro.StatisticsActivity"
             android:label="Statistics"
-            android:parentActivityName="com.wentura.pomodoro.MainActivity"></activity>
+            android:parentActivityName="com.wentura.pomodoro.MainActivity" />
 
         <service android:name="com.wentura.pomodoro.NotificationService" />
     </application>
