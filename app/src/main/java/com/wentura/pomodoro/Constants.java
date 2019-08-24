@@ -6,8 +6,8 @@ public class Constants {
     public static final String WORK_DURATION = "work_duration";
     public static final String BREAK_DURATION = "break_duration";
     // Defaults
-    public static final String DEFAULT_WORK_TIME = "25";
-    public static final String DEFAULT_BREAK_TIME = "5";
+    public static final String DEFAULT_WORK_TIME = "25000";
+    public static final String DEFAULT_BREAK_TIME = "5000";
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
     static final String LAST_WORK_SESSION_DURATION = "last_work_session_duration";

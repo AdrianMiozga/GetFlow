@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (milliseconds != null) {
-            return (Integer.parseInt(milliseconds) * 60000);
+            return (Integer.parseInt(milliseconds));
         } else {
             return 0;
         }
