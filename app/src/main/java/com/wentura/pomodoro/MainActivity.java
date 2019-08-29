@@ -418,6 +418,8 @@ public class MainActivity extends AppCompatActivity {
         isWorkStarted = false;
         isBreakStarted = false;
         Log.d(TAG, "stopTimer: ");
+
+        stopEndNotificationService();
     }
 
     private void cancelAllNotifications() {
