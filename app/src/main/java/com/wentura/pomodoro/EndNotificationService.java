@@ -6,7 +6,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
@@ -15,9 +18,14 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class EndNotificationService extends Service {
 
+    private CountDownTimer reminderCountDownTimer;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         showEndNotification();
+
+        vibrate();
+
         return START_STICKY;
     }
 
@@ -56,11 +64,35 @@ public class EndNotificationService extends Service {
         notificationManagerCompat.notify(Constants.ON_FINISH_NOTIFICATION, builder.build());
     }
 
+    private void vibrate() {
+        final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (vibrator != null) {
+            reminderCountDownTimer = new CountDownTimer(30000, 1000) {
+
+                @Override
+                public void onTick(long l) {
+                }
+
+                @Override
+                public void onFinish() {
+                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                    start();
+                }
+            }.start();
+        }
+    }
+
     @Override
     public void onDestroy() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         if (notificationManager != null) {
             notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
+        }
+
+        if (reminderCountDownTimer != null) {
+            reminderCountDownTimer.cancel();
         }
         super.onDestroy();
     }
