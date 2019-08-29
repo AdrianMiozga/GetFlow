@@ -65,13 +65,24 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                         editPreferences.putInt(Constants.LAST_WORK_SESSION_DURATION,
                                 Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
                                         Constants.DEFAULT_BREAK_TIME)));
-                        editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                        Constants.DEFAULT_BREAK_TIME)));
 
-                        editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)));
+                        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
+                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
+                                            Constants.DEFAULT_BREAK_TIME)));
+
+                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                            Constants.DEFAULT_WORK_TIME)));
+                        } else {
+                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
+                                            Constants.DEFAULT_BREAK_TIME)) * 60000);
+
+                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                            Constants.DEFAULT_WORK_TIME)) * 60000);
+                        }
 
                         Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                         Log.d(TAG, "onReceive: breakState");
@@ -82,13 +93,25 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                         editPreferences.putInt(Constants.LAST_BREAK_SESSION_DURATION,
                                 Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
                                         Constants.DEFAULT_BREAK_TIME)));
-                        editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)));
 
-                        editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                        Constants.DEFAULT_BREAK_TIME)));
+                        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
+                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                            Constants.DEFAULT_WORK_TIME)));
+
+                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
+                                            Constants.DEFAULT_BREAK_TIME)));
+                        } else {
+                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                            Constants.DEFAULT_WORK_TIME)) * 60000);
+
+                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
+                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
+                                            Constants.DEFAULT_BREAK_TIME)) * 60000);
+                        }
+
                         Log.d(TAG, "onReceive: !breakState");
                         Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                     }

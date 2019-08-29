@@ -278,7 +278,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (milliseconds != null) {
-            return (Integer.parseInt(milliseconds));
+            if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
+                return (Integer.parseInt(milliseconds));
+            } else {
+                return (Integer.parseInt(milliseconds) * 60000);
+            }
         } else {
             return 0;
         }
