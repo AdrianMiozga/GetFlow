@@ -2,7 +2,6 @@ package com.wentura.pomodoro;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -129,6 +128,11 @@ public class MainActivity extends AppCompatActivity {
         this.stopService(intent);
     }
 
+    private void stopEndNotificationService() {
+        Intent intent = new Intent(this, EndNotificationService.class);
+        this.stopService(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -245,7 +249,10 @@ public class MainActivity extends AppCompatActivity {
         String key = intent.getStringExtra(Constants.UPDATE_DATABASE_INTENT);
         if (key != null) {
             database = Database.getInstance(this);
-            showEndNotification();
+
+            Intent displayEndNotification = new Intent(this, EndNotificationService.class);
+            startService(displayEndNotification);
+
             switch (key) {
                 case Constants.UPDATE_BREAKS:
                     new UpdateDatabaseBreaks(this).execute();
@@ -411,7 +418,6 @@ public class MainActivity extends AppCompatActivity {
         isWorkStarted = false;
         isBreakStarted = false;
         Log.d(TAG, "stopTimer: ");
-        cancelAllNotifications();
     }
 
     private void cancelAllNotifications() {
@@ -448,8 +454,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 cancelAllNotifications();
-                showEndNotification();
+
                 database = Database.getInstance(context);
+
+                SharedPreferences.Editor preferences =
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+
                 if (isBreakState) {
                     updateTimerTextView(getMillisecondsFromSettings(Constants.WORK_DURATION_SETTING));
                     breakLeftInMilliseconds =
@@ -459,6 +469,7 @@ public class MainActivity extends AppCompatActivity {
                     isBreakStarted = false;
                     Log.d(TAG, "onFinish: isBreakState");
 
+                    preferences.putBoolean(Constants.IS_BREAK_STATE, false);
                     skipButton.setVisibility(View.GONE);
                     new UpdateDatabaseBreaks(context).execute();
 
@@ -470,11 +481,17 @@ public class MainActivity extends AppCompatActivity {
                     workBreakIcon.setImageResource(R.drawable.break_icon);
                     isBreakState = true;
                     isWorkStarted = false;
+
+                    preferences.putBoolean(Constants.IS_BREAK_STATE, true);
                     Log.d(TAG, "onFinish: !isBreakState");
                     new UpdateDatabaseWorks(context).execute();
                 }
                 isTimerRunning = false;
                 startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
+
+                preferences.apply();
+                Intent displayEndNotification = new Intent(context, EndNotificationService.class);
+                startService(displayEndNotification);
             }
         }.start();
     }
@@ -485,8 +502,7 @@ public class MainActivity extends AppCompatActivity {
             countDownTimer.cancel();
         }
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
+        stopEndNotificationService();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
@@ -562,8 +578,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "startPauseTimer: !isTimerRunning && !isBreakState, " +
                         "workLeftInMilliseconds / 60000 = " + (int) workLeftInMilliseconds / 60000);
             }
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-            notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
+
+            stopEndNotificationService();
             startPauseButton.setBackgroundResource(R.drawable.ic_pause_button);
         }
         editor.apply();
@@ -595,31 +611,6 @@ public class MainActivity extends AppCompatActivity {
         isTimerRunning = false;
         Utility.toggleDoNotDisturb(this, RINGER_MODE_NORMAL);
         startPauseButton.setBackgroundResource(R.drawable.ic_play_button);
-    }
-
-    private void showEndNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
-                .setSmallIcon(R.drawable.work_icon)
-                .setColor(getColor(R.color.colorPrimary))
-                .setContentTitle(getString(R.string.app_name))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setOngoing(true);
-
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                Constants.PENDING_INTENT_OPEN_APP_REQUEST_CODE, intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-
-        builder.setContentIntent(pendingIntent);
-
-        if (isBreakState) {
-            builder.setContentText(getString(R.string.work_time));
-        } else {
-            builder.setContentText(getString(R.string.break_time));
-        }
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-        notificationManagerCompat.notify(Constants.ON_FINISH_NOTIFICATION, builder.build());
     }
 
     private void setupNotificationChannels() {

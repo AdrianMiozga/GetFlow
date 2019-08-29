@@ -41,6 +41,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
             switch (action) {
                 case Constants.BUTTON_STOP: {
                     stopNotificationService(context);
+                    stopEndNotificationService(context);
 
                     editPreferences.putBoolean(IS_WORK_STARTED, false);
                     editPreferences.putBoolean(IS_BREAK_STARTED, false);
@@ -55,6 +56,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 }
                 case Constants.BUTTON_SKIP: {
                     boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+                    stopEndNotificationService(context);
 
                     if (isBreakState) {
                         editPreferences.putBoolean(IS_BREAK_STARTED, false);
@@ -65,11 +67,11 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                                         Constants.DEFAULT_BREAK_TIME)));
                         editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
                                 Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                        Constants.DEFAULT_BREAK_TIME)) * 60000);
+                                        Constants.DEFAULT_BREAK_TIME)));
 
                         editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
                                 Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)) * 60000);
+                                        Constants.DEFAULT_WORK_TIME)));
 
                         Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                         Log.d(TAG, "onReceive: breakState");
@@ -82,11 +84,11 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                                         Constants.DEFAULT_BREAK_TIME)));
                         editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
                                 Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)) * 60000);
+                                        Constants.DEFAULT_WORK_TIME)));
 
                         editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
                                 Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                        Constants.DEFAULT_BREAK_TIME)) * 60000);
+                                        Constants.DEFAULT_BREAK_TIME)));
                         Log.d(TAG, "onReceive: !breakState");
                         Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                     }
@@ -138,6 +140,11 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
     private void stopNotificationService(Context context) {
         Intent stopService = new Intent(context, NotificationService.class);
+        context.stopService(stopService);
+    }
+
+    private void stopEndNotificationService(Context context) {
+        Intent stopService = new Intent(context, EndNotificationService.class);
         context.stopService(stopService);
     }
 

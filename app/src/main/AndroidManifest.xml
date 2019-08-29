@@ -32,6 +32,7 @@
             android:parentActivityName="com.wentura.pomodoro.MainActivity" />
 
         <service android:name="com.wentura.pomodoro.NotificationService" />
+        <service android:name="com.wentura.pomodoro.EndNotificationService" />
     </application>
 
 </manifest>
