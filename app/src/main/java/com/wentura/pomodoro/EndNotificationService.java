@@ -85,6 +85,7 @@ public class EndNotificationService extends Service {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (notificationManager != null) {
@@ -94,6 +95,5 @@ public class EndNotificationService extends Service {
         if (reminderCountDownTimer != null) {
             reminderCountDownTimer.cancel();
         }
-        super.onDestroy();
     }
 }
