@@ -31,11 +31,16 @@ public class StatisticsActivity extends AppCompatActivity {
             }
         } else {
             for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE; i++) {
-                Log.d(TAG, "onCreate: " + statisticsItems.get(i).getDate());
-                Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
-                if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
+                if (i >= statisticsItems.size()) {
                     statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
                             0, 0, 0, 0));
+                } else {
+                    Log.d(TAG, "onCreate: " + statisticsItems.get(i).getDate());
+                    Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
+                    if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
+                        statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
+                                0, 0, 0, 0));
+                    }
                 }
                 days++;
             }
