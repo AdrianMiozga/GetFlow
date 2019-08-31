@@ -24,13 +24,13 @@ public class StatisticsActivity extends AppCompatActivity {
         int days = 0;
 
         if (statisticsItems.isEmpty()) {
-            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE; i++) {
+            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW; i++) {
                 statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
                         0, 0, 0, 0));
                 days++;
             }
         } else {
-            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE; i++) {
+            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW; i++) {
                 if (i >= statisticsItems.size()) {
                     statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
                             0, 0, 0, 0));
@@ -82,7 +82,7 @@ public class StatisticsActivity extends AppCompatActivity {
             }
 
             statisticsItems =
-                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(Constants.HOW_MANY_DAYS_TO_SHOW_FROM_CURRENT_DATE),
+                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(Constants.HOW_MANY_DAYS_TO_SHOW),
                             Utility.getCurrentDate());
 
             return null;
