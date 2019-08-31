@@ -48,5 +48,5 @@ public class Constants {
     static final String NOTIFICATION_SERVICE = "notification_service_pause";
     static final String NOTIFICATION_SERVICE_PAUSE = "notification_service_pause";
     // Statistics
-    static final int HOW_MANY_DAYS_TO_SHOW = 6;
+    static final int HOW_MANY_DAYS_TO_SHOW = 7;
 }
