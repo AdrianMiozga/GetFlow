@@ -93,7 +93,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
             RecyclerView recyclerView = statisticsActivity.findViewById(R.id.recycler_view);
 
-            Log.d(TAG, "onCreate: " + statisticsItems.size());
+            Log.d(TAG, "onCreate: statisticsItems.size() = " + statisticsItems.size());
 
             createDatesWithoutPomodoros(statisticsItems);
             formatDates(statisticsItems);
