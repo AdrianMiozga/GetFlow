@@ -82,7 +82,7 @@ public class StatisticsActivity extends AppCompatActivity {
             }
 
             statisticsItems =
-                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(Constants.HOW_MANY_DAYS_TO_SHOW),
+                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(Constants.HOW_MANY_DAYS_TO_SHOW - 1),
                             Utility.getCurrentDate());
 
             return null;
