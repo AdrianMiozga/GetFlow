@@ -29,8 +29,7 @@ public class NotificationService extends Service {
         final TimerNotification timerNotification = new TimerNotification();
         boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
         final NotificationCompat.Builder builder =
-                timerNotification.buildNotification(getApplicationContext(), 0, isBreakState,
-                        isTimerRunning);
+                timerNotification.buildNotification(getApplicationContext(), isTimerRunning);
 
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 

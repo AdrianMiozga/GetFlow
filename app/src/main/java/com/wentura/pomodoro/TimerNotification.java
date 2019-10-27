@@ -8,21 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 class TimerNotification {
-
-    private static final String TAG = TimerNotification.class.getSimpleName();
     private Context context;
     private boolean isTimerRunning;
-    private boolean isBrakeState;
 
-    NotificationCompat.Builder buildNotification(Context context, long millisUntilFinished,
-                                                 boolean isBreakState, boolean isTimerRunning) {
+    NotificationCompat.Builder buildNotification(Context context, boolean isTimerRunning) {
         this.context = context;
         this.isTimerRunning = isTimerRunning;
-        this.isBrakeState = isBreakState;
-        return setupNotification(millisUntilFinished);
+        return setupNotification();
     }
 
-    private NotificationCompat.Builder setupNotification(long millisUntilFinished) {
+    private NotificationCompat.Builder setupNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Constants.CHANNEL_TIMER)
                 .setSmallIcon(R.drawable.work_icon)
                 .setColor(context.getColor(R.color.colorPrimary))
@@ -53,14 +48,6 @@ class TimerNotification {
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
         builder.setContentIntent(pendingIntent);
-
-//        if (isBrakeState) {
-//            builder.setContentText(context.getString(R.string.break_time_left,
-//                    Utility.formatTime(context, millisUntilFinished)));
-//        } else {
-//            builder.setContentText(context.getString(R.string.work_time_left,
-//                    Utility.formatTime(context, millisUntilFinished)));
-//        }
         return builder;
     }
 
