@@ -27,6 +27,7 @@
         <activity
             android:name="com.wentura.pomodoro.settings.SettingsActivity"
             android:label="Settings"
+            android:configChanges="orientation"
             android:parentActivityName="com.wentura.pomodoro.MainActivity" />
 
         <activity
