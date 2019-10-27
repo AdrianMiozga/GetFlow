@@ -99,6 +99,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(IS_TIMER_RUNNING, true);
                 editPreferences.apply();
 
+                stopEndNotificationService(context);
                 startNotificationService(context);
 
                 Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
