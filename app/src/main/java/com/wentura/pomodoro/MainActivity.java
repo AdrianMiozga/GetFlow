@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -138,6 +139,22 @@ public class MainActivity extends AppCompatActivity {
                 updateTimerTextView, new IntentFilter(Constants.ON_TICK));
 
         setupNotificationChannels();
+
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                if (sharedPreferences.getLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0) == 0) {
+                    finish();
+                } else {
+                    moveTaskToBack(true);
+                }
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
