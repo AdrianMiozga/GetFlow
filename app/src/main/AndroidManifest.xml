@@ -33,6 +33,7 @@
         <activity
             android:name="com.wentura.pomodoro.StatisticsActivity"
             android:label="Statistics"
+            android:configChanges="orientation"
             android:parentActivityName="com.wentura.pomodoro.MainActivity" />
 
         <service android:name="com.wentura.pomodoro.NotificationService" />
