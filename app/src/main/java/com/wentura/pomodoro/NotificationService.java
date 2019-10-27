@@ -117,6 +117,8 @@ public class NotificationService extends Service {
                     Intent displayEndNotification = new Intent(getApplicationContext(),
                             EndNotificationService.class);
                     startService(displayEndNotification);
+
+                    stopSelf();
                 }
             }.start();
         }
