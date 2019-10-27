@@ -12,7 +12,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
@@ -65,7 +64,6 @@ public class SettingsFragment extends PreferenceFragment
                         .setCancelable(false)
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Log.d("onResume", "Cancel");
                                 SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTING);
                                 switchPreference.setChecked(false);
                             }
