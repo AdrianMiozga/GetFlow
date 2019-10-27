@@ -21,8 +21,8 @@ public class Constants {
     static final String IS_TIMER_RUNNING = "is_timer_running";
     static final String IS_BREAK_STATE = "is_break_state";
     // Defaults
-    public static final String DEFAULT_WORK_TIME = "25000";
-    public static final String DEFAULT_BREAK_TIME = "5000";
+    public static final String DEFAULT_WORK_TIME = "25";
+    public static final String DEFAULT_BREAK_TIME = "5";
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
     // TimerNotification Ids
