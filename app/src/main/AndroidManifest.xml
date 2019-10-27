@@ -15,7 +15,9 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <receiver android:name="com.wentura.pomodoro.NotificationButtonReceiver" />
 
-        <activity android:name="com.wentura.pomodoro.MainActivity">
+        <activity
+            android:name="com.wentura.pomodoro.MainActivity"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
