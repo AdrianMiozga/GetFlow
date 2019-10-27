@@ -21,7 +21,7 @@
         tools:text="25:00" />
 
     <ImageButton
-        android:id="@+id/start_pause_button"
+        android:id="@+id/start_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -29,7 +29,22 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/ic_play_button"
         android:backgroundTint="@color/colorPrimary"
-        android:contentDescription="@string/start_pause_button"
+        android:contentDescription="@string/start_button"
+        app:layout_constraintEnd_toStartOf="@+id/stop_button"
+        app:layout_constraintStart_toEndOf="@+id/skip_button"
+        app:layout_constraintTop_toBottomOf="@+id/countdown_text_view" />
+
+    <ImageButton
+        android:id="@+id/pause_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/ic_pause_button"
+        android:backgroundTint="@color/colorPrimary"
+        android:contentDescription="@string/pause_button"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/stop_button"
         app:layout_constraintStart_toEndOf="@+id/skip_button"
         app:layout_constraintTop_toBottomOf="@+id/countdown_text_view" />
@@ -64,16 +79,31 @@
         app:layout_constraintTop_toBottomOf="@+id/countdown_text_view" />
 
     <ImageView
-        android:id="@+id/work_break_icon"
+        android:id="@+id/work_icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
-        android:contentDescription="@string/work_break_icon"
+        android:contentDescription="@string/work_icon"
         android:tint="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/countdown_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/work_icon" />
+
+    <ImageView
+        android:id="@+id/break_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:contentDescription="@string/break_icon"
+        android:tint="@color/colorPrimary"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/countdown_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/break_icon" />
 </androidx.constraintlayout.widget.ConstraintLayout>

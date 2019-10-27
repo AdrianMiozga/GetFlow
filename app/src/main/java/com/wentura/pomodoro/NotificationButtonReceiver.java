@@ -5,20 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static com.wentura.pomodoro.Constants.BREAK_DURATION_SETTING;
-import static com.wentura.pomodoro.Constants.BREAK_LEFT_IN_MILLISECONDS;
-import static com.wentura.pomodoro.Constants.IS_BREAK_STARTED;
 import static com.wentura.pomodoro.Constants.IS_BREAK_STATE;
 import static com.wentura.pomodoro.Constants.IS_TIMER_RUNNING;
-import static com.wentura.pomodoro.Constants.IS_WORK_STARTED;
+import static com.wentura.pomodoro.Constants.TIMER_LEFT_IN_MILLISECONDS;
 import static com.wentura.pomodoro.Constants.WORK_DURATION_SETTING;
-import static com.wentura.pomodoro.Constants.WORK_LEFT_IN_MILLISECONDS;
 
 public class NotificationButtonReceiver extends BroadcastReceiver {
 
@@ -27,136 +23,115 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra(Constants.BUTTON_ACTION);
-        boolean isNotificationOpenedFromActivity =
-                intent.getBooleanExtra(Constants.IS_NOTIFICATION_OPENED_FROM_ACTIVITY, false);
 
-        if (isNotificationOpenedFromActivity) {
-            Intent localIntent = new Intent(Constants.BUTTON_CLICKED);
-            localIntent.putExtra(Constants.BUTTON_ACTION, action);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(localIntent);
-        } else {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editPreferences = preferences.edit();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editPreferences = preferences.edit();
 
-            switch (action) {
-                case Constants.BUTTON_STOP: {
-                    stopNotificationService(context);
-                    stopEndNotificationService(context);
+        switch (action) {
+            case Constants.BUTTON_STOP: {
+                stopNotificationService(context);
+                stopEndNotificationService(context);
 
-                    editPreferences.putBoolean(IS_WORK_STARTED, false);
-                    editPreferences.putBoolean(IS_BREAK_STARTED, false);
-                    editPreferences.putBoolean(IS_TIMER_RUNNING, false);
+                editPreferences.putBoolean(IS_TIMER_RUNNING, false);
+                editPreferences.putBoolean(IS_BREAK_STATE, false);
+                editPreferences.apply();
+
+                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_STOP);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
+
+                Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                break;
+            }
+            case Constants.BUTTON_SKIP: {
+                boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+                stopEndNotificationService(context);
+                stopNotificationService(context);
+
+                if (isBreakState) {
                     editPreferences.putBoolean(IS_BREAK_STATE, false);
-                    editPreferences.apply();
 
-                    Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                    editPreferences.putInt(Constants.LAST_SESSION_DURATION,
+                            Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                    Constants.DEFAULT_WORK_TIME)));
 
-                    Log.d(TAG, "onReceive: STOP");
-                    break;
-                }
-                case Constants.BUTTON_SKIP: {
-                    boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
-                    stopEndNotificationService(context);
-
-                    if (isBreakState) {
-                        editPreferences.putBoolean(IS_BREAK_STARTED, false);
-                        editPreferences.putBoolean(IS_WORK_STARTED, true);
-                        editPreferences.putBoolean(IS_BREAK_STATE, false);
-                        editPreferences.putInt(Constants.LAST_WORK_SESSION_DURATION,
+                    if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
+                        editPreferences.putLong(TIMER_LEFT_IN_MILLISECONDS,
                                 Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_BREAK_TIME)));
-
-                        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
-                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                            Constants.DEFAULT_BREAK_TIME)));
-
-                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                            Constants.DEFAULT_WORK_TIME)));
-                        } else {
-                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                            Constants.DEFAULT_BREAK_TIME)) * 60000);
-
-                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                            Constants.DEFAULT_WORK_TIME)) * 60000);
-                        }
-
-                        Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
-                        Log.d(TAG, "onReceive: breakState");
+                                        Constants.DEFAULT_WORK_TIME)));
                     } else {
-                        editPreferences.putBoolean(IS_BREAK_STARTED, true);
-                        editPreferences.putBoolean(IS_WORK_STARTED, false);
-                        editPreferences.putBoolean(IS_BREAK_STATE, true);
-                        editPreferences.putInt(Constants.LAST_BREAK_SESSION_DURATION,
-                                Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                        Constants.DEFAULT_BREAK_TIME)));
-
-                        if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
-                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                            Constants.DEFAULT_WORK_TIME)));
-
-                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                            Constants.DEFAULT_BREAK_TIME)));
-                        } else {
-                            editPreferences.putLong(WORK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
-                                            Constants.DEFAULT_WORK_TIME)) * 60000);
-
-                            editPreferences.putLong(BREAK_LEFT_IN_MILLISECONDS,
-                                    Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
-                                            Constants.DEFAULT_BREAK_TIME)) * 60000);
-                        }
-
-                        Log.d(TAG, "onReceive: !breakState");
-                        Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                        editPreferences.putLong(TIMER_LEFT_IN_MILLISECONDS,
+                                Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                        Constants.DEFAULT_WORK_TIME)) * 60000);
                     }
-                    editPreferences.putBoolean(IS_TIMER_RUNNING, true);
-                    editPreferences.apply();
 
-                    startNotificationService(context);
-                    break;
-                }
-                case Constants.BUTTON_PAUSE_RESUME: {
-                    boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
-                    boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
-                    long workLeftInMilliseconds =
-                            preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0);
-                    long breakLeftInMilliseconds =
-                            preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
+                    Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
+                } else {
+                    editPreferences.putBoolean(IS_BREAK_STATE, true);
 
-                    Log.d(TAG, "onReceive: isTimerRunning");
-                    if (isTimerRunning) {
-                        editPreferences.putBoolean(IS_TIMER_RUNNING, false);
+                    editPreferences.putInt(Constants.LAST_SESSION_DURATION,
+                            Integer.parseInt(preferences.getString(BREAK_DURATION_SETTING,
+                                    Constants.DEFAULT_BREAK_TIME)));
 
-                        if (isBreakState) {
-                            editPreferences.putInt(Constants.LAST_BREAK_SESSION_DURATION,
-                                    (int) breakLeftInMilliseconds / 60000);
-
-                            Log.d(TAG, "onReceive: isBreakState");
-                        } else {
-                            editPreferences.putInt(Constants.LAST_WORK_SESSION_DURATION, (int) workLeftInMilliseconds / 60000);
-                            Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
-                            Log.d(TAG, "onReceive: !isBreakState");
-                        }
-                        Intent serviceIntent = new Intent(context, NotificationService.class);
-                        serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE,
-                                Constants.NOTIFICATION_SERVICE_PAUSE);
-                        context.startService(serviceIntent);
+                    if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
+                        editPreferences.putLong(TIMER_LEFT_IN_MILLISECONDS,
+                                Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                        Constants.DEFAULT_WORK_TIME)));
                     } else {
-                        startNotificationService(context);
-                        editPreferences.putBoolean(IS_TIMER_RUNNING, true);
-                        if (!isBreakState) {
-                            Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
-                        }
+                        editPreferences.putLong(TIMER_LEFT_IN_MILLISECONDS,
+                                Integer.parseInt(preferences.getString(WORK_DURATION_SETTING,
+                                        Constants.DEFAULT_WORK_TIME)) * 60000);
                     }
-                    editPreferences.apply();
-                    break;
+                    Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
+                editPreferences.putBoolean(IS_TIMER_RUNNING, true);
+                editPreferences.apply();
+
+                Intent updateTimer = new Intent(Constants.BUTTON_CLICKED);
+                updateTimer.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_SKIP);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(updateTimer);
+
+                startNotificationService(context);
+                break;
+            }
+            case Constants.BUTTON_START: {
+                boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+                editPreferences.putBoolean(IS_TIMER_RUNNING, true);
+                editPreferences.apply();
+
+                startNotificationService(context);
+
+                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_START);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
+
+                if (!isBreakState) {
+                    Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
+                }
+                break;
+            }
+            case Constants.BUTTON_PAUSE: {
+                boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+                long timerLeftInMilliseconds =
+                        preferences.getLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0);
+
+                editPreferences.putBoolean(IS_TIMER_RUNNING, false);
+                editPreferences.putInt(Constants.LAST_SESSION_DURATION, (int) timerLeftInMilliseconds / 60000);
+                editPreferences.apply();
+
+                if (!isBreakState) {
+                    Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                }
+
+                Intent serviceIntent = new Intent(context, NotificationService.class);
+                serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE,
+                        Constants.NOTIFICATION_SERVICE_PAUSE);
+                context.startService(serviceIntent);
+
+                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_PAUSE);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
+                break;
             }
         }
     }

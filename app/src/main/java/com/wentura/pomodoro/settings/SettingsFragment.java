@@ -22,7 +22,6 @@ import com.wentura.pomodoro.R;
 
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = SettingsFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class SettingsFragment extends PreferenceFragment
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        Log.d("onResume", "Called");
 
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -78,21 +76,19 @@ public class SettingsFragment extends PreferenceFragment
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        Log.d(TAG, "onPreferenceTreeClick: ");
-
         String key = preference.getKey();
 
-        if (key.equals(Constants.BREAK_DURATION) || key.equals(Constants.WORK_DURATION)) {
+        if (key.equals(Constants.BREAK_DURATION_SETTING) || key.equals(Constants.WORK_DURATION_SETTING)) {
             EditTextPreference editTextPreference = (EditTextPreference) findPreference(key);
             EditText editText = editTextPreference.getEditText();
 
-            if (key.equals(Constants.BREAK_DURATION)) {
+            if (key.equals(Constants.BREAK_DURATION_SETTING)) {
                 if (editText.getText().toString().equals("")) {
                     editText.setText(Constants.DEFAULT_BREAK_TIME);
                 }
             }
 
-            if (key.equals(Constants.WORK_DURATION)) {
+            if (key.equals(Constants.WORK_DURATION_SETTING)) {
                 if (editText.getText().toString().equals("")) {
                     editText.setText(Constants.DEFAULT_WORK_TIME);
                 }

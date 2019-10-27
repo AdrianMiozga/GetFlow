@@ -6,14 +6,12 @@ import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class NotificationService extends Service {
-    static final String TAG = NotificationService.class.getSimpleName();
-
     private boolean isBreakState;
     private long timeLeft;
     private CountDownTimer countDownTimer;
@@ -21,6 +19,7 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = null;
+
         if (intent != null) {
             action = intent.getStringExtra(Constants.NOTIFICATION_SERVICE);
         }
@@ -31,23 +30,26 @@ public class NotificationService extends Service {
         boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
         final NotificationCompat.Builder builder =
                 timerNotification.buildNotification(getApplicationContext(), 0, isBreakState,
-                        isTimerRunning, false);
+                        isTimerRunning);
 
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
-        if (isBreakState) {
-            timeLeft = preferences.getLong(Constants.BREAK_LEFT_IN_MILLISECONDS, 0);
-            Log.d(TAG, "onStartCommand: isBreakState");
-        } else {
-            timeLeft = preferences.getLong(Constants.WORK_LEFT_IN_MILLISECONDS, 0);
-            Log.d(TAG, "onStartCommand: !isBreakState");
-        }
-        Log.d(TAG, "onStartCommand: timeLeft " + timeLeft);
+        timeLeft = preferences.getLong(Constants.TIMER_LEFT_IN_MILLISECONDS,
+                Integer.parseInt(Constants.DEFAULT_WORK_TIME) * 60000);
 
-        if (action != null && action.equals(Constants.NOTIFICATION_SERVICE)) {
-            if (countDownTimer != null) {
-                countDownTimer.cancel();
+        if (timeLeft == 0) {
+            if (isBreakState) {
+                timeLeft = Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
+                        Constants.DEFAULT_BREAK_TIME)) * 60000;
+            } else {
+                timeLeft = Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
+                        Constants.DEFAULT_WORK_TIME)) * 60000;
             }
+        }
+
+        if (action != null && action.equals(Constants.NOTIFICATION_SERVICE_PAUSE)) {
+            cancelCountDownTimer();
+
             if (isBreakState) {
                 builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
                         Utility.formatTime(getApplicationContext(), timeLeft)));
@@ -55,70 +57,77 @@ public class NotificationService extends Service {
                 builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
                         Utility.formatTime(getApplicationContext(), timeLeft)));
             }
+
             startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
-            Log.d(TAG, "onStartCommand: NOTIFICATION_SERVICE");
         } else {
-            if (isTimerRunning) {
-                if (countDownTimer != null) {
-                    countDownTimer.cancel();
-                }
-                countDownTimer = new CountDownTimer(timeLeft, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        timeLeft = millisUntilFinished;
+            countDownTimer = new CountDownTimer(timeLeft, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    timeLeft = millisUntilFinished;
 
-                        if (isBreakState) {
-                            preferenceEditor.putLong(Constants.BREAK_LEFT_IN_MILLISECONDS, timeLeft);
-                            builder.setContentText(getApplicationContext().getString(R.string.break_time_left, Utility.formatTime(getApplicationContext(), millisUntilFinished)));
-                        } else {
-                            preferenceEditor.putLong(Constants.WORK_LEFT_IN_MILLISECONDS, timeLeft);
-                            builder.setContentText(getApplicationContext().getString(R.string.work_time_left, Utility.formatTime(getApplicationContext(), millisUntilFinished)));
-                        }
+                    preferenceEditor.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS, timeLeft);
+                    preferenceEditor.apply();
 
-                        preferenceEditor.apply();
-
-                        startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
-
-                        Log.d(TAG, "onTick: " + timeLeft);
+                    if (isBreakState) {
+                        builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
+                                Utility.formatTime(getApplicationContext(), millisUntilFinished)));
+                    } else {
+                        builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
+                                Utility.formatTime(getApplicationContext(), millisUntilFinished)));
                     }
 
-                    @Override
-                    public void onFinish() {
-                        preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
-                        preferenceEditor.putBoolean(Constants.IS_BREAK_STARTED, false);
-                        preferenceEditor.putBoolean(Constants.IS_WORK_STARTED, false);
-                        if (isBreakState) {
-                            preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, false);
-                        } else {
-                            preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
-                        }
-                        preferenceEditor.apply();
+                    Intent updateTimer = new Intent(Constants.ON_TICK);
+                    updateTimer.putExtra(Constants.TIME_LEFT, timeLeft);
+                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(updateTimer);
 
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        if (isBreakState) {
-                            intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_BREAKS);
-                        } else {
-                            intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_WORKS);
-                        }
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        Log.d(TAG, "onFinish: ");
-
-                        Intent displayEndNotification = new Intent(getApplicationContext(),
-                                EndNotificationService.class);
-                        startService(displayEndNotification);
-                    }
-                }.start();
-            } else {
-                if (isBreakState) {
-                    builder.setContentText(getApplicationContext().getString(R.string.break_time_left, Utility.formatTime(getApplicationContext(), timeLeft)));
-                } else {
-                    builder.setContentText(getApplicationContext().getString(R.string.work_time_left, Utility.formatTime(getApplicationContext(), timeLeft)));
+                    startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
                 }
-                startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
-            }
+
+                @Override
+                public void onFinish() {
+                    preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
+                    preferenceEditor.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0);
+
+                    preferenceEditor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
+                    preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
+                    preferenceEditor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
+                    preferenceEditor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
+
+                    if (isBreakState) {
+                        preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
+                        preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
+                        preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, false);
+                    } else {
+                        preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
+                        preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
+                        preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
+                    }
+                    preferenceEditor.apply();
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                    if (isBreakState) {
+                        intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_BREAKS);
+                    } else {
+                        intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_WORKS);
+                    }
+
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                    Intent displayEndNotification = new Intent(getApplicationContext(),
+                            EndNotificationService.class);
+                    startService(displayEndNotification);
+                }
+            }.start();
         }
         return START_STICKY;
+    }
+
+    private void cancelCountDownTimer() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
     }
 
     @Nullable
@@ -130,9 +139,12 @@ public class NotificationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
-        Log.d(TAG, "onDestroy: ");
+        cancelCountDownTimer();
+
+        SharedPreferences.Editor preferenceEditor =
+                PreferenceManager.getDefaultSharedPreferences(this).edit();
+
+        preferenceEditor.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0);
+        preferenceEditor.apply();
     }
 }
