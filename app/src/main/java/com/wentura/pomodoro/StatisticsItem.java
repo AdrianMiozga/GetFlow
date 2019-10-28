@@ -5,15 +5,15 @@ import androidx.annotation.NonNull;
 public class StatisticsItem implements Comparable<StatisticsItem> {
     private String Date;
     private int CompletedWorks;
-    private int CompletedBreaks;
+    private int Breaks;
     private int CompletedWorksTime;
     private int CompletedBreaksTime;
 
-    public StatisticsItem(String Date, int CompletedWorks, int CompletedBreaks,
+    public StatisticsItem(String Date, int CompletedWorks, int Breaks,
                           int CompletedWorksTime, int CompletedBreaksTime) {
         this.Date = Date;
         this.CompletedWorks = CompletedWorks;
-        this.CompletedBreaks = CompletedBreaks;
+        this.Breaks = Breaks;
         this.CompletedBreaksTime = CompletedBreaksTime;
         this.CompletedWorksTime = CompletedWorksTime;
     }
@@ -22,8 +22,8 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
         return CompletedWorks;
     }
 
-    int getCompletedBreaks() {
-        return CompletedBreaks;
+    int getBreaks() {
+        return Breaks;
     }
 
     String getDate() {

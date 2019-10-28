@@ -40,7 +40,7 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
                 statisticsItem.getCompletedWorks()));
 
         holder.breaksNumberTextView.setText(context.getResources().getString(R.string.completed_breaks,
-                statisticsItem.getCompletedBreaks()));
+                statisticsItem.getBreaks()));
 
         holder.dateTextView.setText(statisticsItem.getDate());
 

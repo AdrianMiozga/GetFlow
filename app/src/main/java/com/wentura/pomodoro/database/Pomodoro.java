@@ -15,8 +15,8 @@ public class Pomodoro {
     @ColumnInfo(name = "CompletedWorks")
     private int completedWorks;
 
-    @ColumnInfo(name = "CompletedBreaks")
-    private int completedBreaks;
+    @ColumnInfo(name = "Breaks")
+    private int Breaks;
 
     @ColumnInfo(name = "CompletedWorksTime")
     private int completedWorksTime;
@@ -24,11 +24,11 @@ public class Pomodoro {
     @ColumnInfo(name = "CompletedBreaksTime")
     private int completedBreaksTime;
 
-    public Pomodoro(@NonNull String date, int completedWorks, int completedBreaks,
+    public Pomodoro(@NonNull String date, int completedWorks, int Breaks,
                     int completedWorksTime, int completedBreaksTime) {
         this.date = date;
         this.completedWorks = completedWorks;
-        this.completedBreaks = completedBreaks;
+        this.Breaks = Breaks;
         this.completedWorksTime = completedWorksTime;
         this.completedBreaksTime = completedBreaksTime;
     }
@@ -42,8 +42,8 @@ public class Pomodoro {
         return completedWorks;
     }
 
-    int getCompletedBreaks() {
-        return completedBreaks;
+    int getBreaks() {
+        return Breaks;
     }
 
     int getCompletedWorksTime() {
