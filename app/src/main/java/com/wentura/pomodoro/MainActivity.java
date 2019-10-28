@@ -412,27 +412,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private static class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MainActivity> weakReference;
-
-        UpdateDatabaseBreaks(MainActivity context) {
-            this.weakReference = new WeakReference<>(context);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            String currentDate = Utility.getCurrentDate();
-
-            if (weakReference.get().database.pomodoroDao().getLatestDate().equals(currentDate)) {
-                weakReference.get().database.pomodoroDao().updateBreaks(weakReference.get().database.pomodoroDao().getBreaks(currentDate) + 1, currentDate);
-                weakReference.get().database.pomodoroDao().updateCompletedBreaksTime(weakReference.get().database.pomodoroDao().getCompletedBreaksTime(currentDate) + getLastSessionDuration(weakReference), currentDate);
-            } else {
-                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1, 0, getLastSessionDuration(weakReference)));
-            }
-            return null;
-        }
-    }
-
     private static class UpdateDatabaseWorks extends AsyncTask<Void, Void, Void> {
         private WeakReference<MainActivity> weakReference;
 
