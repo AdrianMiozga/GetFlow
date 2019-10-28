@@ -132,6 +132,21 @@ public class MainActivity extends AppCompatActivity {
 
         setupUI();
 
+        String action = getIntent().getStringExtra(Constants.UPDATE_DATABASE_INTENT);
+
+        if (action != null) {
+            switch (action) {
+                case Constants.UPDATE_BREAKS: {
+                    new UpdateDatabaseBreaks(this).execute();
+                    break;
+                }
+                case Constants.UPDATE_WORKS: {
+                    new UpdateDatabaseWorks(this).execute();
+                    break;
+                }
+            }
+        }
+
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 statusReceiver, new IntentFilter(Constants.BUTTON_CLICKED));
 
@@ -234,28 +249,6 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        String key = intent.getStringExtra(Constants.UPDATE_DATABASE_INTENT);
-        if (key != null) {
-            database = Database.getInstance(this);
-
-            Intent displayEndNotification = new Intent(this, EndNotificationService.class);
-            startService(displayEndNotification);
-
-            switch (key) {
-                case Constants.UPDATE_BREAKS:
-                    new UpdateDatabaseBreaks(this).execute();
-                    break;
-                case Constants.UPDATE_WORKS:
-                    new UpdateDatabaseWorks(this).execute();
-                    break;
-            }
-        }
     }
 
     @Override
