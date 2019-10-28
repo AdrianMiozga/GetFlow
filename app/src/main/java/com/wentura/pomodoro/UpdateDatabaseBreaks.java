@@ -36,7 +36,7 @@ public class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         String currentDate = Utility.getCurrentDate();
 
-        if (database.pomodoroDao().getLatestDate().equals(currentDate)) {
+        if (database.pomodoroDao().getLatestDate() != null && database.pomodoroDao().getLatestDate().equals(currentDate)) {
             database.pomodoroDao().updateBreaks(database.pomodoroDao().getBreaks(currentDate) + 1, currentDate);
             database.pomodoroDao().updateCompletedBreaksTime(database.pomodoroDao().getCompletedBreaksTime(currentDate) + getLastSessionDuration(weakReference), currentDate);
         } else {
