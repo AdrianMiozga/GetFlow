@@ -18,8 +18,6 @@ import static com.wentura.pomodoro.Constants.WORK_DURATION_SETTING;
 
 public class NotificationButtonReceiver extends BroadcastReceiver {
 
-    private static final String TAG = NotificationButtonReceiver.class.getSimpleName();
-
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra(Constants.BUTTON_ACTION);
