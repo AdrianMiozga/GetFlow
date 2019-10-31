@@ -30,11 +30,21 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 stopNotificationService(context);
                 stopEndNotificationService(context);
 
+                boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+
+                Intent updateUI = new Intent(Constants.UPDATE_DATABASE_INTENT);
+                if (isBreakState) {
+                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_BREAKS);
+                } else {
+                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_WORKS);
+                }
+                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
+
                 editPreferences.putBoolean(IS_TIMER_RUNNING, false);
                 editPreferences.putBoolean(IS_BREAK_STATE, false);
                 editPreferences.apply();
 
-                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                updateUI = new Intent(Constants.BUTTON_CLICKED);
                 updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_STOP);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
@@ -45,8 +55,11 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
                 stopEndNotificationService(context);
                 stopNotificationService(context);
+                Intent updateUI = new Intent(Constants.UPDATE_DATABASE_INTENT);
 
                 if (isBreakState) {
+                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_BREAKS);
+
                     editPreferences.putBoolean(IS_BREAK_STATE, false);
 
                     editPreferences.putInt(Constants.LAST_SESSION_DURATION,
@@ -65,6 +78,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                     Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
+                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_WORKS);
+
                     editPreferences.putBoolean(IS_BREAK_STATE, true);
 
                     editPreferences.putInt(Constants.LAST_SESSION_DURATION,
@@ -85,9 +100,11 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(IS_TIMER_RUNNING, true);
                 editPreferences.apply();
 
-                Intent updateTimer = new Intent(Constants.BUTTON_CLICKED);
-                updateTimer.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_SKIP);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(updateTimer);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
+
+                updateUI = new Intent(Constants.BUTTON_CLICKED);
+                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_SKIP);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
                 startNotificationService(context);
                 break;

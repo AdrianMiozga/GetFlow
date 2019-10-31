@@ -89,6 +89,30 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver updateDatabase = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getStringExtra(Constants.BUTTON_ACTION);
+
+            switch (action) {
+                case Constants.UPDATE_WORKS:
+                    updateDatabaseWorks();
+                    break;
+                case Constants.UPDATE_BREAKS:
+                    updateDatabaseBreaks();
+                    break;
+            }
+        }
+    };
+
+    private void updateDatabaseWorks() {
+//        new UpdateDatabaseWorks(this).execute();
+    }
+
+    private void updateDatabaseBreaks() {
+        new UpdateDatabaseBreaks(this).execute();
+    }
+
     private BroadcastReceiver updateTimerTextView = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -152,6 +176,9 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 updateTimerTextView, new IntentFilter(Constants.ON_TICK));
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                updateDatabase, new IntentFilter(Constants.UPDATE_DATABASE_INTENT));
 
         setupNotificationChannels();
 
@@ -249,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateDatabase);
     }
 
     @Override
