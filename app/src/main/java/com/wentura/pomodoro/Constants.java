@@ -16,7 +16,7 @@ public class Constants {
     // work duration setting when the work timer is already running.
     // Using the work duration setting would update the wrong time in statistics.
     static final String LAST_SESSION_DURATION = "last_session_duration";
-    static final String TIMER_LEFT_IN_MILLISECONDS = "timer_left_in_milliseconds";
+    static final String TIMER_LEFT = "timer_left";
 
     static final String IS_TIMER_RUNNING = "is_timer_running";
     static final String IS_BREAK_STATE = "is_break_state";

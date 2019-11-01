@@ -36,17 +36,11 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
 
         Context context = holder.dateTextView.getContext();
 
-        holder.worksNumberTextView.setText(context.getResources().getString(R.string.completed_works,
-                statisticsItem.getCompletedWorks()));
-
-        holder.breaksNumberTextView.setText(context.getResources().getString(R.string.completed_breaks,
-                statisticsItem.getBreaks()));
-
+        holder.worksNumberTextView.setText(String.valueOf(statisticsItem.getCompletedWorks()));
+        holder.breaksNumberTextView.setText(String.valueOf(statisticsItem.getBreaks()));
         holder.dateTextView.setText(statisticsItem.getDate());
-
-        holder.completedWorksTimeTextView.setText(context.getResources().getString(R.string.completed_work_time, Utility.formatStatisticsTime(context, statisticsItem.getCompletedWorksTime() * 1000)));
-
-        holder.completedBreaksTimeTextView.setText(context.getResources().getString(R.string.total_break_time, Utility.formatStatisticsTime(context, statisticsItem.getCompletedBreaksTime() * 1000)));
+        holder.completedWorksTimeTextView.setText(Utility.formatStatisticsTime(context, statisticsItem.getCompletedWorksTime()));
+        holder.breakTimeTextView.setText(Utility.formatStatisticsTime(context, statisticsItem.getBreakTime()));
     }
 
     @Override
@@ -59,7 +53,7 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
         TextView worksNumberTextView;
         TextView breaksNumberTextView;
         TextView completedWorksTimeTextView;
-        TextView completedBreaksTimeTextView;
+        TextView breakTimeTextView;
 
         ViewHolder(View view) {
             super(view);
@@ -67,7 +61,7 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
             dateTextView = view.findViewById(R.id.date);
             breaksNumberTextView = view.findViewById(R.id.breaks_number);
             worksNumberTextView = view.findViewById(R.id.works_number);
-            completedBreaksTimeTextView = view.findViewById(R.id.total_break_time);
+            breakTimeTextView = view.findViewById(R.id.total_break_time);
             completedWorksTimeTextView = view.findViewById(R.id.completed_work_time);
         }
     }

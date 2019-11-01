@@ -22,8 +22,8 @@ public interface PomodoroDao {
     @Query("UPDATE Pomodoro SET CompletedWorksTime = :completedWorksTime WHERE Date = :date")
     void updateCompletedWorksTime(int completedWorksTime, String date);
 
-    @Query("UPDATE Pomodoro SET CompletedBreaksTime = :completedBreaksTime WHERE Date = :date")
-    void updateCompletedBreaksTime(int completedBreaksTime, String date);
+    @Query("UPDATE Pomodoro SET BreakTime = :BreakTime WHERE Date = :date")
+    void updateBreakTime(int BreakTime, String date);
 
     @Query("SELECT Date FROM Pomodoro ORDER BY Date DESC LIMIT 1")
     String getLatestDate();
@@ -37,8 +37,8 @@ public interface PomodoroDao {
     @Query("SELECT CompletedWorksTime FROM Pomodoro WHERE Date = :date")
     int getCompletedWorksTime(String date);
 
-    @Query("SELECT CompletedBreaksTime FROM Pomodoro WHERE Date = :date")
-    int getCompletedBreaksTime(String date);
+    @Query("SELECT BreakTime FROM Pomodoro WHERE Date = :date")
+    int getBreakTime(String date);
 
     @Query("SELECT * FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate ORDER BY Date DESC")
     List<StatisticsItem> getAllDatesBetween(String startDate, String endDate);

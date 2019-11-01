@@ -2,7 +2,6 @@ package com.wentura.pomodoro;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class StatisticsActivity extends AppCompatActivity {
-    private static final String TAG = StatisticsActivity.class.getSimpleName();
     private Database database;
 
     // SQL database contains only records with at least one completed work or break sessions
@@ -35,8 +33,6 @@ public class StatisticsActivity extends AppCompatActivity {
                     statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
                             0, 0, 0, 0));
                 } else {
-                    Log.d(TAG, "onCreate: " + statisticsItems.get(i).getDate());
-                    Log.d(TAG, "onCreate: " + Utility.subtractDaysFromCurrentDate(days));
                     if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
                         statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
                                 0, 0, 0, 0));
@@ -97,8 +93,6 @@ public class StatisticsActivity extends AppCompatActivity {
             }
 
             RecyclerView recyclerView = statisticsActivity.findViewById(R.id.recycler_view);
-
-            Log.d(TAG, "onCreate: statisticsItems.size() = " + statisticsItems.size());
 
             createDatesWithoutPomodoros(statisticsItems);
             formatDates(statisticsItems);

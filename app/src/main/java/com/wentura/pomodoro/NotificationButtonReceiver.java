@@ -27,6 +27,12 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
+                int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
+                int timerLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
+
+                editPreferences.putInt(Constants.LAST_SESSION_DURATION,
+                        lastSessionDuration - timerLeft);
+
                 Intent updateUI = new Intent(Constants.UPDATE_DATABASE_INTENT);
                 if (isBreakState) {
                     updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_BREAKS);
@@ -52,24 +58,20 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 stopNotificationService(context);
                 Intent updateUI = new Intent(Constants.UPDATE_DATABASE_INTENT);
 
+                int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
+                int timerLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
+
+                editPreferences.putInt(Constants.LAST_SESSION_DURATION,
+                        lastSessionDuration - timerLeft);
+
                 if (isBreakState) {
                     updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_BREAKS);
 
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, false);
 
-                    editPreferences.putInt(Constants.LAST_SESSION_DURATION,
+                    editPreferences.putInt(Constants.TIMER_LEFT,
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                    Constants.DEFAULT_WORK_TIME)));
-
-                    if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
-                        editPreferences.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)));
-                    } else {
-                        editPreferences.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)) * 60000);
-                    }
+                                    Constants.DEFAULT_WORK_TIME)) * 60000);
 
                     Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
@@ -77,19 +79,10 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
 
-                    editPreferences.putInt(Constants.LAST_SESSION_DURATION,
-                            Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
-                                    Constants.DEFAULT_BREAK_TIME)));
+                    editPreferences.putInt(Constants.TIMER_LEFT,
+                            Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
+                                    Constants.DEFAULT_WORK_TIME)) * 60000);
 
-                    if (BuildConfig.BUILD_TYPE.equalsIgnoreCase("myDebug")) {
-                        editPreferences.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)));
-                    } else {
-                        editPreferences.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS,
-                                Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                        Constants.DEFAULT_WORK_TIME)) * 60000);
-                    }
                     Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, true);
@@ -123,11 +116,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
             }
             case Constants.BUTTON_PAUSE: {
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
-                long timerLeftInMilliseconds =
-                        preferences.getLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0);
 
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, false);
-                editPreferences.putInt(Constants.LAST_SESSION_DURATION, (int) timerLeftInMilliseconds / 60000);
                 editPreferences.apply();
 
                 if (!isBreakState) {

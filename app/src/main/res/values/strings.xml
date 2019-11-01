@@ -27,12 +27,8 @@
     <string name="time_format">%d:%02d</string>
     <string name="time_format_statistics">%02d:%02d</string>
     <string name="statistics">Statistics</string>
-    <string name="completed_works">%d</string>
-    <string name="completed_breaks">%d</string>
     <string name="completed">Completed</string>
     <string name="breaks">Breaks</string>
-    <string name="total_break_time">%s</string>
-    <string name="completed_work_time">%s</string>
     <string name="today">Today</string>
     <string name="pomodoro">Pomodoro</string>
     <string name="pause_button">Pause button</string>

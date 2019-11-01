@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b117f13f99521f4b930772e6a9547c09",
+    "identityHash": "ed9b75c3de90f7c49e9d1f368e2257dc",
     "entities": [
       {
         "tableName": "Pomodoro",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `CompletedWorksTime` INTEGER NOT NULL, `CompletedBreaksTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `CompletedWorksTime` INTEGER NOT NULL, `BreakTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
         "fields": [
           {
             "fieldPath": "date",
@@ -21,7 +21,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "breaks",
+            "fieldPath": "Breaks",
             "columnName": "Breaks",
             "affinity": "INTEGER",
             "notNull": true
@@ -33,8 +33,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "completedBreaksTime",
-            "columnName": "CompletedBreaksTime",
+            "fieldPath": "BreakTime",
+            "columnName": "BreakTime",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -52,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b117f13f99521f4b930772e6a9547c09')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ed9b75c3de90f7c49e9d1f368e2257dc')"
     ]
   }
 }

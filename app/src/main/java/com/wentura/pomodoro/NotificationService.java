@@ -13,7 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class NotificationService extends Service {
     private boolean isBreakState;
-    private long timeLeft;
+    private int timeLeft;
     private CountDownTimer countDownTimer;
 
     @Override
@@ -33,8 +33,7 @@ public class NotificationService extends Service {
 
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
-        timeLeft = preferences.getLong(Constants.TIMER_LEFT_IN_MILLISECONDS,
-                Integer.parseInt(Constants.DEFAULT_WORK_TIME) * 60000);
+        timeLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
 
         if (timeLeft == 0) {
             if (isBreakState) {
@@ -45,6 +44,8 @@ public class NotificationService extends Service {
                         Constants.DEFAULT_WORK_TIME)) * 60000;
             }
         }
+
+        preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, timeLeft);
 
         if (action != null && action.equals(Constants.NOTIFICATION_SERVICE_PAUSE)) {
             cancelCountDownTimer();
@@ -62,9 +63,9 @@ public class NotificationService extends Service {
             countDownTimer = new CountDownTimer(timeLeft, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    timeLeft = millisUntilFinished;
+                    timeLeft = (int) millisUntilFinished;
 
-                    preferenceEditor.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS, timeLeft);
+                    preferenceEditor.putInt(Constants.TIMER_LEFT, timeLeft);
                     preferenceEditor.apply();
 
                     if (isBreakState) {
@@ -85,7 +86,7 @@ public class NotificationService extends Service {
                 @Override
                 public void onFinish() {
                     preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
-                    preferenceEditor.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0);
+                    preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
 
                     preferenceEditor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
                     preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
@@ -145,7 +146,7 @@ public class NotificationService extends Service {
         SharedPreferences.Editor preferenceEditor =
                 PreferenceManager.getDefaultSharedPreferences(this).edit();
 
-        preferenceEditor.putLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0);
+        preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
         preferenceEditor.apply();
     }
 }

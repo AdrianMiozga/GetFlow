@@ -33,7 +33,7 @@ public class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
 
         if (database.pomodoroDao().getLatestDate() != null && database.pomodoroDao().getLatestDate().equals(currentDate)) {
             database.pomodoroDao().updateBreaks(database.pomodoroDao().getBreaks(currentDate) + 1, currentDate);
-            database.pomodoroDao().updateCompletedBreaksTime(database.pomodoroDao().getCompletedBreaksTime(currentDate) + getLastSessionDuration(weakReference), currentDate);
+            database.pomodoroDao().updateBreakTime(database.pomodoroDao().getBreakTime(currentDate) + getLastSessionDuration(weakReference), currentDate);
         } else {
             database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 0, 1, 0, getLastSessionDuration(weakReference)));
         }

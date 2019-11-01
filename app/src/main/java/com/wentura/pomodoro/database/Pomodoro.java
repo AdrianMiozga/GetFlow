@@ -21,16 +21,16 @@ public class Pomodoro {
     @ColumnInfo(name = "CompletedWorksTime")
     private int completedWorksTime;
 
-    @ColumnInfo(name = "CompletedBreaksTime")
-    private int completedBreaksTime;
+    @ColumnInfo(name = "BreakTime")
+    private int BreakTime;
 
     public Pomodoro(@NonNull String date, int completedWorks, int Breaks,
-                    int completedWorksTime, int completedBreaksTime) {
+                    int completedWorksTime, int BreakTime) {
         this.date = date;
         this.completedWorks = completedWorks;
         this.Breaks = Breaks;
         this.completedWorksTime = completedWorksTime;
-        this.completedBreaksTime = completedBreaksTime;
+        this.BreakTime = BreakTime;
     }
 
     @NonNull
@@ -50,7 +50,7 @@ public class Pomodoro {
         return completedWorksTime;
     }
 
-    int getCompletedBreaksTime() {
-        return completedBreaksTime;
+    int getBreakTime() {
+        return BreakTime;
     }
 }

@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver updateTimerTextView = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            long time = intent.getLongExtra(Constants.TIME_LEFT, 0);
+            int time = intent.getIntExtra(Constants.TIME_LEFT, 0);
             updateTimerTextView(time);
         }
     };
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
                 case Constants.UPDATE_WORKS: {
-                    new UpdateDatabaseWorks(this).execute();
+                    // new UpdateDatabaseWorks(this).execute();
                     break;
                 }
             }
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                if (sharedPreferences.getLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0) == 0) {
+                if (sharedPreferences.getInt(Constants.TIMER_LEFT, 0) == 0) {
                     finish();
                 } else {
                     moveTaskToBack(true);
@@ -313,9 +313,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
-        long timerLeftInMilliseconds = sharedPreferences.getLong(Constants.TIMER_LEFT_IN_MILLISECONDS, 0);
+        int timerLeft = sharedPreferences.getInt(Constants.TIMER_LEFT, 0);
 
-        if (timerLeftInMilliseconds == 0) {
+        if (timerLeft == 0) {
             if (isBreakState) {
                 updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.BREAK_DURATION_SETTING,
                         Constants.DEFAULT_BREAK_TIME)) * 60000);
@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                         Constants.DEFAULT_WORK_TIME)) * 60000);
             }
         } else {
-            updateTimerTextView(timerLeftInMilliseconds);
+            updateTimerTextView(timerLeft);
         }
 
         if (sharedPreferences.getBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false)) {
@@ -412,8 +412,8 @@ public class MainActivity extends AppCompatActivity {
         sendBroadcast(intent);
     }
 
-    private void updateTimerTextView(long timeInMilliseconds) {
-        countdownText.setText(Utility.formatTime(this, timeInMilliseconds));
+    private void updateTimerTextView(long time) {
+        countdownText.setText(Utility.formatTime(this, time));
     }
 
     private void setupNotificationChannels() {
