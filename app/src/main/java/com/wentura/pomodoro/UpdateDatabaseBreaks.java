@@ -22,14 +22,9 @@ public class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(weakReference.get());
 
-        int lastWorkSessionDuration = sharedPreferences.getInt(Constants.LAST_SESSION_DURATION, 0);
-
-        if (lastWorkSessionDuration == 0) {
-            return Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
-                    Constants.DEFAULT_WORK_TIME));
-        } else {
-            return lastWorkSessionDuration;
-        }
+        return sharedPreferences.getInt(Constants.LAST_SESSION_DURATION,
+                Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
+                        Constants.DEFAULT_WORK_TIME)));
     }
 
     @Override
