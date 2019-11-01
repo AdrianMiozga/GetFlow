@@ -6,16 +6,16 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
     private String Date;
     private int CompletedWorks;
     private int Breaks;
-    private int CompletedWorksTime;
+    private int CompletedWorkTime;
     private int BreakTime;
 
     public StatisticsItem(String Date, int CompletedWorks, int Breaks,
-                          int CompletedWorksTime, int BreakTime) {
+                          int CompletedWorkTime, int BreakTime) {
         this.Date = Date;
         this.CompletedWorks = CompletedWorks;
         this.Breaks = Breaks;
         this.BreakTime = BreakTime;
-        this.CompletedWorksTime = CompletedWorksTime;
+        this.CompletedWorkTime = CompletedWorkTime;
     }
 
     int getCompletedWorks() {
@@ -34,8 +34,8 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
         Date = date;
     }
 
-    int getCompletedWorksTime() {
-        return CompletedWorksTime;
+    int getCompletedWorkTime() {
+        return CompletedWorkTime;
     }
 
     int getBreakTime() {

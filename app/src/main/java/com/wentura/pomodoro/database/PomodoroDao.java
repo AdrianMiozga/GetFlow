@@ -19,8 +19,8 @@ public interface PomodoroDao {
     @Query("UPDATE Pomodoro SET Breaks = :breaks WHERE Date = :date")
     void updateBreaks(int breaks, String date);
 
-    @Query("UPDATE Pomodoro SET CompletedWorksTime = :completedWorksTime WHERE Date = :date")
-    void updateCompletedWorksTime(int completedWorksTime, String date);
+    @Query("UPDATE Pomodoro SET CompletedWorkTime = :completedWorkTime WHERE Date = :date")
+    void updateCompletedWorkTime(int completedWorkTime, String date);
 
     @Query("UPDATE Pomodoro SET BreakTime = :BreakTime WHERE Date = :date")
     void updateBreakTime(int BreakTime, String date);
@@ -34,8 +34,8 @@ public interface PomodoroDao {
     @Query("SELECT Breaks FROM Pomodoro WHERE Date = :date")
     int getBreaks(String date);
 
-    @Query("SELECT CompletedWorksTime FROM Pomodoro WHERE Date = :date")
-    int getCompletedWorksTime(String date);
+    @Query("SELECT CompletedWorkTime FROM Pomodoro WHERE Date = :date")
+    int getCompletedWorkTime(String date);
 
     @Query("SELECT BreakTime FROM Pomodoro WHERE Date = :date")
     int getBreakTime(String date);

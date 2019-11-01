@@ -10,44 +10,44 @@ public class Pomodoro {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "Date")
-    private String date;
+    private String Date;
 
     @ColumnInfo(name = "CompletedWorks")
-    private int completedWorks;
+    private int CompletedWorks;
 
     @ColumnInfo(name = "Breaks")
     private int Breaks;
 
-    @ColumnInfo(name = "CompletedWorksTime")
-    private int completedWorksTime;
+    @ColumnInfo(name = "CompletedWorkTime")
+    private int CompletedWorkTime;
 
     @ColumnInfo(name = "BreakTime")
     private int BreakTime;
 
-    public Pomodoro(@NonNull String date, int completedWorks, int Breaks,
-                    int completedWorksTime, int BreakTime) {
-        this.date = date;
-        this.completedWorks = completedWorks;
+    public Pomodoro(@NonNull String Date, int CompletedWorks, int Breaks,
+                    int CompletedWorkTime, int BreakTime) {
+        this.Date = Date;
+        this.CompletedWorks = CompletedWorks;
         this.Breaks = Breaks;
-        this.completedWorksTime = completedWorksTime;
+        this.CompletedWorkTime = CompletedWorkTime;
         this.BreakTime = BreakTime;
     }
 
     @NonNull
     String getDate() {
-        return date;
+        return Date;
     }
 
     int getCompletedWorks() {
-        return completedWorks;
+        return CompletedWorks;
     }
 
     int getBreaks() {
         return Breaks;
     }
 
-    int getCompletedWorksTime() {
-        return completedWorksTime;
+    int getCompletedWorkTime() {
+        return CompletedWorkTime;
     }
 
     int getBreakTime() {

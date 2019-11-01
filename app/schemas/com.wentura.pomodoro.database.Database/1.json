@@ -2,20 +2,20 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ed9b75c3de90f7c49e9d1f368e2257dc",
+    "identityHash": "b9e9d1bc03ffc95840ed16d063100c7b",
     "entities": [
       {
         "tableName": "Pomodoro",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `CompletedWorksTime` INTEGER NOT NULL, `BreakTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `CompletedWorkTime` INTEGER NOT NULL, `BreakTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
         "fields": [
           {
-            "fieldPath": "date",
+            "fieldPath": "Date",
             "columnName": "Date",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "completedWorks",
+            "fieldPath": "CompletedWorks",
             "columnName": "CompletedWorks",
             "affinity": "INTEGER",
             "notNull": true
@@ -27,8 +27,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "completedWorksTime",
-            "columnName": "CompletedWorksTime",
+            "fieldPath": "CompletedWorkTime",
+            "columnName": "CompletedWorkTime",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -52,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ed9b75c3de90f7c49e9d1f368e2257dc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b9e9d1bc03ffc95840ed16d063100c7b')"
     ]
   }
 }

@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (weakReference.get().database.pomodoroDao().getLatestDate().equals(currentDate)) {
                 weakReference.get().database.pomodoroDao().updateCompletedWorks(weakReference.get().database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);
-                weakReference.get().database.pomodoroDao().updateCompletedWorksTime(weakReference.get().database.pomodoroDao().getCompletedWorksTime(currentDate) + getLastSessionDuration(weakReference), currentDate);
+                weakReference.get().database.pomodoroDao().updateCompletedWorkTime(weakReference.get().database.pomodoroDao().getCompletedWorkTime(currentDate) + getLastSessionDuration(weakReference), currentDate);
             } else {
                 weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0, getLastSessionDuration(weakReference), 0));
             }

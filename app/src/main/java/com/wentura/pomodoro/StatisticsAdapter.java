@@ -39,7 +39,7 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
         holder.worksNumberTextView.setText(String.valueOf(statisticsItem.getCompletedWorks()));
         holder.breaksNumberTextView.setText(String.valueOf(statisticsItem.getBreaks()));
         holder.dateTextView.setText(statisticsItem.getDate());
-        holder.completedWorksTimeTextView.setText(Utility.formatStatisticsTime(context, statisticsItem.getCompletedWorksTime()));
+        holder.completedWorkTimeTextView.setText(Utility.formatStatisticsTime(context, statisticsItem.getCompletedWorkTime()));
         holder.breakTimeTextView.setText(Utility.formatStatisticsTime(context, statisticsItem.getBreakTime()));
     }
 
@@ -52,7 +52,7 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
         TextView dateTextView;
         TextView worksNumberTextView;
         TextView breaksNumberTextView;
-        TextView completedWorksTimeTextView;
+        TextView completedWorkTimeTextView;
         TextView breakTimeTextView;
 
         ViewHolder(View view) {
@@ -61,8 +61,8 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
             dateTextView = view.findViewById(R.id.date);
             breaksNumberTextView = view.findViewById(R.id.breaks_number);
             worksNumberTextView = view.findViewById(R.id.works_number);
-            breakTimeTextView = view.findViewById(R.id.total_break_time);
-            completedWorksTimeTextView = view.findViewById(R.id.completed_work_time);
+            breakTimeTextView = view.findViewById(R.id.break_time);
+            completedWorkTimeTextView = view.findViewById(R.id.completed_work_time);
         }
     }
 }
