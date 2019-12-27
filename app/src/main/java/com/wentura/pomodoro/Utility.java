@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
@@ -29,11 +30,23 @@ class Utility {
     private static void setRingerMode(Context context, int mode) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (notificationManager != null && notificationManager.isNotificationPolicyAccessGranted()) {
-            AudioManager audioManager = context.getSystemService(AudioManager.class);
-            if (audioManager != null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (notificationManager != null && notificationManager.isNotificationPolicyAccessGranted()) {
+                AudioManager audioManager = context.getSystemService(AudioManager.class);
+
+                if (audioManager == null) {
+                    return;
+                }
                 audioManager.setRingerMode(mode);
             }
+        } else {
+            AudioManager audioManager =
+                    (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+            if (audioManager == null) {
+                return;
+            }
+            audioManager.setRingerMode(mode);
         }
     }
 

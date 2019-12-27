@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            Log.d(TAG, "onReceive: statusReceiver action = " + action);
+            Log.d(TAG, "onReceive: " + action);
 
             switch (action) {
                 case Constants.BUTTON_SKIP: {
@@ -414,19 +414,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel timerCompletedChannel = new NotificationChannel(Constants.CHANNEL_TIMER_COMPLETED,
-                    Constants.CHANNEL_TIMER_COMPLETED, NotificationManager.IMPORTANCE_HIGH);
-            NotificationChannel timerChannel = new NotificationChannel(Constants.CHANNEL_TIMER,
-                    Constants.CHANNEL_TIMER, NotificationManager.IMPORTANCE_LOW);
-
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            if (notificationManager != null) {
-                timerCompletedChannel.setShowBadge(false);
-                timerChannel.setShowBadge(false);
-                notificationManager.createNotificationChannel(timerCompletedChannel);
-                notificationManager.createNotificationChannel(timerChannel);
-            }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
         }
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
+        if (notificationManager == null) {
+            return;
+        }
+
+        NotificationChannel timerCompletedChannel = new NotificationChannel(Constants.CHANNEL_TIMER_COMPLETED,
+                Constants.CHANNEL_TIMER_COMPLETED, NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel timerChannel = new NotificationChannel(Constants.CHANNEL_TIMER,
+                Constants.CHANNEL_TIMER, NotificationManager.IMPORTANCE_LOW);
+
+        timerCompletedChannel.setShowBadge(false);
+        timerChannel.setShowBadge(false);
+        notificationManager.createNotificationChannel(timerCompletedChannel);
+        notificationManager.createNotificationChannel(timerChannel);
     }
 }

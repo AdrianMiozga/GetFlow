@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 class TimerNotification {
     private Context context;
@@ -20,8 +21,8 @@ class TimerNotification {
     private NotificationCompat.Builder setupNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Constants.CHANNEL_TIMER)
                 .setSmallIcon(R.drawable.work_icon)
-                .setColor(context.getColor(R.color.colorPrimary))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setContentTitle(context.getString(R.string.pomodoro))
                 .setOngoing(true)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)

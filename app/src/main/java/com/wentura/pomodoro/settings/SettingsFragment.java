@@ -5,27 +5,59 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceScreen;
-import android.preference.SwitchPreference;
 import android.provider.Settings;
+import android.text.InputType;
+import android.util.Log;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.wentura.pomodoro.Constants;
 import com.wentura.pomodoro.R;
 
-public class SettingsFragment extends PreferenceFragment
+import java.util.Objects;
+
+public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String TAG = "Hello";
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.preferences, rootKey);
+
+        EditTextPreference workDurationSetting = findPreference(Constants.WORK_DURATION_SETTING);
+
+        if (workDurationSetting != null) {
+            workDurationSetting.setOnBindEditTextListener(
+                    new EditTextPreference.OnBindEditTextListener() {
+                        @Override
+                        public void onBindEditText(@NonNull EditText editText) {
+                            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            editText.selectAll();
+                        }
+                    });
+        }
+
+        EditTextPreference breakDurationSetting = findPreference(Constants.BREAK_DURATION_SETTING);
+
+        if (breakDurationSetting != null) {
+            breakDurationSetting.setOnBindEditTextListener(
+                    new EditTextPreference.OnBindEditTextListener() {
+                        @Override
+                        public void onBindEditText(@NonNull EditText editText) {
+                            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            editText.selectAll();
+                        }
+                    });
+        }
     }
 
     @Override
@@ -33,10 +65,22 @@ public class SettingsFragment extends PreferenceFragment
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
-        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            NotificationManager notificationManager = (NotificationManager) Objects.requireNonNull(getContext()).getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
-            SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTING);
+            if (notificationManager == null) {
+                return;
+            }
+
+            if (notificationManager.isNotificationPolicyAccessGranted()) {
+                return;
+            }
+
+            SwitchPreferenceCompat switchPreference = findPreference(Constants.DO_NOT_DISTURB_SETTING);
+
+            if (switchPreference == null) {
+                return;
+            }
             switchPreference.setChecked(false);
         }
     }
@@ -50,10 +94,18 @@ public class SettingsFragment extends PreferenceFragment
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
         if (key.equals(Constants.DO_NOT_DISTURB_SETTING) && sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTING, false)) {
-            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) Objects.requireNonNull(getContext()).getSystemService(Context.NOTIFICATION_SERVICE);
 
-            if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            if (notificationManager == null) {
+                return;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (notificationManager.isNotificationPolicyAccessGranted()) {
+                    return;
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
                 builder.setMessage(R.string.dialog_access_policy_not_granted)
                         .setPositiveButton(R.string.dialog_go_to_settings, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -64,7 +116,11 @@ public class SettingsFragment extends PreferenceFragment
                         .setCancelable(false)
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                SwitchPreference switchPreference = (SwitchPreference) findPreference(Constants.DO_NOT_DISTURB_SETTING);
+                                SwitchPreferenceCompat switchPreference = findPreference(Constants.DO_NOT_DISTURB_SETTING);
+
+                                if (switchPreference == null) {
+                                    return;
+                                }
                                 switchPreference.setChecked(false);
                             }
                         }).show();
@@ -73,26 +129,32 @@ public class SettingsFragment extends PreferenceFragment
     }
 
     @Override
-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+    public boolean onPreferenceTreeClick(Preference preference) {
         String key = preference.getKey();
 
+        Log.d(TAG, "onPreferenceTreeClick: ");
+
         if (key.equals(Constants.BREAK_DURATION_SETTING) || key.equals(Constants.WORK_DURATION_SETTING)) {
-            EditTextPreference editTextPreference = (EditTextPreference) findPreference(key);
-            EditText editText = editTextPreference.getEditText();
+            EditTextPreference editTextPreference = findPreference(key);
+
+            if (editTextPreference == null) {
+                return super.onPreferenceTreeClick(preference);
+            }
+
+            String editText = editTextPreference.getText();
 
             if (key.equals(Constants.BREAK_DURATION_SETTING)) {
-                if (editText.getText().toString().equals("")) {
-                    editText.setText(Constants.DEFAULT_BREAK_TIME);
+                if (editText == null || editText.equals("")) {
+                    editTextPreference.setText(Constants.DEFAULT_BREAK_TIME);
                 }
             }
 
             if (key.equals(Constants.WORK_DURATION_SETTING)) {
-                if (editText.getText().toString().equals("")) {
-                    editText.setText(Constants.DEFAULT_WORK_TIME);
+                if (editText == null || editText.equals("")) {
+                    editTextPreference.setText(Constants.DEFAULT_WORK_TIME);
                 }
             }
-            editText.requestFocus();
         }
-        return super.onPreferenceTreeClick(preferenceScreen, preference);
+        return super.onPreferenceTreeClick(preference);
     }
 }

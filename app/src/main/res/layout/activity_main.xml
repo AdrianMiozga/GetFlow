@@ -28,7 +28,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/ic_play_button"
-        android:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/start_button"
         app:layout_constraintEnd_toStartOf="@+id/stop_button"
         app:layout_constraintStart_toEndOf="@+id/skip_button"
@@ -42,7 +42,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/ic_pause_button"
-        android:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/pause_button"
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/stop_button"
@@ -57,7 +57,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/ic_stop_button"
-        android:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/stop_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/skip_button"
@@ -71,7 +71,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/ic_skip_button"
-        android:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/skip_button"
         app:layout_constraintEnd_toStartOf="@+id/stop_button"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -90,7 +90,8 @@
         app:layout_constraintBottom_toTopOf="@+id/countdown_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/work_icon" />
+        android:src="@drawable/work_icon"
+        app:backgroundTint="@color/colorPrimary" />
 
     <ImageView
         android:id="@+id/break_icon"
@@ -105,5 +106,6 @@
         app:layout_constraintBottom_toTopOf="@+id/countdown_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/break_icon" />
+        android:src="@drawable/break_icon"
+        app:backgroundTint="@color/colorPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

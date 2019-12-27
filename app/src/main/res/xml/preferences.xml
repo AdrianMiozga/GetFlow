@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <EditTextPreference
+        app:key="work_duration"
+        app:title="@string/work_duration_title" />
 
     <EditTextPreference
-        android:inputType="number"
-        android:key="work_duration"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/work_duration_title" />
+        app:key="break_duration"
+        app:title="@string/break_duration" />
 
-    <EditTextPreference
-        android:inputType="number"
-        android:key="break_duration"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/break_duration" />
+    <SwitchPreferenceCompat
+        app:defaultValue="false"
+        app:key="do_not_disturb"
+        app:summary="@string/do_not_disturb_summary"
+        app:title="@string/do_not_disturb_title" />
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="do_not_disturb"
-        android:summary="@string/do_not_disturb_summary"
-        android:title="@string/do_not_disturb_title" />
-
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="keep_screen_on"
-        android:title="Keep screen on" />
+    <SwitchPreferenceCompat
+        app:defaultValue="false"
+        app:key="keep_screen_on"
+        app:title="Keep screen on" />
 </PreferenceScreen>
