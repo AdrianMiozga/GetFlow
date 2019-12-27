@@ -20,45 +20,48 @@ public class Constants {
 
     static final String IS_TIMER_RUNNING = "is_timer_running";
     static final String IS_BREAK_STATE = "is_break_state";
+    static final String CENTER_BUTTONS = "center_buttons";
+
     // Defaults
     public static final String DEFAULT_WORK_TIME = "25";
     public static final String DEFAULT_BREAK_TIME = "5";
+
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
     // TimerNotification Ids
+
     static final int ON_FINISH_NOTIFICATION = 0;
     static final int TIME_LEFT_NOTIFICATION = 1;
+
     // Pending Intent Request Codes
     static final int PENDING_INTENT_OPEN_APP_REQUEST_CODE = 0;
     static final int PENDING_INTENT_SKIP_REQUEST_CODE = 1;
     static final int PENDING_INTENT_PAUSE_RESUME_REQUEST_CODE = 2;
     static final int PENDING_INTENT_STOP_REQUEST_CODE = 3;
-    // Buttons
+
+    // Intent Filters
     static final String BUTTON_CLICKED = "button_clicked";
+    static final String ON_TICK = "on_tick";
+
+    // Intent Action
     static final String BUTTON_ACTION = "button_action";
+    static final String UPDATE_UI_ACTION = "update_ui_action";
+
+    // Intent Extra
     static final String BUTTON_STOP = "button_stop";
     static final String BUTTON_SKIP = "button_skip";
     static final String BUTTON_START = "button_start";
     static final String BUTTON_PAUSE = "button_pause";
+    static final String TIME_LEFT = "time_left";
+
     // TimerNotification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";
     static final String CHANNEL_TIMER_COMPLETED = "Pomodoro Timer Completed";
-    // Intents
-    static final String UPDATE_DATABASE_INTENT = "update_database";
-    static final String UPDATE_COMPLETED_WORKS = "update_completed_works";
-    static final String UPDATE_INCOMPLETE_WORKS = "update_incomplete_works";
-    static final String UPDATE_BREAKS = "update_breaks";
+
+    // Services
     static final String NOTIFICATION_SERVICE = "notification_service";
     static final String NOTIFICATION_SERVICE_PAUSE = "notification_service_pause";
-    static final String WHAT_TO_UPDATE = "what_to_update";
-    static final String TIME_TO_UPDATE = "time_to_update";
+
     // Statistics
     static final int HOW_MANY_DAYS_TO_SHOW = 7;
-
-    static final String TIME_LEFT = "time_left";
-    static final String ON_TICK = "on_tick";
-
-    static final String UPDATE_UI_ACTION = "update_ui_action";
-
-    static final String CENTER_BUTTONS = "center_buttons";
 }
