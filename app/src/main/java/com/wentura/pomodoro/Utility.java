@@ -28,17 +28,23 @@ class Utility {
     }
 
     private static void setRingerMode(Context context, int mode) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (notificationManager != null && notificationManager.isNotificationPolicyAccessGranted()) {
-                AudioManager audioManager = context.getSystemService(AudioManager.class);
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-                if (audioManager == null) {
-                    return;
-                }
-                audioManager.setRingerMode(mode);
+            if (notificationManager == null) {
+                return;
             }
+
+            if (!notificationManager.isNotificationPolicyAccessGranted()) {
+                return;
+            }
+
+            AudioManager audioManager = context.getSystemService(AudioManager.class);
+
+            if (audioManager == null) {
+                return;
+            }
+            audioManager.setRingerMode(mode);
         } else {
             AudioManager audioManager =
                     (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
