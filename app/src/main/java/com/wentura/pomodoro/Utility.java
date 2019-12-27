@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 class Utility {
 
-    static void toggleDoNotDisturb(Context context, int mode) {
+    static void setDoNotDisturb(Context context, int mode) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTING, false)) {

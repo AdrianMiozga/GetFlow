@@ -87,7 +87,7 @@ public class NotificationService extends Service {
 
                 @Override
                 public void onFinish() {
-                    Utility.toggleDoNotDisturb(getApplicationContext(),
+                    Utility.setDoNotDisturb(getApplicationContext(),
                             AudioManager.RINGER_MODE_NORMAL);
 
                     preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);

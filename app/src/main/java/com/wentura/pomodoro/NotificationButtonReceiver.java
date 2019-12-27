@@ -60,7 +60,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                 Log.d(TAG, "onReceive: Button Stop");
 
-                Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
                 break;
             }
             case Constants.BUTTON_SKIP: {
@@ -82,7 +82,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
                                     Constants.DEFAULT_WORK_TIME)) * 60000);
 
-                    Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
+                    Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
@@ -92,7 +92,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
                                     Constants.DEFAULT_WORK_TIME)) * 60000);
 
-                    Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                    Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
 
                 if (timerLeft != 0) {
@@ -134,7 +134,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
                 if (!isBreakState) {
-                    Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
+                    Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
                 }
                 break;
             }
@@ -149,7 +149,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.apply();
 
                 if (!isBreakState) {
-                    Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
+                    Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
 
                 Intent serviceIntent = new Intent(context, NotificationService.class);
