@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b9e9d1bc03ffc95840ed16d063100c7b",
+    "identityHash": "c686558cd9e3915b87e219ff448ebed1",
     "entities": [
       {
         "tableName": "Pomodoro",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `CompletedWorkTime` INTEGER NOT NULL, `BreakTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `CompletedWorkTime` INTEGER NOT NULL, `IncompleteWorks` INTEGER NOT NULL, `IncompleteWorkTime` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `BreakTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
         "fields": [
           {
             "fieldPath": "Date",
@@ -21,14 +21,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "Breaks",
-            "columnName": "Breaks",
+            "fieldPath": "CompletedWorkTime",
+            "columnName": "CompletedWorkTime",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "CompletedWorkTime",
-            "columnName": "CompletedWorkTime",
+            "fieldPath": "IncompleteWorks",
+            "columnName": "IncompleteWorks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "IncompleteWorkTime",
+            "columnName": "IncompleteWorkTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Breaks",
+            "columnName": "Breaks",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -52,7 +64,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b9e9d1bc03ffc95840ed16d063100c7b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c686558cd9e3915b87e219ff448ebed1')"
     ]
   }
 }

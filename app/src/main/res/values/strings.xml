@@ -24,12 +24,12 @@
     <string name="break_time">Break time!</string>
     <string name="break_time_left">Break time left: %s</string>
     <string name="work_time_left">Work time left: %s</string>
-    <string name="time_format">%d:%02d</string>
-    <string name="time_format_statistics">%02d:%02d</string>
     <string name="statistics">Statistics</string>
     <string name="completed">Completed</string>
     <string name="breaks">Breaks</string>
     <string name="today">Today</string>
     <string name="pomodoro">Pomodoro</string>
     <string name="pause_button">Pause button</string>
+    <string name="incomplete">Incomplete</string>
+    <string name="total">Total</string>
 </resources>

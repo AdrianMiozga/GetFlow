@@ -34,13 +34,23 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
     public void onBindViewHolder(@NonNull StatisticsAdapter.ViewHolder holder, int position) {
         StatisticsItem statisticsItem = statisticsItems.get(position);
 
-        Context context = holder.dateTextView.getContext();
-
-        holder.worksNumberTextView.setText(String.valueOf(statisticsItem.getCompletedWorks()));
-        holder.breaksNumberTextView.setText(String.valueOf(statisticsItem.getBreaks()));
         holder.dateTextView.setText(statisticsItem.getDate());
-        holder.completedWorkTimeTextView.setText(Utility.formatStatisticsTime(context, statisticsItem.getCompletedWorkTime()));
-        holder.breakTimeTextView.setText(Utility.formatStatisticsTime(context, statisticsItem.getBreakTime()));
+
+        holder.completedWorkNumberTextView.setText(String.valueOf(statisticsItem.getCompletedWorks()));
+        holder.completedWorkTimeTextView.setText(Utility.formatStatisticsTime(
+                statisticsItem.getCompletedWorkTime()));
+
+        holder.breakNumberTextView.setText(String.valueOf(statisticsItem.getBreaks()));
+        holder.breakTimeTextView.setText(Utility.formatStatisticsTime(
+                statisticsItem.getBreakTime()));
+
+        holder.incompleteWorkNumberTextView.setText(String.valueOf(statisticsItem.getIncompleteWorks()));
+        holder.incompleteWorkTimeTextView.setText(Utility.formatStatisticsTime(
+                statisticsItem.getIncompleteWorkTime()));
+
+        holder.totalWorkNumberTextView.setText(String.valueOf(statisticsItem.getCompletedWorks() + statisticsItem.getIncompleteWorks()));
+        holder.totalWorkTimeTextView.setText(Utility.formatStatisticsTime(
+                statisticsItem.getCompletedWorkTime() + statisticsItem.getIncompleteWorkTime()));
     }
 
     @Override
@@ -50,19 +60,35 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView dateTextView;
-        TextView worksNumberTextView;
-        TextView breaksNumberTextView;
+
+        TextView completedWorkNumberTextView;
         TextView completedWorkTimeTextView;
+
+        TextView breakNumberTextView;
         TextView breakTimeTextView;
+
+        TextView incompleteWorkNumberTextView;
+        TextView incompleteWorkTimeTextView;
+
+        TextView totalWorkNumberTextView;
+        TextView totalWorkTimeTextView;
 
         ViewHolder(View view) {
             super(view);
 
             dateTextView = view.findViewById(R.id.date);
-            breaksNumberTextView = view.findViewById(R.id.breaks_number);
-            worksNumberTextView = view.findViewById(R.id.works_number);
+
+            breakNumberTextView = view.findViewById(R.id.break_number);
             breakTimeTextView = view.findViewById(R.id.break_time);
+
+            completedWorkNumberTextView = view.findViewById(R.id.work_number);
             completedWorkTimeTextView = view.findViewById(R.id.completed_work_time);
+
+            incompleteWorkNumberTextView = view.findViewById(R.id.incomplete_work_number);
+            incompleteWorkTimeTextView = view.findViewById(R.id.incomplete_work_time);
+
+            totalWorkNumberTextView = view.findViewById(R.id.total_work_number);
+            totalWorkTimeTextView = view.findViewById(R.id.total_work_time);
         }
     }
 }

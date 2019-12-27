@@ -8,10 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,13 +25,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.wentura.pomodoro.database.Database;
-import com.wentura.pomodoro.database.Pomodoro;
 import com.wentura.pomodoro.settings.SettingsActivity;
 
-import java.lang.ref.WeakReference;
-
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
     private ImageButton startButton;
     private ImageButton pauseButton;
     private ImageButton stopButton;
@@ -39,12 +36,18 @@ public class MainActivity extends AppCompatActivity {
     private ImageView workIcon;
     private ImageView breakIcon;
     private TextView countdownText;
-    private Database database;
 
     private BroadcastReceiver statusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getStringExtra(Constants.BUTTON_ACTION);
+            String action = intent.getStringExtra(Constants.UPDATE_UI_ACTION);
+
+            if (action == null) {
+                Log.d(TAG, "onReceive: Action null");
+                return;
+            }
+
+            Log.d(TAG, "onReceive: statusReceiver action = " + action);
 
             switch (action) {
                 case Constants.BUTTON_SKIP: {
@@ -89,30 +92,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver updateDatabase = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getStringExtra(Constants.BUTTON_ACTION);
-
-            switch (action) {
-                case Constants.UPDATE_WORKS:
-                    updateDatabaseWorks();
-                    break;
-                case Constants.UPDATE_BREAKS:
-                    updateDatabaseBreaks();
-                    break;
-            }
-        }
-    };
-
-    private void updateDatabaseWorks() {
-//        new UpdateDatabaseWorks(this).execute();
-    }
-
-    private void updateDatabaseBreaks() {
-        new UpdateDatabaseBreaks(this).execute();
-    }
-
     private BroadcastReceiver updateTimerTextView = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -121,24 +100,19 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private static int getLastSessionDuration(WeakReference<MainActivity> weakReference) {
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(weakReference.get());
-
-        int lastWorkSessionDuration = sharedPreferences.getInt(Constants.LAST_SESSION_DURATION, 0);
-
-        if (lastWorkSessionDuration == 0) {
-            return Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
-                    Constants.DEFAULT_WORK_TIME));
-        } else {
-            return lastWorkSessionDuration;
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
+
+        setupUI();
+
         Utility.toggleKeepScreenOn(this);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                updateTimerTextView, new IntentFilter(Constants.ON_TICK));
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                statusReceiver, new IntentFilter(Constants.BUTTON_CLICKED));
     }
 
     @Override
@@ -154,31 +128,7 @@ public class MainActivity extends AppCompatActivity {
         breakIcon = findViewById(R.id.break_icon);
         skipButton = findViewById(R.id.skip_button);
 
-        setupUI();
-
-        String action = getIntent().getStringExtra(Constants.UPDATE_DATABASE_INTENT);
-
-        if (action != null) {
-            switch (action) {
-                case Constants.UPDATE_BREAKS: {
-                    new UpdateDatabaseBreaks(this).execute();
-                    break;
-                }
-                case Constants.UPDATE_WORKS: {
-                    // new UpdateDatabaseWorks(this).execute();
-                    break;
-                }
-            }
-        }
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                statusReceiver, new IntentFilter(Constants.BUTTON_CLICKED));
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                updateTimerTextView, new IntentFilter(Constants.ON_TICK));
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                updateDatabase, new IntentFilter(Constants.UPDATE_DATABASE_INTENT));
+        Log.d(TAG, "onCreate: ");
 
         setupNotificationChannels();
 
@@ -187,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                Log.d(TAG, "handleOnBackPressed: ");
 
                 if (sharedPreferences.getInt(Constants.TIMER_LEFT, 0) == 0) {
                     finish();
@@ -238,8 +190,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        Log.d(TAG, "onDestroy: ");
 
         SharedPreferences.Editor editor =
                 PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -273,10 +234,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         editor.apply();
-
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(updateDatabase);
     }
 
     @Override
@@ -318,10 +275,10 @@ public class MainActivity extends AppCompatActivity {
         if (timerLeft == 0) {
             if (isBreakState) {
                 updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.BREAK_DURATION_SETTING,
-                        Constants.DEFAULT_BREAK_TIME)) * 60000);
+                        Constants.DEFAULT_BREAK_TIME)));
             } else {
                 updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
-                        Constants.DEFAULT_WORK_TIME)) * 60000);
+                        Constants.DEFAULT_WORK_TIME)));
             }
         } else {
             updateTimerTextView(timerLeft);
@@ -371,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopTimerUI() {
+        Log.d(TAG, "stopTimerUI: ");
         stopButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
         pauseButton.setVisibility(View.INVISIBLE);
@@ -381,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
-                Constants.DEFAULT_WORK_TIME)) * 60000);
+                Constants.DEFAULT_WORK_TIME)));
     }
 
     private void skipTimer() {
@@ -413,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateTimerTextView(long time) {
-        countdownText.setText(Utility.formatTime(this, time));
+        countdownText.setText(Utility.formatTime(time));
     }
 
     private void setupNotificationChannels() {
@@ -430,27 +388,6 @@ public class MainActivity extends AppCompatActivity {
                 notificationManager.createNotificationChannel(timerCompletedChannel);
                 notificationManager.createNotificationChannel(timerChannel);
             }
-        }
-    }
-
-    private static class UpdateDatabaseWorks extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MainActivity> weakReference;
-
-        UpdateDatabaseWorks(MainActivity context) {
-            this.weakReference = new WeakReference<>(context);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            String currentDate = Utility.getCurrentDate();
-
-            if (weakReference.get().database.pomodoroDao().getLatestDate().equals(currentDate)) {
-                weakReference.get().database.pomodoroDao().updateCompletedWorks(weakReference.get().database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);
-                weakReference.get().database.pomodoroDao().updateCompletedWorkTime(weakReference.get().database.pomodoroDao().getCompletedWorkTime(currentDate) + getLastSessionDuration(weakReference), currentDate);
-            } else {
-                weakReference.get().database.pomodoroDao().insertPomodoro(new Pomodoro(currentDate, 1, 0, getLastSessionDuration(weakReference), 0));
-            }
-            return null;
         }
     }
 }

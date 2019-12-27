@@ -1,5 +1,6 @@
 package com.wentura.pomodoro;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -36,16 +37,27 @@ class Utility {
         }
     }
 
-    static String formatTime(Context context, long milliseconds) {
-        return String.format(context.getString(R.string.time_format),
+    @SuppressLint("DefaultLocale")
+    static String formatTime(long milliseconds) {
+        return String.format("%d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(milliseconds),
                 TimeUnit.MILLISECONDS.toSeconds(milliseconds % 60000));
     }
 
-    static String formatStatisticsTime(Context context, long milliseconds) {
-        return String.format(context.getString(R.string.time_format_statistics),
-                TimeUnit.MILLISECONDS.toHours(milliseconds),
-                TimeUnit.MILLISECONDS.toMinutes(milliseconds % 3_600_000));
+    @SuppressLint("DefaultLocale")
+    static String formatStatisticsTime(long milliseconds) {
+        long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
+
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds));
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds));
+
+        if (seconds > 0) {
+            minutes++;
+        }
+        return String.format("%02d:%02d", hours, minutes);
     }
 
     static void toggleKeepScreenOn(Context context) {
@@ -84,10 +96,15 @@ class Utility {
         Date oldDate = null;
         try {
             oldDate = oldDateFormat.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (ParseException exception) {
+            exception.printStackTrace();
         }
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM dd", Locale.US);
-        return newDateFormat.format(oldDate);
+
+        if (oldDate == null) {
+            return "";
+        } else {
+            SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM dd", Locale.US);
+            return newDateFormat.format(oldDate);
+        }
     }
 }

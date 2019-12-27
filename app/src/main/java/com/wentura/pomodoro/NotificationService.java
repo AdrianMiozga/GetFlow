@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class NotificationService extends Service {
+    private static final String TAG = "Hello";
     private boolean isBreakState;
     private int timeLeft;
     private CountDownTimer countDownTimer;
@@ -38,10 +39,10 @@ public class NotificationService extends Service {
         if (timeLeft == 0) {
             if (isBreakState) {
                 timeLeft = Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
-                        Constants.DEFAULT_BREAK_TIME)) * 60000;
+                        Constants.DEFAULT_BREAK_TIME));
             } else {
                 timeLeft = Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                        Constants.DEFAULT_WORK_TIME)) * 60000;
+                        Constants.DEFAULT_WORK_TIME));
             }
         }
 
@@ -52,10 +53,10 @@ public class NotificationService extends Service {
 
             if (isBreakState) {
                 builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
-                        Utility.formatTime(getApplicationContext(), timeLeft)));
+                        Utility.formatTime(timeLeft)));
             } else {
                 builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
-                        Utility.formatTime(getApplicationContext(), timeLeft)));
+                        Utility.formatTime(timeLeft)));
             }
 
             startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
@@ -70,10 +71,10 @@ public class NotificationService extends Service {
 
                     if (isBreakState) {
                         builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
-                                Utility.formatTime(getApplicationContext(), millisUntilFinished)));
+                                Utility.formatTime(millisUntilFinished)));
                     } else {
                         builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
-                                Utility.formatTime(getApplicationContext(), millisUntilFinished)));
+                                Utility.formatTime(millisUntilFinished)));
                     }
 
                     Intent updateTimer = new Intent(Constants.ON_TICK);
@@ -89,15 +90,16 @@ public class NotificationService extends Service {
                     preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
 
                     preferenceEditor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
-                    preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
                     preferenceEditor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
                     preferenceEditor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
 
                     if (isBreakState) {
+                        preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
                         preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, false);
                     } else {
+                        preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
                         preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
@@ -107,9 +109,11 @@ public class NotificationService extends Service {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
                     if (isBreakState) {
-                        intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_BREAKS);
+                        new UpdateDatabaseBreaks(getApplicationContext(),
+                                preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
                     } else {
-                        intent.putExtra(Constants.UPDATE_DATABASE_INTENT, Constants.UPDATE_WORKS);
+                        new UpdateDatabaseCompletedWorks(getApplicationContext(),
+                                preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
                     }
 
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

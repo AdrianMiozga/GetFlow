@@ -24,18 +24,18 @@ public class StatisticsActivity extends AppCompatActivity {
         if (statisticsItems.isEmpty()) {
             for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW; i++) {
                 statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                        0, 0, 0, 0));
+                        0, 0, 0, 0, 0, 0));
                 days++;
             }
         } else {
             for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW; i++) {
                 if (i >= statisticsItems.size()) {
                     statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                            0, 0, 0, 0));
+                            0, 0, 0, 0, 0, 0));
                 } else {
                     if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
                         statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                                0, 0, 0, 0));
+                                0, 0, 0, 0, 0, 0));
                     }
                 }
                 days++;

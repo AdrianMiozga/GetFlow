@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -13,12 +14,18 @@ import static android.media.AudioManager.RINGER_MODE_SILENT;
 
 public class NotificationButtonReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "pomodoro";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra(Constants.BUTTON_ACTION);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editPreferences = preferences.edit();
+
+        if (action == null) {
+            return;
+        }
 
         switch (action) {
             case Constants.BUTTON_STOP: {
@@ -30,44 +37,45 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
                 int timerLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
 
-                editPreferences.putInt(Constants.LAST_SESSION_DURATION,
-                        lastSessionDuration - timerLeft);
-
-                Intent updateUI = new Intent(Constants.UPDATE_DATABASE_INTENT);
-                if (isBreakState) {
-                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_BREAKS);
-                } else {
-                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_WORKS);
+                if (timerLeft != 0) {
+                    if (isBreakState) {
+                        new UpdateDatabaseBreaks(context, lastSessionDuration - timerLeft).execute();
+                    } else {
+                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timerLeft).execute();
+                    }
                 }
-                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, false);
                 editPreferences.putBoolean(Constants.IS_BREAK_STATE, false);
+                editPreferences.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
+                editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
+                editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false);
                 editPreferences.apply();
 
-                updateUI = new Intent(Constants.BUTTON_CLICKED);
-                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_STOP);
+                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_STOP);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
+
+                Log.d(TAG, "onReceive: Button Stop");
 
                 Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 break;
             }
             case Constants.BUTTON_SKIP: {
+                Log.d("Pomodoro", "onReceive: SKIP");
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
                 stopEndNotificationService(context);
                 stopNotificationService(context);
-                Intent updateUI = new Intent(Constants.UPDATE_DATABASE_INTENT);
 
                 int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
+
                 int timerLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
 
-                editPreferences.putInt(Constants.LAST_SESSION_DURATION,
-                        lastSessionDuration - timerLeft);
-
                 if (isBreakState) {
-                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_BREAKS);
-
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, false);
+                    editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
+                    editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
 
                     editPreferences.putInt(Constants.TIMER_LEFT,
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
@@ -75,9 +83,9 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                     Utility.toggleDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
-                    updateUI.putExtra(Constants.BUTTON_ACTION, Constants.UPDATE_WORKS);
-
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
+                    editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
+                    editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
 
                     editPreferences.putInt(Constants.TIMER_LEFT,
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
@@ -85,13 +93,22 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                     Utility.toggleDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
+
+                if (timerLeft != 0) {
+                    if (isBreakState) {
+                        new UpdateDatabaseBreaks(context, lastSessionDuration - timerLeft).execute();
+                    } else {
+                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timerLeft).execute();
+                    }
+                }
+
+                editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, true);
                 editPreferences.apply();
 
-                LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
-
-                updateUI = new Intent(Constants.BUTTON_CLICKED);
-                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_SKIP);
+                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_SKIP);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
                 startNotificationService(context);
@@ -100,13 +117,17 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
             case Constants.BUTTON_START: {
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, true);
+                editPreferences.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, false);
+                editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
                 editPreferences.apply();
 
                 stopEndNotificationService(context);
                 startNotificationService(context);
 
                 Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
-                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_START);
+                updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_START);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
                 if (!isBreakState) {
@@ -116,8 +137,11 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
             }
             case Constants.BUTTON_PAUSE: {
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
-
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, false);
+                editPreferences.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
+                editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
                 editPreferences.apply();
 
                 if (!isBreakState) {
@@ -130,7 +154,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 context.startService(serviceIntent);
 
                 Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
-                updateUI.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_PAUSE);
+                updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_PAUSE);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
                 break;
             }

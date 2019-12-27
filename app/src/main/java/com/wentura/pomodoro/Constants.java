@@ -45,13 +45,18 @@ public class Constants {
     static final String CHANNEL_TIMER_COMPLETED = "Pomodoro Timer Completed";
     // Intents
     static final String UPDATE_DATABASE_INTENT = "update_database";
-    static final String UPDATE_WORKS = "update_works";
+    static final String UPDATE_COMPLETED_WORKS = "update_completed_works";
+    static final String UPDATE_INCOMPLETE_WORKS = "update_incomplete_works";
     static final String UPDATE_BREAKS = "update_breaks";
-    static final String NOTIFICATION_SERVICE = "notification_service_pause";
+    static final String NOTIFICATION_SERVICE = "notification_service";
     static final String NOTIFICATION_SERVICE_PAUSE = "notification_service_pause";
+    static final String WHAT_TO_UPDATE = "what_to_update";
+    static final String TIME_TO_UPDATE = "time_to_update";
     // Statistics
     static final int HOW_MANY_DAYS_TO_SHOW = 7;
 
     static final String TIME_LEFT = "time_left";
     static final String ON_TICK = "on_tick";
+
+    static final String UPDATE_UI_ACTION = "update_ui_action";
 }
