@@ -3,6 +3,7 @@ package com.wentura.pomodoro;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -86,6 +87,9 @@ public class NotificationService extends Service {
 
                 @Override
                 public void onFinish() {
+                    Utility.toggleDoNotDisturb(getApplicationContext(),
+                            AudioManager.RINGER_MODE_NORMAL);
+
                     preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
                     preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
 
