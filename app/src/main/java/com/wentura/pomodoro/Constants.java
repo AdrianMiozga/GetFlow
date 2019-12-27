@@ -59,4 +59,6 @@ public class Constants {
     static final String ON_TICK = "on_tick";
 
     static final String UPDATE_UI_ACTION = "update_ui_action";
+
+    static final String CENTER_BUTTONS = "center_buttons";
 }

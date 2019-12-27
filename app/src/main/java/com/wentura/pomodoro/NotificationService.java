@@ -98,11 +98,13 @@ public class NotificationService extends Service {
                         preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, false);
+                        preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, true);
                     } else {
                         preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
                         preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
                         preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
+                        preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, false);
                     }
                     preferenceEditor.apply();
 

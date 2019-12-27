@@ -51,6 +51,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false);
+                editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
@@ -105,6 +106,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, true);
+                editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
@@ -121,6 +123,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
                 editPreferences.apply();
 
                 stopEndNotificationService(context);
@@ -142,6 +145,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
                 editPreferences.apply();
 
                 if (!isBreakState) {

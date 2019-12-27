@@ -23,6 +23,8 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.wentura.pomodoro.settings.SettingsActivity;
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
             switch (action) {
                 case Constants.BUTTON_SKIP: {
+                    switchToNormalLayout();
+
                     SharedPreferences sharedPreferences =
                             PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -73,14 +77,29 @@ public class MainActivity extends AppCompatActivity {
                         startButton.setVisibility(View.VISIBLE);
                         pauseButton.setVisibility(View.INVISIBLE);
                     }
+
                     break;
                 }
                 case Constants.BUTTON_STOP:
                     stopTimerUI();
                     break;
                 case Constants.BUTTON_START: {
+                    switchToNormalLayout();
                     startButton.setVisibility(View.INVISIBLE);
                     pauseButton.setVisibility(View.VISIBLE);
+
+                    SharedPreferences sharedPreferences =
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                    boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
+
+                    if (isBreakState) {
+                        workIcon.setVisibility(View.INVISIBLE);
+                        breakIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        workIcon.setVisibility(View.VISIBLE);
+                        breakIcon.setVisibility(View.INVISIBLE);
+                    }
                     break;
                 }
                 case Constants.BUTTON_PAUSE: {
@@ -284,6 +303,12 @@ public class MainActivity extends AppCompatActivity {
             updateTimerTextView(timerLeft);
         }
 
+        if (sharedPreferences.getBoolean(Constants.CENTER_BUTTONS, false)) {
+            switchToWaitingStateLayout();
+        } else {
+            switchToNormalLayout();
+        }
+
         if (sharedPreferences.getBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false)) {
             skipButton.setVisibility(View.VISIBLE);
         } else {
@@ -329,6 +354,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopTimerUI() {
         Log.d(TAG, "stopTimerUI: ");
+        switchToNormalLayout();
+
         stopButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
         pauseButton.setVisibility(View.INVISIBLE);
@@ -372,6 +399,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateTimerTextView(long time) {
         countdownText.setText(Utility.formatTime(time));
+    }
+
+    private void switchToWaitingStateLayout() {
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(getApplicationContext(), R.layout.activity_main_waiting);
+        constraintSet.applyTo((ConstraintLayout) findViewById(R.id.constraint_layout));
+    }
+
+    private void switchToNormalLayout() {
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(getApplicationContext(), R.layout.activity_main);
+        constraintSet.applyTo((ConstraintLayout) findViewById(R.id.constraint_layout));
     }
 
     private void setupNotificationChannels() {
