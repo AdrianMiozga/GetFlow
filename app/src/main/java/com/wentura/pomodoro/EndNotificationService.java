@@ -43,6 +43,7 @@ public class EndNotificationService extends Service {
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
                 .setContentTitle(getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setOngoing(true);
 
         Intent intent = new Intent(this, MainActivity.class);
