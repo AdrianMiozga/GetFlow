@@ -15,7 +15,6 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 public class EndNotificationService extends Service {
@@ -63,8 +62,7 @@ public class EndNotificationService extends Service {
             builder.setContentText(getString(R.string.work_time));
         }
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-        notificationManagerCompat.notify(Constants.ON_FINISH_NOTIFICATION, builder.build());
+        startForeground(Constants.ON_FINISH_NOTIFICATION, builder.build());
     }
 
     private void vibrate() {

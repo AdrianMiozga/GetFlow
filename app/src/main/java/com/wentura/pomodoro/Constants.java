@@ -30,8 +30,8 @@ public class Constants {
     public static final String DATABASE_NAME = "Pomodoro.db";
     // TimerNotification Ids
 
-    static final int ON_FINISH_NOTIFICATION = 0;
     static final int TIME_LEFT_NOTIFICATION = 1;
+    static final int ON_FINISH_NOTIFICATION = 2;
 
     // Pending Intent Request Codes
     static final int PENDING_INTENT_OPEN_APP_REQUEST_CODE = 0;

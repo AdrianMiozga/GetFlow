@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -89,6 +90,8 @@ public class NotificationService extends Service {
                 public void onFinish() {
                     Utility.setDoNotDisturb(getApplicationContext(),
                             AudioManager.RINGER_MODE_NORMAL);
+
+                    Log.d(TAG, "onFinish: ");
 
                     preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
                     preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
