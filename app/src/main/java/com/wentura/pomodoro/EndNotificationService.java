@@ -69,24 +69,25 @@ public class EndNotificationService extends Service {
     private void vibrate() {
         final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        if (vibrator != null) {
-            reminderCountDownTimer = new CountDownTimer(30000, 1000) {
-
-                @Override
-                public void onTick(long l) {
-                }
-
-                @Override
-                public void onFinish() {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-                    } else {
-                        vibrator.vibrate(500);
-                    }
-                    start();
-                }
-            }.start();
+        if (vibrator == null) {
+            return;
         }
+
+        reminderCountDownTimer = new CountDownTimer(30000, 1000) {
+            @Override
+            public void onTick(long l) {
+            }
+
+            @Override
+            public void onFinish() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    vibrator.vibrate(500);
+                }
+                start();
+            }
+        }.start();
     }
 
     @Override
