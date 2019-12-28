@@ -22,12 +22,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-
-        myDebug {
-            debuggable true
-        }
-    }
-    productFlavors {
     }
     buildToolsVersion = '29.0.2'
 }
