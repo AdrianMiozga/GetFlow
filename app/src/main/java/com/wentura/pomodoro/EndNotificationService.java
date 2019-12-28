@@ -1,6 +1,5 @@
 package com.wentura.pomodoro;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -92,12 +91,6 @@ public class EndNotificationService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (notificationManager != null) {
-            notificationManager.cancel(Constants.ON_FINISH_NOTIFICATION);
-        }
-
         if (reminderCountDownTimer != null) {
             reminderCountDownTimer.cancel();
         }
