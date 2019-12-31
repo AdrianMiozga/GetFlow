@@ -1,11 +1,17 @@
 package com.wentura.pomodoro;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -18,6 +24,7 @@ public class NotificationService extends Service {
     private boolean isBreakState;
     private int timeLeft;
     private CountDownTimer countDownTimer;
+    private PowerManager.WakeLock wakeLock = null;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -41,10 +48,10 @@ public class NotificationService extends Service {
         if (timeLeft == 0) {
             if (isBreakState) {
                 timeLeft = Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
-                        Constants.DEFAULT_BREAK_TIME));
+                        Constants.DEFAULT_BREAK_TIME)) /* * 60000 */;
             } else {
                 timeLeft = Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                        Constants.DEFAULT_WORK_TIME));
+                        Constants.DEFAULT_WORK_TIME) /* * 60000 */);
             }
         }
 
@@ -52,6 +59,11 @@ public class NotificationService extends Service {
 
         if (action != null && action.equals(Constants.NOTIFICATION_SERVICE_PAUSE)) {
             cancelCountDownTimer();
+            cancelAlarm();
+
+            if (wakeLock != null) {
+                wakeLock.release();
+            }
 
             if (isBreakState) {
                 builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
@@ -63,6 +75,55 @@ public class NotificationService extends Service {
 
             startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
         } else {
+            // AlarmManager doesn't work when the time is less than 5 seconds,
+            // so I have to use another method to trigger the end notification.
+            if (timeLeft < 6000) {
+                PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+
+                if (powerManager != null) {
+                    wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                            Constants.WAKE_LOCK_TAG);
+                }
+
+                if (wakeLock != null) {
+                    wakeLock.acquire(timeLeft + 1000);
+                }
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(getApplicationContext(),
+                                EndNotificationService.class);
+                        startService(intent);
+                    }
+                }, timeLeft);
+            } else {
+                AlarmManager alarmManager =
+                        (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+                if (alarmManager == null) {
+                    return START_STICKY;
+                }
+
+                Intent displayEndNotification = new Intent(getApplicationContext(),
+                        EndNotificationService.class);
+
+                PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(),
+                        Constants.PENDING_INTENT_END_REQUEST_CODE,
+                        displayEndNotification, 0);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                            SystemClock.elapsedRealtime() +
+                                    timeLeft, pendingIntent);
+                } else {
+                    alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                            SystemClock.elapsedRealtime() +
+                                    timeLeft, pendingIntent);
+                }
+            }
+
             countDownTimer = new CountDownTimer(timeLeft, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -88,50 +149,7 @@ public class NotificationService extends Service {
 
                 @Override
                 public void onFinish() {
-                    Utility.setDoNotDisturb(getApplicationContext(),
-                            AudioManager.RINGER_MODE_NORMAL);
-
                     Log.d(TAG, "onFinish: ");
-
-                    preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
-                    preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
-
-                    preferenceEditor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
-                    preferenceEditor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
-                    preferenceEditor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
-
-                    if (isBreakState) {
-                        preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
-                        preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
-                        preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
-                        preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, false);
-                        preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, true);
-                    } else {
-                        preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
-                        preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
-                        preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
-                        preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
-                        preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, false);
-                    }
-                    preferenceEditor.apply();
-
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
-                    if (isBreakState) {
-                        new UpdateDatabaseBreaks(getApplicationContext(),
-                                preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
-                    } else {
-                        new UpdateDatabaseCompletedWorks(getApplicationContext(),
-                                preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
-                    }
-
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
-                    Intent displayEndNotification = new Intent(getApplicationContext(),
-                            EndNotificationService.class);
-                    startService(displayEndNotification);
-
                     stopSelf();
                 }
             }.start();
@@ -156,10 +174,34 @@ public class NotificationService extends Service {
         super.onDestroy();
         cancelCountDownTimer();
 
+        cancelAlarm();
+
+        if (wakeLock != null) {
+            wakeLock.release();
+        }
+
         SharedPreferences.Editor preferenceEditor =
                 PreferenceManager.getDefaultSharedPreferences(this).edit();
 
         preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
         preferenceEditor.apply();
+    }
+
+    private void cancelAlarm() {
+        AlarmManager alarmManager =
+                (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+        if (alarmManager == null) {
+            return;
+        }
+
+        Intent displayEndNotification = new Intent(getApplicationContext(),
+                EndNotificationService.class);
+
+        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(),
+                Constants.PENDING_INTENT_END_REQUEST_CODE,
+                displayEndNotification, 0);
+
+        alarmManager.cancel(pendingIntent);
     }
 }

@@ -38,6 +38,7 @@ public class Constants {
     static final int PENDING_INTENT_SKIP_REQUEST_CODE = 1;
     static final int PENDING_INTENT_PAUSE_RESUME_REQUEST_CODE = 2;
     static final int PENDING_INTENT_STOP_REQUEST_CODE = 3;
+    static final int PENDING_INTENT_END_REQUEST_CODE = 4;
 
     // Intent Filters
     static final String BUTTON_CLICKED = "button_clicked";
@@ -64,4 +65,9 @@ public class Constants {
 
     // Statistics
     static final int HOW_MANY_DAYS_TO_SHOW = 7;
+
+    // Wake Lock
+    static final String WAKE_LOCK_TAG = "pomodoro::wake_lock";
+
+    static final long VIBRATION_REMINDER_FREQUENCY = 30000;
 }

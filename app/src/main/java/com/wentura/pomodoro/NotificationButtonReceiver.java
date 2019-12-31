@@ -52,6 +52,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
+                editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
+                editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
@@ -80,7 +82,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                     editPreferences.putInt(Constants.TIMER_LEFT,
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                    Constants.DEFAULT_WORK_TIME)) * 60000);
+                                    Constants.DEFAULT_WORK_TIME))/* * 60000*/);
 
                     Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
@@ -90,7 +92,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                     editPreferences.putInt(Constants.TIMER_LEFT,
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                    Constants.DEFAULT_WORK_TIME)) * 60000);
+                                    Constants.DEFAULT_WORK_TIME))/* * 60000*/);
 
                     Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }

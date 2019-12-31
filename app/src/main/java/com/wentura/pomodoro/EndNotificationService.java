@@ -5,12 +5,15 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -18,14 +21,70 @@ import androidx.core.content.ContextCompat;
 
 public class EndNotificationService extends Service {
 
+    private static final String TAG = "Hello";
     private CountDownTimer reminderCountDownTimer;
+    private PowerManager.WakeLock wakeLock = null;
+    private long[] vibrationPattern = new long[]{0, 500, 250, 500};
+    private long vibrationPatternLength = sumArrayElements(vibrationPattern);
+
+    private long sumArrayElements(long[] vibrationPattern) {
+        int sum = 0;
+
+        for (Long element : vibrationPattern) {
+            sum += element;
+        }
+        return sum;
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStartCommand: ");
+        Log.d(TAG, "onStartCommand: length = " + vibrationPatternLength);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor preferenceEditor = preferences.edit();
+
+        boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
+
+        Utility.setDoNotDisturb(getApplicationContext(),
+                AudioManager.RINGER_MODE_NORMAL);
+
+        preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
+        preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
+
+        preferenceEditor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
+        preferenceEditor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
+        preferenceEditor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
+
+        if (isBreakState) {
+            preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
+            preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
+            preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
+            preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, false);
+            preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, true);
+        } else {
+            preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
+            preferenceEditor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
+            preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
+            preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
+            preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, false);
+        }
+        preferenceEditor.apply();
+
+        if (isBreakState) {
+            new UpdateDatabaseBreaks(getApplicationContext(),
+                    preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
+        } else {
+            new UpdateDatabaseCompletedWorks(getApplicationContext(),
+                    preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
+        }
+
+        Intent displayMainActivity = new Intent(getApplicationContext(), MainActivity.class);
+        displayMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(displayMainActivity);
+
         showEndNotification();
-
         vibrate();
-
         return START_STICKY;
     }
 
@@ -42,7 +101,9 @@ public class EndNotificationService extends Service {
                 .setContentTitle(getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setOngoing(true);
+                .setOngoing(true)
+                .setLights(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
+                        500, 2000);
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -71,7 +132,18 @@ public class EndNotificationService extends Service {
             return;
         }
 
-        reminderCountDownTimer = new CountDownTimer(30000, 1000) {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+
+        if (powerManager != null) {
+            wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    Constants.WAKE_LOCK_TAG);
+        }
+
+        if (wakeLock != null) {
+            wakeLock.acquire(Constants.VIBRATION_REMINDER_FREQUENCY + vibrationPatternLength);
+        }
+
+        reminderCountDownTimer = new CountDownTimer(Constants.VIBRATION_REMINDER_FREQUENCY, 1000) {
             @Override
             public void onTick(long l) {
             }
@@ -79,9 +151,15 @@ public class EndNotificationService extends Service {
             @Override
             public void onFinish() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                    vibrator.vibrate(VibrationEffect.createWaveform(vibrationPattern,
+                            VibrationEffect.DEFAULT_AMPLITUDE));
                 } else {
                     vibrator.vibrate(500);
+                }
+
+                if (wakeLock != null) {
+                    Log.d(TAG, "vibrate: wakeLock != null");
+                    wakeLock.acquire(Constants.VIBRATION_REMINDER_FREQUENCY + vibrationPatternLength);
                 }
                 start();
             }
@@ -93,6 +171,10 @@ public class EndNotificationService extends Service {
         super.onDestroy();
         if (reminderCountDownTimer != null) {
             reminderCountDownTimer.cancel();
+        }
+
+        if (wakeLock != null) {
+            wakeLock.release();
         }
     }
 }
