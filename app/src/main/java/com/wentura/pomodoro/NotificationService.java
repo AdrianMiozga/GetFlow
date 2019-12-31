@@ -25,6 +25,7 @@ public class NotificationService extends Service {
     private int timeLeft;
     private CountDownTimer countDownTimer;
     private PowerManager.WakeLock wakeLock = null;
+    private final Handler handler = new Handler();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -89,7 +90,6 @@ public class NotificationService extends Service {
                     wakeLock.acquire(timeLeft + 1000);
                 }
 
-                final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -175,6 +175,8 @@ public class NotificationService extends Service {
         cancelCountDownTimer();
 
         cancelAlarm();
+
+        handler.removeCallbacksAndMessages(null);
 
         if (wakeLock != null) {
             wakeLock.release();
