@@ -62,6 +62,8 @@ public class NotificationService extends Service {
             cancelCountDownTimer();
             cancelAlarm();
 
+            handler.removeCallbacksAndMessages(null);
+
             if (wakeLock != null) {
                 wakeLock.release();
             }
