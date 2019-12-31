@@ -12,12 +12,13 @@ public class Constants {
     static final String IS_PAUSE_BUTTON_VISIBLE = "is_pause_button_visible";
     static final String IS_WORK_ICON_VISIBLE = "is_work_icon_visible";
     static final String IS_BREAK_ICON_VISIBLE = "is_break_icon_visible";
+
     // Last session duration is needed when the user changes, for example,
     // work duration setting when the work timer is already running.
     // Using the work duration setting would update the wrong time in statistics.
     static final String LAST_SESSION_DURATION = "last_session_duration";
-    static final String TIMER_LEFT = "timer_left";
 
+    static final String TIMER_LEFT = "timer_left";
     static final String IS_TIMER_RUNNING = "is_timer_running";
     static final String IS_BREAK_STATE = "is_break_state";
     static final String CENTER_BUTTONS = "center_buttons";
@@ -25,11 +26,13 @@ public class Constants {
     // Defaults
     public static final String DEFAULT_WORK_TIME = "25";
     public static final String DEFAULT_BREAK_TIME = "5";
+    static final long VIBRATION_REMINDER_FREQUENCY = 30000;
+    static final int HOW_MANY_DAYS_TO_SHOW = 7;
 
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
-    // TimerNotification Ids
 
+    // TimerNotification Ids
     static final int TIME_LEFT_NOTIFICATION = 1;
     static final int ON_FINISH_NOTIFICATION = 2;
 
@@ -63,11 +66,6 @@ public class Constants {
     static final String NOTIFICATION_SERVICE = "notification_service";
     static final String NOTIFICATION_SERVICE_PAUSE = "notification_service_pause";
 
-    // Statistics
-    static final int HOW_MANY_DAYS_TO_SHOW = 7;
-
     // Wake Lock
     static final String WAKE_LOCK_TAG = "pomodoro::wake_lock";
-
-    static final long VIBRATION_REMINDER_FREQUENCY = 30000;
 }
