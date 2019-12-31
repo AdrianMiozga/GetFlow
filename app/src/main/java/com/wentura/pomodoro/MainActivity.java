@@ -114,8 +114,15 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver updateTimerTextView = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int time = intent.getIntExtra(Constants.TIME_LEFT, 0);
-            updateTimerTextView(time);
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+            // Very rarely, this broadcast delivers a little late. If the user presses the stop
+            // button, and this happens, it will update the timer text view after the stop timer method.
+            // This condition prevents it.
+            if (sharedPreferences.getBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false)) {
+                updateTimerTextView(intent.getIntExtra(Constants.TIME_LEFT, 0));
+            }
         }
     };
 
