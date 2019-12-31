@@ -29,7 +29,8 @@ class Utility {
 
     private static void setRingerMode(Context context, int mode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (notificationManager == null) {
                 return;
@@ -58,6 +59,10 @@ class Utility {
 
     @SuppressLint("DefaultLocale")
     static String formatTime(long milliseconds) {
+        // I'm adding 999 milliseconds so that the timer doesn't end one second after 00:00, but
+        // exactly when 00:00 strikes. Adding exactly 1000 milliseconds makes the timer show one
+        // second more when it's not started.
+        milliseconds += 999;
         return String.format("%d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(milliseconds),
                 TimeUnit.MILLISECONDS.toSeconds(milliseconds % 60000));
