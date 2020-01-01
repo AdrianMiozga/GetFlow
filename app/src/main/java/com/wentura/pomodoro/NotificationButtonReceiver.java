@@ -76,24 +76,18 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                 int timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
+                editPreferences.putInt(Constants.TIME_LEFT, 0);
+
                 if (isBreakState) {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, false);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
-
-                    editPreferences.putInt(Constants.TIME_LEFT,
-                            Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                    Constants.DEFAULT_WORK_TIME))/* * 60000*/);
 
                     Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
                 } else {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
-
-                    editPreferences.putInt(Constants.TIME_LEFT,
-                            Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                                    Constants.DEFAULT_WORK_TIME))/* * 60000*/);
 
                     Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
