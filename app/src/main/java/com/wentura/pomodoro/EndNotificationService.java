@@ -50,7 +50,7 @@ public class EndNotificationService extends Service {
                 AudioManager.RINGER_MODE_NORMAL);
 
         preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
-        preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
+        preferenceEditor.putInt(Constants.TIME_LEFT, 0);
 
         preferenceEditor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
         preferenceEditor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);

@@ -18,7 +18,7 @@ public class Constants {
     // Using the work duration setting would update the wrong time in statistics.
     static final String LAST_SESSION_DURATION = "last_session_duration";
 
-    static final String TIMER_LEFT = "timer_left";
+    static final String TIME_LEFT = "time_left";
     static final String IS_TIMER_RUNNING = "is_timer_running";
     static final String IS_BREAK_STATE = "is_break_state";
     static final String CENTER_BUTTONS = "center_buttons";
@@ -56,7 +56,7 @@ public class Constants {
     static final String BUTTON_SKIP = "button_skip";
     static final String BUTTON_START = "button_start";
     static final String BUTTON_PAUSE = "button_pause";
-    static final String TIME_LEFT = "time_left";
+    static final String TIME_LEFT_INTENT = "time_left_intent";
 
     // TimerNotification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";

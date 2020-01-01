@@ -35,13 +35,13 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
                 int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
-                int timerLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
+                int timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
-                if (timerLeft != 0) {
+                if (timeLeft != 0) {
                     if (isBreakState) {
-                        new UpdateDatabaseBreaks(context, lastSessionDuration - timerLeft).execute();
+                        new UpdateDatabaseBreaks(context, lastSessionDuration - timeLeft).execute();
                     } else {
-                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timerLeft).execute();
+                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timeLeft).execute();
                     }
                 }
 
@@ -54,6 +54,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
                 editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
+                editPreferences.putInt(Constants.TIME_LEFT, 0);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
@@ -73,14 +74,14 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                 int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
 
-                int timerLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
+                int timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
                 if (isBreakState) {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, false);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
 
-                    editPreferences.putInt(Constants.TIMER_LEFT,
+                    editPreferences.putInt(Constants.TIME_LEFT,
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
                                     Constants.DEFAULT_WORK_TIME))/* * 60000*/);
 
@@ -90,18 +91,18 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
 
-                    editPreferences.putInt(Constants.TIMER_LEFT,
+                    editPreferences.putInt(Constants.TIME_LEFT,
                             Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
                                     Constants.DEFAULT_WORK_TIME))/* * 60000*/);
 
                     Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
                 }
 
-                if (timerLeft != 0) {
+                if (timeLeft != 0) {
                     if (isBreakState) {
-                        new UpdateDatabaseBreaks(context, lastSessionDuration - timerLeft).execute();
+                        new UpdateDatabaseBreaks(context, lastSessionDuration - timeLeft).execute();
                     } else {
-                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timerLeft).execute();
+                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timeLeft).execute();
                     }
                 }
 

@@ -44,7 +44,7 @@ public class NotificationService extends Service {
 
         isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
-        timeLeft = preferences.getInt(Constants.TIMER_LEFT, 0);
+        timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
         if (timeLeft == 0) {
             if (isBreakState) {
@@ -55,6 +55,8 @@ public class NotificationService extends Service {
                         Constants.DEFAULT_WORK_TIME) /* * 60000 */);
             }
         }
+
+        Log.d(TAG, "onStartCommand: timeLeft = " + timeLeft);
 
         preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, timeLeft);
 
@@ -131,7 +133,7 @@ public class NotificationService extends Service {
                 public void onTick(long millisUntilFinished) {
                     timeLeft = (int) millisUntilFinished;
 
-                    preferenceEditor.putInt(Constants.TIMER_LEFT, timeLeft);
+                    preferenceEditor.putInt(Constants.TIME_LEFT, timeLeft);
                     preferenceEditor.apply();
 
                     if (isBreakState) {
@@ -143,7 +145,7 @@ public class NotificationService extends Service {
                     }
 
                     Intent updateTimer = new Intent(Constants.ON_TICK);
-                    updateTimer.putExtra(Constants.TIME_LEFT, timeLeft);
+                    updateTimer.putExtra(Constants.TIME_LEFT_INTENT, timeLeft);
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(updateTimer);
 
                     startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
@@ -187,7 +189,7 @@ public class NotificationService extends Service {
         SharedPreferences.Editor preferenceEditor =
                 PreferenceManager.getDefaultSharedPreferences(this).edit();
 
-        preferenceEditor.putInt(Constants.TIMER_LEFT, 0);
+        preferenceEditor.putInt(Constants.TIME_LEFT, 0);
         preferenceEditor.apply();
     }
 

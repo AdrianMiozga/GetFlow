@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             // button, and this happens, it will update the timer text view after the stop timer method.
             // This condition prevents it.
             if (sharedPreferences.getBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false)) {
-                updateTimerTextView(intent.getIntExtra(Constants.TIME_LEFT, 0));
+                updateTimerTextView(intent.getIntExtra(Constants.TIME_LEFT_INTENT, 0));
             }
         }
     };
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d(TAG, "handleOnBackPressed: ");
 
-                if (sharedPreferences.getInt(Constants.TIMER_LEFT, 0) == 0) {
+                if (sharedPreferences.getInt(Constants.TIME_LEFT, 0) == 0) {
                     finish();
                 } else {
                     moveTaskToBack(true);
@@ -296,9 +296,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
-        int timerLeft = sharedPreferences.getInt(Constants.TIMER_LEFT, 0);
+        int timeLeft = sharedPreferences.getInt(Constants.TIME_LEFT, 0);
 
-        if (timerLeft == 0) {
+        if (timeLeft == 0) {
             if (isBreakState) {
                 updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.BREAK_DURATION_SETTING,
                         Constants.DEFAULT_BREAK_TIME)));
@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                         Constants.DEFAULT_WORK_TIME)));
             }
         } else {
-            updateTimerTextView(timerLeft);
+            updateTimerTextView(timeLeft);
         }
 
         if (sharedPreferences.getBoolean(Constants.CENTER_BUTTONS, false)) {
