@@ -18,7 +18,8 @@
 
         <activity
             android:name="com.wentura.pomodoro.MainActivity"
-            android:configChanges="orientation">
+            android:configChanges="orientation"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
