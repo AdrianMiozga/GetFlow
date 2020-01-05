@@ -438,6 +438,7 @@ public class MainActivity extends AppCompatActivity {
 
         timerCompletedChannel.setShowBadge(false);
         timerCompletedChannel.enableLights(true);
+        timerCompletedChannel.setSound(null, null);
         timerChannel.setShowBadge(false);
         notificationManager.createNotificationChannel(timerCompletedChannel);
         notificationManager.createNotificationChannel(timerChannel);

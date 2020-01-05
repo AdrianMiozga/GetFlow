@@ -5,7 +5,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -18,6 +21,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+
+import java.io.IOException;
 
 public class EndNotificationService extends Service {
 
@@ -39,7 +44,6 @@ public class EndNotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: ");
-        Log.d(TAG, "onStartCommand: length = " + vibrationPatternLength);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor preferenceEditor = preferences.edit();
@@ -48,6 +52,25 @@ public class EndNotificationService extends Service {
 
         Utility.setDoNotDisturb(getApplicationContext(),
                 AudioManager.RINGER_MODE_NORMAL);
+
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(getApplicationContext(),
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build());
+            } else {
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            }
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
 
         preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
         preferenceEditor.putInt(Constants.TIME_LEFT, 0);
