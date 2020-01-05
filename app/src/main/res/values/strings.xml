@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Pomodoro</string>
+    <string name="app_name" translatable="false">Focus</string>
     <string name="start_button">Start button</string>
     <string name="stop_button">Stop button</string>
     <string name="work_icon">Work icon</string>
