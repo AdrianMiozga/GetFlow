@@ -121,7 +121,7 @@ public class EndNotificationService extends Service {
 
     private void showEndNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
-                .setSmallIcon(R.drawable.work_icon)
+                .setSmallIcon(R.drawable.notification_icon)
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
                 .setContentTitle(getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

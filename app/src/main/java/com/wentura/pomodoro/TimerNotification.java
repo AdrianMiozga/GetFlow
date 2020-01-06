@@ -20,7 +20,7 @@ class TimerNotification {
 
     private NotificationCompat.Builder setupNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Constants.CHANNEL_TIMER)
-                .setSmallIcon(R.drawable.work_icon)
+                .setSmallIcon(R.drawable.notification_icon)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setContentTitle(context.getString(R.string.pomodoro))
