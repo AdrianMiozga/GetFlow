@@ -50,8 +50,10 @@ public class EndNotificationService extends Service {
 
         boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
-        Utility.setDoNotDisturb(getApplicationContext(),
-                AudioManager.RINGER_MODE_NORMAL);
+        if (!preferences.getBoolean(Constants.DO_NOT_DISTURB_BREAK_SETTING, false)) {
+            Utility.setDoNotDisturb(getApplicationContext(),
+                    AudioManager.RINGER_MODE_NORMAL);
+        }
 
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {

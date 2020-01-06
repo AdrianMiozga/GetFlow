@@ -27,7 +27,7 @@ import java.util.Objects;
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "Hello";
+    private static final String TAG = "Help";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -58,6 +58,15 @@ public class SettingsFragment extends PreferenceFragmentCompat
                         }
                     });
         }
+
+        SwitchPreferenceCompat doNotDisturbSwitch = findPreference(Constants.DO_NOT_DISTURB_SETTING);
+
+        SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
+
+        Log.d(TAG, "onResume: " + doNotDisturbSwitch + ", " + doNotDisturbBreakSwitch);
+        if (doNotDisturbSwitch != null && doNotDisturbBreakSwitch != null) {
+            doNotDisturbBreakSwitch.setVisible(doNotDisturbSwitch.isChecked());
+        }
     }
 
     @Override
@@ -76,12 +85,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 return;
             }
 
-            SwitchPreferenceCompat switchPreference = findPreference(Constants.DO_NOT_DISTURB_SETTING);
+            SwitchPreferenceCompat doNotDisturbSwitch = findPreference(Constants.DO_NOT_DISTURB_SETTING);
 
-            if (switchPreference == null) {
-                return;
+            if (doNotDisturbSwitch != null) {
+                doNotDisturbSwitch.setChecked(false);
             }
-            switchPreference.setChecked(false);
         }
     }
 
@@ -132,7 +140,15 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public boolean onPreferenceTreeClick(Preference preference) {
         String key = preference.getKey();
 
-        Log.d(TAG, "onPreferenceTreeClick: ");
+        if (key.equals(Constants.DO_NOT_DISTURB_SETTING)) {
+            SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
+
+            SwitchPreferenceCompat doNotDisturbSwitch = findPreference(key);
+
+            if (doNotDisturbSwitch != null && doNotDisturbBreakSwitch != null) {
+                doNotDisturbBreakSwitch.setVisible(doNotDisturbSwitch.isChecked());
+            }
+        }
 
         if (key.equals(Constants.BREAK_DURATION_SETTING) || key.equals(Constants.WORK_DURATION_SETTING)) {
             EditTextPreference editTextPreference = findPreference(key);

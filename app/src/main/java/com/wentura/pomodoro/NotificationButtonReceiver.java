@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -89,7 +90,9 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
 
-                    Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
+                    if (!preferences.getBoolean(Constants.DO_NOT_DISTURB_BREAK_SETTING, false)) {
+                        Utility.setDoNotDisturb(context, AudioManager.RINGER_MODE_NORMAL);
+                    }
                 }
 
                 if (timeLeft != 0) {

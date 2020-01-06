@@ -3,6 +3,7 @@ package com.wentura.pomodoro;
 public class Constants {
     // SharedPreferences Keys
     public static final String DO_NOT_DISTURB_SETTING = "do_not_disturb";
+    public static final String DO_NOT_DISTURB_BREAK_SETTING = "do_not_disturb_break";
     public static final String WORK_DURATION_SETTING = "work_duration";
     public static final String BREAK_DURATION_SETTING = "break_duration";
     static final String KEEP_SCREEN_ON_SETTING = "keep_screen_on";
