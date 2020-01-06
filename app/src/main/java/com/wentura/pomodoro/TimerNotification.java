@@ -23,7 +23,7 @@ class TimerNotification {
                 .setSmallIcon(R.drawable.notification_icon)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                .setContentTitle(context.getString(R.string.pomodoro))
+                .setContentTitle(context.getString(R.string.app_name))
                 .setOngoing(true)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setShowWhen(false);
