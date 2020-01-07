@@ -7,7 +7,7 @@ import android.util.Log;
 import com.wentura.pomodoro.database.Database;
 import com.wentura.pomodoro.database.Pomodoro;
 
-public class UpdateDatabaseCompletedWorks extends AsyncTask<Void, Void, Void> {
+class UpdateDatabaseCompletedWorks extends AsyncTask<Void, Void, Void> {
     private Database database;
     private int time;
 
