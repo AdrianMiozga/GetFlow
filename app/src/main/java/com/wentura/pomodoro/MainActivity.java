@@ -28,6 +28,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.wentura.pomodoro.settings.SettingsActivity;
+import com.wentura.pomodoro.statistics.StatisticsActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();

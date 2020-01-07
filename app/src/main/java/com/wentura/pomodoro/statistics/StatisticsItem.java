@@ -1,4 +1,4 @@
-package com.wentura.pomodoro;
+package com.wentura.pomodoro.statistics;
 
 import androidx.annotation.NonNull;
 

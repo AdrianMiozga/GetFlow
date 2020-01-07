@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-class Utility {
+public class Utility {
 
     static void setDoNotDisturb(Context context, int mode) {
         SharedPreferences sharedPreferences =
@@ -69,7 +69,7 @@ class Utility {
     }
 
     @SuppressLint("DefaultLocale")
-    static String formatStatisticsTime(long milliseconds) {
+    public static String formatStatisticsTime(long milliseconds) {
         long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
@@ -94,7 +94,7 @@ class Utility {
         }
     }
 
-    static String getCurrentDate() {
+    public static String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -104,7 +104,7 @@ class Utility {
     /**
      * Returns date in format 2019-02-20
      */
-    static String subtractDaysFromCurrentDate(int days) {
+    public static String subtractDaysFromCurrentDate(int days) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -days);
 
@@ -115,7 +115,7 @@ class Utility {
     /**
      * Changes date format from for example 2019-02-20 to February 20
      */
-    static String formatDate(String date) {
+    public static String formatDate(String date) {
         SimpleDateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Date oldDate = null;
         try {

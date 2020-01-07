@@ -4,7 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.wentura.pomodoro.StatisticsItem;
+import com.wentura.pomodoro.statistics.StatisticsItem;
 
 import java.util.List;
 
