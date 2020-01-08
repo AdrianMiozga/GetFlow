@@ -21,13 +21,13 @@
         tools:text="25:00" />
 
     <ImageButton
-        android:id="@+id/stop_button"
+        android:id="@+id/skip_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/ic_stop_button"
+        android:background="@drawable/ic_skip_button"
         android:backgroundTint="@color/colorPrimary"
-        android:contentDescription="@string/stop_button"
+        android:contentDescription="@string/skip_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countdown_text_view" />

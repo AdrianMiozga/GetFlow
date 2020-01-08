@@ -4,7 +4,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -23,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -34,7 +32,6 @@ import com.wentura.pomodoro.statistics.StatisticsActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ImageButton stopButton;
     private ImageButton skipButton;
     private ImageView workIcon;
     private ImageView breakIcon;
@@ -148,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         countdownText = findViewById(R.id.countdown_text_view);
-        stopButton = findViewById(R.id.stop_button);
         workIcon = findViewById(R.id.work_icon);
         breakIcon = findViewById(R.id.break_icon);
         skipButton = findViewById(R.id.skip_button);
@@ -203,22 +199,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        stopButton.setOnClickListener(new View.OnClickListener() {
+        countdownText.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-                alertDialog.setMessage(R.string.dialog_stop)
-                        .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                stopTimer();
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                            }
-                        }).show();
+            public boolean onLongClick(View v) {
+                stopTimer();
+                return true;
             }
         });
+
+//        stopButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+//                alertDialog.setMessage(R.string.dialog_stop)
+//                        .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                stopTimer();
+//                            }
+//                        })
+//                        .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                            }
+//                        }).show();
+//            }
+//        });
 
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,11 +248,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor =
                 PreferenceManager.getDefaultSharedPreferences(this).edit();
 
-        if (stopButton.getVisibility() == View.VISIBLE) {
-            editor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
-        } else {
-            editor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false);
-        }
+//        if (stopButton.getVisibility() == View.VISIBLE) {
+//            editor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
+//        } else {
+//            editor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false);
+//        }
 
         if (skipButton.getVisibility() == View.VISIBLE) {
             editor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
@@ -335,11 +339,11 @@ public class MainActivity extends AppCompatActivity {
             skipButton.setVisibility(View.INVISIBLE);
         }
 
-        if (sharedPreferences.getBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false)) {
-            stopButton.setVisibility(View.VISIBLE);
-        } else {
-            stopButton.setVisibility(View.INVISIBLE);
-        }
+//        if (sharedPreferences.getBoolean(Constants.IS_STOP_BUTTON_VISIBLE, false)) {
+//            stopButton.setVisibility(View.VISIBLE);
+//        } else {
+//            stopButton.setVisibility(View.INVISIBLE);
+//        }
 
         if (sharedPreferences.getBoolean(Constants.IS_START_BUTTON_VISIBLE, true)) {
 //            startButton.setVisibility(View.VISIBLE);
@@ -376,12 +380,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "stopTimerUI: ");
         switchToNormalLayout();
 
-        stopButton.setVisibility(View.INVISIBLE);
+//        stopButton.setVisibility(View.INVISIBLE);
 //        startButton.setVisibility(View.VISIBLE);
 //        pauseButton.setVisibility(View.INVISIBLE);
         skipButton.setVisibility(View.INVISIBLE);
         workIcon.setVisibility(View.VISIBLE);
         breakIcon.setVisibility(View.INVISIBLE);
+        countdownText.clearAnimation();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -396,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startTimer() {
-        stopButton.setVisibility(View.VISIBLE);
+//        stopButton.setVisibility(View.VISIBLE);
         skipButton.setVisibility(View.VISIBLE);
 //        startButton.setVisibility(View.INVISIBLE);
 //        pauseButton.setVisibility(View.VISIBLE);
@@ -409,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pauseTimer() {
-        stopButton.setVisibility(View.VISIBLE);
+//        stopButton.setVisibility(View.VISIBLE);
         skipButton.setVisibility(View.VISIBLE);
 //        startButton.setVisibility(View.VISIBLE);
 //        pauseButton.setVisibility(View.INVISIBLE);
