@@ -32,8 +32,6 @@ import com.wentura.pomodoro.statistics.StatisticsActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ImageButton startButton;
-    private ImageButton pauseButton;
     private ImageButton stopButton;
     private ImageButton skipButton;
     private ImageView workIcon;
@@ -72,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     if (isTimerRunning) {
-                        startButton.setVisibility(View.INVISIBLE);
-                        pauseButton.setVisibility(View.VISIBLE);
+//                        startButton.setVisibility(View.INVISIBLE);
+//                        pauseButton.setVisibility(View.VISIBLE);
                     } else {
-                        startButton.setVisibility(View.VISIBLE);
-                        pauseButton.setVisibility(View.INVISIBLE);
+//                        startButton.setVisibility(View.VISIBLE);
+//                        pauseButton.setVisibility(View.INVISIBLE);
                     }
 
                     break;
@@ -86,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case Constants.BUTTON_START: {
                     switchToNormalLayout();
-                    startButton.setVisibility(View.INVISIBLE);
-                    pauseButton.setVisibility(View.VISIBLE);
+//                    startButton.setVisibility(View.INVISIBLE);
+//                    pauseButton.setVisibility(View.VISIBLE);
 
                     SharedPreferences sharedPreferences =
                             PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -104,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
                 case Constants.BUTTON_PAUSE: {
-                    startButton.setVisibility(View.VISIBLE);
-                    pauseButton.setVisibility(View.INVISIBLE);
+//                    startButton.setVisibility(View.VISIBLE);
+//                    pauseButton.setVisibility(View.INVISIBLE);
                     break;
                 }
             }
@@ -148,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         countdownText = findViewById(R.id.countdown_text_view);
-        startButton = findViewById(R.id.start_button);
-        pauseButton = findViewById(R.id.pause_button);
         stopButton = findViewById(R.id.stop_button);
         workIcon = findViewById(R.id.work_icon);
         breakIcon = findViewById(R.id.break_icon);
@@ -177,17 +173,31 @@ public class MainActivity extends AppCompatActivity {
 
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
 
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startTimer();
-            }
-        });
+//        startButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startTimer();
+//            }
+//        });
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
+//        pauseButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                pauseTimer();
+//            }
+//        });
+
+        countdownText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pauseTimer();
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false)) {
+                    pauseTimer();
+                } else {
+                    startTimer();
+                }
             }
         });
 
@@ -244,13 +254,13 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
         }
 
-        if (startButton.getVisibility() == View.VISIBLE) {
-            editor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
-            editor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
-        } else {
-            editor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, false);
-            editor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, true);
-        }
+//        if (startButton.getVisibility() == View.VISIBLE) {
+//            editor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
+//            editor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
+//        } else {
+//            editor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, false);
+//            editor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, true);
+//        }
 
         if (workIcon.getVisibility() == View.VISIBLE) {
             editor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
@@ -330,15 +340,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (sharedPreferences.getBoolean(Constants.IS_START_BUTTON_VISIBLE, true)) {
-            startButton.setVisibility(View.VISIBLE);
+//            startButton.setVisibility(View.VISIBLE);
         } else {
-            startButton.setVisibility(View.INVISIBLE);
+//            startButton.setVisibility(View.INVISIBLE);
         }
 
         if (sharedPreferences.getBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false)) {
-            pauseButton.setVisibility(View.VISIBLE);
+//            pauseButton.setVisibility(View.VISIBLE);
         } else {
-            pauseButton.setVisibility(View.INVISIBLE);
+//            pauseButton.setVisibility(View.INVISIBLE);
         }
 
         if (sharedPreferences.getBoolean(Constants.IS_WORK_ICON_VISIBLE, true)) {
@@ -365,8 +375,8 @@ public class MainActivity extends AppCompatActivity {
         switchToNormalLayout();
 
         stopButton.setVisibility(View.INVISIBLE);
-        startButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.INVISIBLE);
+//        startButton.setVisibility(View.VISIBLE);
+//        pauseButton.setVisibility(View.INVISIBLE);
         skipButton.setVisibility(View.INVISIBLE);
         workIcon.setVisibility(View.VISIBLE);
         breakIcon.setVisibility(View.INVISIBLE);
@@ -386,8 +396,8 @@ public class MainActivity extends AppCompatActivity {
     private void startTimer() {
         stopButton.setVisibility(View.VISIBLE);
         skipButton.setVisibility(View.VISIBLE);
-        startButton.setVisibility(View.INVISIBLE);
-        pauseButton.setVisibility(View.VISIBLE);
+//        startButton.setVisibility(View.INVISIBLE);
+//        pauseButton.setVisibility(View.VISIBLE);
 
         Intent intent = new Intent(this, NotificationButtonReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_START);
@@ -397,8 +407,8 @@ public class MainActivity extends AppCompatActivity {
     private void pauseTimer() {
         stopButton.setVisibility(View.VISIBLE);
         skipButton.setVisibility(View.VISIBLE);
-        startButton.setVisibility(View.VISIBLE);
-        pauseButton.setVisibility(View.INVISIBLE);
+//        startButton.setVisibility(View.VISIBLE);
+//        pauseButton.setVisibility(View.INVISIBLE);
 
         Intent intent = new Intent(this, NotificationButtonReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_PAUSE);
