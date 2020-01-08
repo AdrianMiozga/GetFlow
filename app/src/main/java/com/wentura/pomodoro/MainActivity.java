@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -399,6 +401,8 @@ public class MainActivity extends AppCompatActivity {
 //        startButton.setVisibility(View.INVISIBLE);
 //        pauseButton.setVisibility(View.VISIBLE);
 
+        countdownText.clearAnimation();
+
         Intent intent = new Intent(this, NotificationButtonReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_START);
         sendBroadcast(intent);
@@ -409,6 +413,12 @@ public class MainActivity extends AppCompatActivity {
         skipButton.setVisibility(View.VISIBLE);
 //        startButton.setVisibility(View.VISIBLE);
 //        pauseButton.setVisibility(View.INVISIBLE);
+
+        Animation blinkingAnimation = new AlphaAnimation(1.0f, 0.0f);
+        blinkingAnimation.setDuration(1000);
+        blinkingAnimation.setRepeatMode(Animation.REVERSE);
+        blinkingAnimation.setRepeatCount(Animation.INFINITE);
+        countdownText.startAnimation(blinkingAnimation);
 
         Intent intent = new Intent(this, NotificationButtonReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_PAUSE);
