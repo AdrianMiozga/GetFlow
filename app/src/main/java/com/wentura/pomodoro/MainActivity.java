@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
 //        startButton.setVisibility(View.VISIBLE);
 //        pauseButton.setVisibility(View.INVISIBLE);
 
-        Animation blinkingAnimation = new AlphaAnimation(1.0f, 0.0f);
+        Animation blinkingAnimation = new AlphaAnimation(1.0f, 0.5f);
         blinkingAnimation.setDuration(1000);
         blinkingAnimation.setRepeatMode(Animation.REVERSE);
         blinkingAnimation.setRepeatCount(Animation.INFINITE);
