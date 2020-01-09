@@ -182,7 +182,7 @@ public class NotificationService extends Service {
 
         handler.removeCallbacksAndMessages(null);
 
-        if (wakeLock != null) {
+        if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
 
