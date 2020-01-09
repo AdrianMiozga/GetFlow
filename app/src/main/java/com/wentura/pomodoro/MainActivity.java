@@ -22,7 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +35,7 @@ import com.wentura.pomodoro.statistics.StatisticsActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ImageButton skipButton;
+    private Button skipButton;
     private ImageView workIcon;
     private ImageView breakIcon;
     private TextView timerTextView;
