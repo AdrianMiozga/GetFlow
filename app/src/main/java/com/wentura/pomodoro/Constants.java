@@ -6,6 +6,7 @@ public class Constants {
     public static final String DO_NOT_DISTURB_BREAK_SETTING = "do_not_disturb_break";
     public static final String WORK_DURATION_SETTING = "work_duration";
     public static final String BREAK_DURATION_SETTING = "break_duration";
+    public static final String DARK_MODE_SETTING = "dark_mode";
     static final String KEEP_SCREEN_ON_SETTING = "keep_screen_on";
     static final String IS_STOP_BUTTON_VISIBLE = "is_stop_button_visible";
     static final String IS_SKIP_BUTTON_VISIBLE = "is_skip_button_visible";

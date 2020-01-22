@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.wentura.pomodoro.settings.SettingsActivity;
@@ -123,6 +124,15 @@ public class MainActivity extends AppCompatActivity {
         workIcon = findViewById(R.id.work_icon);
         breakIcon = findViewById(R.id.break_icon);
         skipButton = findViewById(R.id.skip_button);
+
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if (sharedPreferences.getBoolean(Constants.DARK_MODE_SETTING, false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         Log.d(TAG, "onCreate: ");
 
