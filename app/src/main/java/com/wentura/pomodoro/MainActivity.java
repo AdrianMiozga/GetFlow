@@ -102,6 +102,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        // When I'm in dark mode in this activity, swipe off the app of recents,
+        // reenter the app, change the mode to light and come back to this activity,
+        // it's still dark.It seems like a bug because Android should recreate this activity,
+        // it knows that the theme is light, but it doesn't do that.
+        if (sharedPreferences.getBoolean(Constants.UPDATE_MODE, false)) {
+            sharedPreferences.edit().putBoolean(Constants.UPDATE_MODE, false).apply();
+            recreate();
+        }
 
         setupUI();
 
@@ -112,19 +123,13 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 statusReceiver, new IntentFilter(Constants.BUTTON_CLICKED));
+
+        overridePendingTransition(R.anim.background_down, R.anim.foreground_down);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        timerTextView = findViewById(R.id.countdown_text_view);
-        workIcon = findViewById(R.id.work_icon);
-        breakIcon = findViewById(R.id.break_icon);
-        skipButton = findViewById(R.id.skip_button);
-
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -133,6 +138,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        timerTextView = findViewById(R.id.countdown_text_view);
+        workIcon = findViewById(R.id.work_icon);
+        breakIcon = findViewById(R.id.break_icon);
+        skipButton = findViewById(R.id.skip_button);
 
         Log.d(TAG, "onCreate: ");
 
@@ -278,6 +291,8 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
+
+        overridePendingTransition(R.anim.foreground_up, R.anim.background_up);
     }
 
     @Override

@@ -75,6 +75,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
+        Log.d(TAG, "onResume: ");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             NotificationManager notificationManager = (NotificationManager) Objects.requireNonNull(getContext()).getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -133,6 +135,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
                                 switchPreference.setChecked(false);
                             }
                         }).show();
+            }
+        } else if (key.equals(Constants.DARK_MODE_SETTING)) {
+            SwitchPreferenceCompat darkModeSwitch = findPreference(key);
+
+            if (darkModeSwitch != null && !darkModeSwitch.isChecked()) {
+                sharedPreferences.edit().putBoolean(Constants.UPDATE_MODE, true).apply();
             }
         }
     }

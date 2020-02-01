@@ -110,4 +110,10 @@ public class StatisticsActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(statisticsActivity));
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(R.anim.background_down, R.anim.foreground_down);
+    }
 }

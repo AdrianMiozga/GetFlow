@@ -20,7 +20,7 @@
         <activity
             android:name="com.wentura.pomodoro.MainActivity"
             android:configChanges="orientation"
-            android:launchMode="singleInstance">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,12 +30,14 @@
         <activity
             android:name="com.wentura.pomodoro.settings.SettingsActivity"
             android:label="Settings"
+            android:theme="@style/Theme.NoPreviewWindow"
             android:configChanges="orientation"
             android:parentActivityName="com.wentura.pomodoro.MainActivity" />
 
         <activity
             android:name="com.wentura.pomodoro.statistics.StatisticsActivity"
             android:label="Statistics"
+            android:theme="@style/Theme.NoPreviewWindow"
             android:configChanges="orientation"
             android:parentActivityName="com.wentura.pomodoro.MainActivity" />
 
