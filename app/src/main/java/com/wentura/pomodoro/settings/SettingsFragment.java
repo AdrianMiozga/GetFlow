@@ -139,7 +139,10 @@ public class SettingsFragment extends PreferenceFragmentCompat
         } else if (key.equals(Constants.DARK_MODE_SETTING)) {
             SwitchPreferenceCompat darkModeSwitch = findPreference(key);
 
-            if (darkModeSwitch != null && !darkModeSwitch.isChecked()) {
+            if (darkModeSwitch != null && darkModeSwitch.isChecked()) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 sharedPreferences.edit().putBoolean(Constants.UPDATE_MODE, true).apply();
             }
         }
@@ -148,16 +151,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
         String key = preference.getKey();
-
-        if (key.equals(Constants.DARK_MODE_SETTING)) {
-            SwitchPreferenceCompat darkModeSwitch = findPreference(key);
-
-            if (darkModeSwitch != null && darkModeSwitch.isChecked()) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-        }
 
         if (key.equals(Constants.DO_NOT_DISTURB_SETTING)) {
             SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
