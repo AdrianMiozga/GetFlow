@@ -34,6 +34,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.wentura.pomodoro.settings.SettingsActivity;
 import com.wentura.pomodoro.statistics.StatisticsActivity;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Button skipButton;
@@ -150,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: ");
 
         setupNotificationChannels();
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
 
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override

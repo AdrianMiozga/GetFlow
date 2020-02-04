@@ -3,12 +3,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
     </style>
 
-    <style name="Theme.NoPreviewWindow" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="Theme.NoPreviewWindow" parent="AppTheme">
         <item name="android:windowDisablePreview">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
 </resources>
