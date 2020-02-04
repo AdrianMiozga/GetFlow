@@ -14,7 +14,6 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -135,15 +134,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
                                 switchPreference.setChecked(false);
                             }
                         }).show();
-            }
-        } else if (key.equals(Constants.DARK_MODE_SETTING)) {
-            SwitchPreferenceCompat darkModeSwitch = findPreference(key);
-
-            if (darkModeSwitch != null && darkModeSwitch.isChecked()) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                sharedPreferences.edit().putBoolean(Constants.UPDATE_MODE, true).apply();
             }
         }
     }

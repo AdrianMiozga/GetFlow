@@ -104,17 +104,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        // When I'm in dark mode in this activity, swipe off the app of recents,
-        // reenter the app, change the mode to light and come back to this activity,
-        // it's still dark.It seems like a bug because Android should recreate this activity,
-        // it knows that the theme is light, but it doesn't do that.
-        if (sharedPreferences.getBoolean(Constants.UPDATE_MODE, false)) {
-            sharedPreferences.edit().putBoolean(Constants.UPDATE_MODE, false).apply();
-            recreate();
-        }
 
         setupUI();
 
@@ -132,14 +121,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        if (sharedPreferences.getBoolean(Constants.DARK_MODE_SETTING, false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

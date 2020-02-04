@@ -6,7 +6,6 @@ public class Constants {
     public static final String DO_NOT_DISTURB_BREAK_SETTING = "do_not_disturb_break";
     public static final String WORK_DURATION_SETTING = "work_duration";
     public static final String BREAK_DURATION_SETTING = "break_duration";
-    public static final String DARK_MODE_SETTING = "dark_mode";
     static final String KEEP_SCREEN_ON_SETTING = "keep_screen_on";
     static final String IS_STOP_BUTTON_VISIBLE = "is_stop_button_visible";
     static final String IS_SKIP_BUTTON_VISIBLE = "is_skip_button_visible";
@@ -14,7 +13,6 @@ public class Constants {
     static final String IS_PAUSE_BUTTON_VISIBLE = "is_pause_button_visible";
     static final String IS_WORK_ICON_VISIBLE = "is_work_icon_visible";
     static final String IS_BREAK_ICON_VISIBLE = "is_break_icon_visible";
-    public static final String UPDATE_MODE = "update_mode";
 
     // Last session duration is needed when the user changes, for example,
     // work duration setting when the work timer is already running.

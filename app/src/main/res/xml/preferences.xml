@@ -24,9 +24,4 @@
         app:defaultValue="false"
         app:key="keep_screen_on"
         app:title="Keep screen on" />
-
-    <SwitchPreferenceCompat
-        app:defaultValue="false"
-        app:key="dark_mode"
-        app:title="Dark mode" />
 </PreferenceScreen>
