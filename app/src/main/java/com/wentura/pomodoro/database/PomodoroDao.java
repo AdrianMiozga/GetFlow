@@ -19,6 +19,15 @@ public interface PomodoroDao {
     @Query("SELECT * FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate ORDER BY Date DESC")
     List<StatisticsItem> getAllDatesBetween(String startDate, String endDate);
 
+    @Query("SELECT * FROM Pomodoro WHERE Date = :date ORDER BY Date DESC")
+    StatisticsItem getAll(String date);
+
+    @Query("SELECT * FROM Pomodoro ORDER BY Date DESC")
+    List<StatisticsItem> getAll();
+
+    @Query("SELECT * FROM Pomodoro WHERE Date < :date ORDER BY Date DESC")
+    List<StatisticsItem> getAllDateLess(String date);
+
     @Query("UPDATE Pomodoro SET CompletedWorks = :completedWorks WHERE Date = :date")
     void updateCompletedWorks(int completedWorks, String date);
 

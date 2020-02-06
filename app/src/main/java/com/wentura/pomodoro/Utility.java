@@ -81,7 +81,12 @@ public class Utility {
         if (seconds > 0) {
             minutes++;
         }
-        return String.format("%02d:%02d", hours, minutes);
+
+        if (hours > 0) {
+            return String.format("%dh %dm", hours, minutes);
+        } else {
+            return String.format("%dm", minutes);
+        }
     }
 
     static void toggleKeepScreenOn(Context context) {

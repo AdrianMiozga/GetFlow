@@ -2,13 +2,11 @@ package com.wentura.pomodoro.statistics;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.wentura.pomodoro.Constants;
 import com.wentura.pomodoro.R;
 import com.wentura.pomodoro.Utility;
 import com.wentura.pomodoro.database.Database;
@@ -18,44 +16,20 @@ import java.util.List;
 
 public class StatisticsActivity extends AppCompatActivity {
     private Database database;
-
-    // SQL database contains only records with at least one completed work or break sessions
-    // This method fills the rest of the days for consistent statistic showing
-    private static void createDatesWithoutPomodoros(List<StatisticsItem> statisticsItems) {
-        int days = 0;
-
-        if (statisticsItems.isEmpty()) {
-            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW; i++) {
-                statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                        0, 0, 0, 0, 0, 0));
-                days++;
-            }
-        } else {
-            for (int i = 0; i < Constants.HOW_MANY_DAYS_TO_SHOW; i++) {
-                if (i >= statisticsItems.size()) {
-                    statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                            0, 0, 0, 0, 0, 0));
-                } else {
-                    if (!statisticsItems.get(i).getDate().equals(Utility.subtractDaysFromCurrentDate(days))) {
-                        statisticsItems.add(i, new StatisticsItem(Utility.subtractDaysFromCurrentDate(days),
-                                0, 0, 0, 0, 0, 0));
-                    }
-                }
-                days++;
-            }
-        }
-    }
-
-    private static void formatDates(List<StatisticsItem> statisticsItems) {
-        for (int i = 0; i < statisticsItems.size(); i++) {
-            statisticsItems.get(i).setDate(Utility.formatDate(statisticsItems.get(i).getDate()));
-        }
-    }
+    TextView numberTodayTextView;
+    TextView numberWeekTextView;
+    TextView numberMonthTextView;
+    TextView numberTotalTextView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
+
+        numberTodayTextView = findViewById(R.id.numberTodayTextView);
+        numberWeekTextView = findViewById(R.id.numberWeekTextView);
+        numberMonthTextView = findViewById(R.id.numberMonthTextView);
+        numberTotalTextView = findViewById(R.id.numberTotalTextView);
 
         database = Database.getInstance(this);
 
@@ -63,7 +37,11 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private static class LoadFromDatabase extends AsyncTask<Void, Void, Void> {
-        List<StatisticsItem> statisticsItems;
+        private static final String TAG = "Help";
+        StatisticsItem statisticsItemToday;
+        List<StatisticsItem> statisticsItemsWeek;
+        List<StatisticsItem> statisticsItemsMonth;
+        List<StatisticsItem> statisticsItemsTotal;
 
         private WeakReference<StatisticsActivity> activityWeakReference;
 
@@ -73,16 +51,24 @@ public class StatisticsActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-
             StatisticsActivity statisticsActivity = activityWeakReference.get();
 
             if (statisticsActivity == null || statisticsActivity.isFinishing()) {
                 return null;
             }
 
-            statisticsItems =
-                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(Constants.HOW_MANY_DAYS_TO_SHOW - 1),
-                            Utility.getCurrentDate());
+            statisticsItemToday = statisticsActivity.database.pomodoroDao().getAll(Utility.getCurrentDate());
+
+            statisticsItemsWeek =
+                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(6),
+                            Utility.subtractDaysFromCurrentDate(1));
+
+            statisticsItemsMonth =
+                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(29),
+                            Utility.subtractDaysFromCurrentDate(7));
+
+            statisticsItemsTotal =
+                    statisticsActivity.database.pomodoroDao().getAllDateLess(Utility.subtractDaysFromCurrentDate(29));
 
             return null;
         }
@@ -95,19 +81,33 @@ public class StatisticsActivity extends AppCompatActivity {
                 return;
             }
 
-            RecyclerView recyclerView = statisticsActivity.findViewById(R.id.recycler_view);
+            int timeToday = statisticsItemToday.getCompletedWorkTime() + statisticsItemToday.getIncompleteWorkTime();
 
-            createDatesWithoutPomodoros(statisticsItems);
-            formatDates(statisticsItems);
+            int timeWeek = timeToday;
 
-            if (!statisticsItems.isEmpty()) {
-                statisticsItems.get(0).setDate(statisticsActivity.getString(R.string.today));
+            for (StatisticsItem statisticsItem : statisticsItemsWeek) {
+                timeWeek += statisticsItem.getCompletedWorkTime();
+                timeWeek += statisticsItem.getIncompleteWorkTime();
             }
 
-            StatisticsAdapter statisticsAdapter = new StatisticsAdapter(statisticsItems);
+            int timeMonth = timeWeek;
 
-            recyclerView.setAdapter(statisticsAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(statisticsActivity));
+            for (StatisticsItem statisticsItem : statisticsItemsMonth) {
+                timeMonth += statisticsItem.getCompletedWorkTime();
+                timeMonth += statisticsItem.getIncompleteWorkTime();
+            }
+
+            int timeTotal = timeMonth;
+
+            for (StatisticsItem statisticsItem : statisticsItemsTotal) {
+                timeTotal += statisticsItem.getCompletedWorkTime();
+                timeTotal += statisticsItem.getIncompleteWorkTime();
+            }
+
+            statisticsActivity.numberTodayTextView.setText(Utility.formatStatisticsTime(timeToday));
+            statisticsActivity.numberWeekTextView.setText(Utility.formatStatisticsTime(timeWeek));
+            statisticsActivity.numberMonthTextView.setText(Utility.formatStatisticsTime(timeMonth));
+            statisticsActivity.numberTotalTextView.setText(Utility.formatStatisticsTime(timeTotal));
         }
     }
 
