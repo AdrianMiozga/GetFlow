@@ -81,7 +81,12 @@ public class StatisticsActivity extends AppCompatActivity {
                 return;
             }
 
-            int timeToday = statisticsItemToday.getCompletedWorkTime() + statisticsItemToday.getIncompleteWorkTime();
+            int timeToday = 0;
+
+            if (statisticsItemToday != null) {
+                timeToday =
+                        statisticsItemToday.getCompletedWorkTime() + statisticsItemToday.getIncompleteWorkTime();
+            }
 
             int timeWeek = timeToday;
 
