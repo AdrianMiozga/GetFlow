@@ -50,7 +50,6 @@ public class StatisticsActivity extends AppCompatActivity {
     private TextView numberMonthTextView;
     private TextView numberTotalTextView;
     private LineChart chart;
-    private Spinner spinner;
     private static int currentSelectedIndex;
 
     private static void updateChartData(LineChart lineChart, Context context, int position) {
@@ -342,11 +341,11 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
+        Spinner spinner = findViewById(R.id.spinner);
         numberTodayTextView = findViewById(R.id.numberTodayTextView);
         numberWeekTextView = findViewById(R.id.numberWeekTextView);
         numberMonthTextView = findViewById(R.id.numberMonthTextView);
         numberTotalTextView = findViewById(R.id.numberTotalTextView);
-        spinner = findViewById(R.id.spinner2);
         chart = findViewById(R.id.history_chart);
 
         database = Database.getInstance(this);
