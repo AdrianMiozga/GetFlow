@@ -2,6 +2,7 @@ package com.wentura.pomodoro.statistics;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -346,6 +348,11 @@ public class StatisticsActivity extends AppCompatActivity {
         numberMonthTextView = findViewById(R.id.numberMonthTextView);
         numberTotalTextView = findViewById(R.id.numberTotalTextView);
         chart = findViewById(R.id.history_chart);
+
+        Paint paint = chart.getPaint(Chart.PAINT_INFO);
+        paint.setColor(getResources().getColor(R.color.white));
+        chart.setNoDataText(getString(R.string.loadingChart));
+        chart.invalidate();
 
         database = Database.getInstance(this);
 

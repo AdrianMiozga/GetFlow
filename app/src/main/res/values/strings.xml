@@ -36,6 +36,7 @@
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="history">History</string>
+    <string name="loadingChart">Loading…</string>
 
     <string-array name="history_spinner">
         <item>Days</item>
