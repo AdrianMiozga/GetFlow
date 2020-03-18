@@ -22,7 +22,7 @@ public interface PomodoroDao {
     @Query("SELECT * FROM Pomodoro WHERE Date = :date ORDER BY Date DESC")
     StatisticsItem getAll(String date);
 
-    @Query("SELECT * FROM Pomodoro ORDER BY Date DESC")
+    @Query("SELECT * FROM Pomodoro")
     List<StatisticsItem> getAll();
 
     @Query("SELECT * FROM Pomodoro WHERE Date < :date ORDER BY Date DESC")

@@ -106,6 +106,13 @@ public class Utility {
         return simpleDateFormat.format(calendar.getTime());
     }
 
+    public static String getCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM", Locale.US);
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
     /**
      * Returns date in format 2019-02-20
      */
