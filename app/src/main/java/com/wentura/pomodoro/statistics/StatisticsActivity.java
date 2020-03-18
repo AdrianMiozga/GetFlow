@@ -1,8 +1,10 @@
 package com.wentura.pomodoro.statistics;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.wentura.pomodoro.Constants;
 import com.wentura.pomodoro.R;
 import com.wentura.pomodoro.Utility;
 import com.wentura.pomodoro.database.Database;
@@ -48,7 +51,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private TextView numberTotalTextView;
     private LineChart chart;
     private Spinner spinner;
-    private int currentSelectedIndex = 1;
+    private static int currentSelectedIndex;
 
     private static void updateChartData(LineChart lineChart, Context context, int position) {
         entries.clear();
@@ -103,7 +106,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private static void setupChart(StatisticsActivity statisticsActivity) {
         LineChart chart = statisticsActivity.findViewById(R.id.history_chart);
 
-        updateChartData(chart, statisticsActivity.getApplicationContext(), 1);
+        updateChartData(chart, statisticsActivity.getApplicationContext(), currentSelectedIndex);
 
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setDrawAxisLine(false);
@@ -357,8 +360,13 @@ public class StatisticsActivity extends AppCompatActivity {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        final SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+        currentSelectedIndex = sharedPreferences.getInt(Constants.SPINNER_SETTING, 1);
+
         spinner.setAdapter(adapter);
-        spinner.setSelection(1);
+        spinner.setSelection(currentSelectedIndex);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -368,6 +376,10 @@ public class StatisticsActivity extends AppCompatActivity {
                 }
 
                 currentSelectedIndex = position;
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putInt(Constants.SPINNER_SETTING, position).apply();
 
                 updateChartData(chart, getApplicationContext(), position);
 
