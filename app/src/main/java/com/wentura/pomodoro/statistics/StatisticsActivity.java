@@ -105,8 +105,6 @@ public class StatisticsActivity extends AppCompatActivity {
     private static void setupChart(StatisticsActivity statisticsActivity) {
         LineChart chart = statisticsActivity.findViewById(R.id.history_chart);
 
-        updateChartData(chart, statisticsActivity.getApplicationContext(), currentSelectedIndex);
-
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setDrawAxisLine(false);
         yAxis.setValueFormatter(new CustomYAxisFormatter());
@@ -132,7 +130,8 @@ public class StatisticsActivity extends AppCompatActivity {
         chart.setHighlightPerTapEnabled(false);
         chart.setHighlightPerDragEnabled(false);
         chart.getDescription().setEnabled(false);
-        chart.invalidate();
+
+        updateChartData(chart, statisticsActivity.getApplicationContext(), currentSelectedIndex);
     }
 
     private static void prepareMonthsForChart() {
