@@ -27,14 +27,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.wentura.pomodoro.settings.SettingsActivity;
 import com.wentura.pomodoro.statistics.StatisticsActivity;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -135,7 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
         setupNotificationChannels();
 
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.setTitle("");
+        }
 
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
