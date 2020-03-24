@@ -21,6 +21,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.IOException;
 
@@ -103,6 +104,10 @@ public class EndNotificationService extends Service {
             new UpdateDatabaseCompletedWorks(getApplicationContext(),
                     preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
         }
+
+        Intent updateUI = new Intent(Constants.UPDATE_UI);
+        updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.END_TIMER);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(updateUI);
 
         Intent displayMainActivity = new Intent(getApplicationContext(), MainActivity.class);
         displayMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

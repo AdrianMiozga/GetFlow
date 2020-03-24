@@ -46,7 +46,7 @@ public class Constants {
     static final int PENDING_INTENT_END_REQUEST_CODE = 4;
 
     // Intent Filters
-    static final String BUTTON_CLICKED = "button_clicked";
+    static final String UPDATE_UI = "button_clicked";
     static final String ON_TICK = "on_tick";
 
     // Intent Action
@@ -59,6 +59,7 @@ public class Constants {
     static final String BUTTON_START = "button_start";
     static final String BUTTON_PAUSE = "button_pause";
     static final String TIME_LEFT_INTENT = "time_left_intent";
+    static final String END_TIMER = "end_timer";
 
     // TimerNotification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";

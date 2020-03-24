@@ -58,7 +58,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putInt(Constants.TIME_LEFT, 0);
                 editPreferences.apply();
 
-                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                Intent updateUI = new Intent(Constants.UPDATE_UI);
                 updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_STOP);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
@@ -109,7 +109,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
                 editPreferences.apply();
 
-                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                Intent updateUI = new Intent(Constants.UPDATE_UI);
                 updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_SKIP);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
@@ -129,7 +129,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 stopEndNotificationService(context);
                 startNotificationService(context);
 
-                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                Intent updateUI = new Intent(Constants.UPDATE_UI);
                 updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_START);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
@@ -157,7 +157,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                         Constants.NOTIFICATION_SERVICE_PAUSE);
                 context.startService(serviceIntent);
 
-                Intent updateUI = new Intent(Constants.BUTTON_CLICKED);
+                Intent updateUI = new Intent(Constants.UPDATE_UI);
                 updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_PAUSE);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
                 break;

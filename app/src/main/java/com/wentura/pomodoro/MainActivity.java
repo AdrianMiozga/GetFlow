@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     stopTimerUI();
                     break;
                 case Constants.BUTTON_PAUSE:
+                case Constants.END_TIMER:
                     startBlinkingAnimation();
                     break;
             }
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 updateTimerTextView, new IntentFilter(Constants.ON_TICK));
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
-                statusReceiver, new IntentFilter(Constants.BUTTON_CLICKED));
+                statusReceiver, new IntentFilter(Constants.UPDATE_UI));
 
         overridePendingTransition(R.anim.background_down, R.anim.foreground_down);
     }
