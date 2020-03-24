@@ -398,6 +398,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void skipTimer() {
+        if (blinkingAnimation != null) {
+            blinkingAnimation.cancel();
+        }
+        revertTimerAnimation();
+
         Intent intent = new Intent(this, NotificationButtonReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_SKIP);
         sendBroadcast(intent);
