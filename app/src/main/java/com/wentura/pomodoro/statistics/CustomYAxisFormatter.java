@@ -1,9 +1,14 @@
 package com.wentura.pomodoro.statistics;
 
+import android.util.Log;
+
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+
 public class CustomYAxisFormatter extends ValueFormatter {
+    private static final String TAG = "Hello";
+
     CustomYAxisFormatter() {
     }
 
@@ -15,10 +20,12 @@ public class CustomYAxisFormatter extends ValueFormatter {
             return "";
         }
 
+        Log.d(TAG, "getAxisLabel: = " + value / 3_600_000);
+
         if (axis.mAxisMaximum > 3_600_000) {
-            result = (int) Math.ceil(value / 3_600_000) + "h";
+            result = Math.round(value / 3_600_000) + "h";
         } else {
-            result = (int) value / 60_000 + "m";
+            result = (int) Math.ceil(value / 60_000) + "m";
         }
 
         return result;

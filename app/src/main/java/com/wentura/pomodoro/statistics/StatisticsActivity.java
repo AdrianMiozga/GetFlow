@@ -59,31 +59,28 @@ public class StatisticsActivity extends AppCompatActivity {
 
         XAxis xAxis = lineChart.getXAxis();
 
+        long maxValue = 0;
         if (position == 1) {
-            long maxValue = 0;
-
             for (int i = 0; i < months.size(); i++) {
-                entries.add(new Entry(i,
-                        (months.get(i).getCompletedWorkTime() + months.get(i).getIncompleteWorkTime())));
+                long totalTime = months.get(i).getCompletedWorkTime() + months.get(i).getIncompleteWorkTime();
 
-                if (months.get(i).getCompletedWorkTime() + months.get(i).getIncompleteWorkTime() > maxValue) {
-                    maxValue =
-                            months.get(i).getCompletedWorkTime() + months.get(i).getIncompleteWorkTime();
+                entries.add(new Entry(i, totalTime));
+
+                if (totalTime > maxValue) {
+                    maxValue = totalTime;
                 }
-            }
-
-            YAxis yAxis = lineChart.getAxisLeft();
-
-            if (maxValue <= 3_600_000) {
-                yAxis.setAxisMaximum(3_600_000);
-            } else if (maxValue <= 21_600_000) {
-                yAxis.setAxisMaximum(21_600_000);
             }
 
             xAxis.setValueFormatter(new CustomXAxisFormatter(months, MONTHS));
         } else {
             for (int i = 0; i < days.size(); i++) {
-                entries.add(new Entry(i, (days.get(i).getCompletedWorkTime() + days.get(i).getIncompleteWorkTime())));
+                long totalTime = days.get(i).getCompletedWorkTime() + days.get(i).getIncompleteWorkTime();
+
+                entries.add(new Entry(i, totalTime));
+
+                if (totalTime > maxValue) {
+                    maxValue = totalTime;
+                }
             }
 
             xAxis.setValueFormatter(new CustomXAxisFormatter(days, DAYS));
@@ -100,7 +97,21 @@ public class StatisticsActivity extends AppCompatActivity {
         LineData lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
 
-        lineChart.setVisibleXRange(11, 11);
+        YAxis yAxis = lineChart.getAxisLeft();
+
+        if (maxValue <= 3_600_000) {
+            yAxis.setAxisMaximum(3_600_000);
+            yAxis.setAxisMinimum(-50000f);
+        } else {
+            double toHours = maxValue / 3_600_000d;
+            double result =
+                    Math.ceil(toHours / 6) * 6;
+            double toMilliseconds = result * 3_600_000;
+            yAxis.setAxisMaximum((float) toMilliseconds);
+            yAxis.setAxisMinimum(-100000f);
+        }
+
+        lineChart.setVisibleXRange(11f, 11f);
         lineChart.moveViewToX(entries.size());
     }
 
@@ -113,7 +124,6 @@ public class StatisticsActivity extends AppCompatActivity {
         yAxis.setLabelCount(7, true);
         yAxis.setGridColor(statisticsActivity.getResources().getColor(R.color.grey));
         yAxis.setTextColor(statisticsActivity.getResources().getColor(R.color.white));
-        yAxis.setAxisMinimum(-360000f);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setDrawGridLines(false);
@@ -121,6 +131,7 @@ public class StatisticsActivity extends AppCompatActivity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelCount(11);
         xAxis.setTextColor(statisticsActivity.getResources().getColor(R.color.white));
+        xAxis.setSpaceMax(0.1f);
 
         chart.setExtraBottomOffset(20f);
         chart.setXAxisRenderer(new CustomXAxisRenderer(chart.getViewPortHandler(), xAxis,
@@ -139,7 +150,31 @@ public class StatisticsActivity extends AppCompatActivity {
     private static void prepareMonthsForChart() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.US);
 
+        // The loop below this condition works only when the months array has two entries. I'm
+        // using this block of code to generate the second entry if it doesn't exist.
+        if (months.size() == 1) {
+            Date thisMonth = stringToDate(months.get(0).getDate());
+            Date currentMonth = stringToDate(Utility.getCurrentDate());
+
+            if (thisMonth != null && currentMonth != null) {
+                Calendar thisCalendar = Calendar.getInstance();
+                thisCalendar.setTime(thisMonth);
+
+                Calendar currentCalendar = Calendar.getInstance();
+                currentCalendar.setTime(currentMonth);
+
+                if (thisCalendar.get(Calendar.MONTH) != currentCalendar.get(Calendar.MONTH) || thisCalendar.get(Calendar.YEAR) != currentCalendar.get(Calendar.YEAR)) {
+                    String date = calendarToString(currentCalendar);
+
+                    months.add(new StatisticsItem(date, 0, 0, 0, 0, 0, 0));
+                }
+            }
+        }
+
         for (int i = 0; i < months.size() - 1; i++) {
+            if (i == 200) {
+                break;
+            }
             Date thisMonth = stringToDate(months.get(i).getDate());
             Date nextMonth = stringToDate(months.get(i + 1).getDate());
 
@@ -156,14 +191,16 @@ public class StatisticsActivity extends AppCompatActivity {
 
             String insertDate;
 
-            if (nextCalendar.get(Calendar.MONTH) != thisCalendar.get(Calendar.MONTH) || nextCalendar.get(Calendar.YEAR) != thisCalendar.get(Calendar.YEAR)) {
+            if (nextCalendar.get(Calendar.MONTH) != thisCalendar.get(Calendar.MONTH) ||
+                    nextCalendar.get(Calendar.YEAR) != thisCalendar.get(Calendar.YEAR)) {
                 insertDate = dateFormat.format(thisCalendar.getTime());
                 months.add(i + 1, new StatisticsItem(insertDate,
                         0, 0, 0, 0, 0, 0));
                 continue;
             }
 
-            if (i + 1 == months.size() - 1 && !new SimpleDateFormat("MMMM", Locale.US).format(nextCalendar.getTime()).equals(Utility.getCurrentMonth())) {
+            if (i + 1 == months.size() - 1 &&
+                    !new SimpleDateFormat("MMMM", Locale.US).format(nextCalendar.getTime()).equals(Utility.getCurrentMonth())) {
                 thisCalendar.add(Calendar.MONTH, 1);
                 insertDate = dateFormat.format(thisCalendar.getTime());
 
@@ -172,26 +209,20 @@ public class StatisticsActivity extends AppCompatActivity {
             }
         }
 
-        if (months.size() == 1) {
-            Date thisMonth = stringToDate(months.get(0).getDate());
-
-            if (thisMonth != null) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(thisMonth);
-
-                if (!new SimpleDateFormat("MMMM", Locale.US).format(calendar.getTime()).equals(Utility.getCurrentMonth())) {
-                    calendar.add(Calendar.MONTH, 1);
-                    months.add(new StatisticsItem(new SimpleDateFormat(datePattern, Locale.US).format(calendar.getTime()), 0,
-                            0, 0, 0, 0, 0));
-                }
-            }
-        }
-
         if (months.size() == 0) {
-            months.add(days.get(0));
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MONTH, -11);
+
+            for (int i = 0; i < 12; i++) {
+                months.add(new StatisticsItem(dateFormat.format(calendar.getTime()), 0, 0, 0, 0, 0,
+                        0));
+
+                calendar.add(Calendar.MONTH, 1);
+            }
+            return;
         }
 
-        if (months.size() < 12 && months.size() != 0) {
+        if (months.size() < 12) {
             Date firstMonth = stringToDate(months.get(0).getDate());
 
             if (firstMonth == null) {
@@ -221,32 +252,18 @@ public class StatisticsActivity extends AppCompatActivity {
                 continue;
             }
 
-            Calendar todayCalendar = Calendar.getInstance();
-            todayCalendar.setTime(todayDate);
+            Calendar today = Calendar.getInstance();
+            today.setTime(todayDate);
 
-            Calendar nextCalendar = Calendar.getInstance();
-            nextCalendar.setTime(nextDate);
+            Calendar nextDay = Calendar.getInstance();
+            nextDay.setTime(nextDate);
 
             totalCompletedTime += days.get(i).getCompletedWorkTime();
             totalIncompleteTime += days.get(i).getIncompleteWorkTime();
 
-            if (todayCalendar.get(Calendar.MONTH) != nextCalendar.get(Calendar.MONTH) || i == days.size() - 2) {
-                if (i == days.size() - 2) {
-                    totalCompletedTime += days.get(i + 1).getCompletedWorkTime();
-                    totalIncompleteTime += days.get(i + 1).getIncompleteWorkTime();
-                }
-
-                String stringDate = "";
-
-                stringDate += todayCalendar.get(Calendar.YEAR);
-                stringDate += "-";
-
-                if (todayCalendar.get(Calendar.MONTH) + 1 < 10) {
-                    stringDate += "0";
-                }
-
-                stringDate += (todayCalendar.get(Calendar.MONTH) + 1);
-                stringDate += "-01";
+            if (today.get(Calendar.MONTH) != nextDay.get(Calendar.MONTH) ||
+                    today.get(Calendar.YEAR) != nextDay.get(Calendar.YEAR)) {
+                String stringDate = calendarToString(today);
 
                 months.add(new StatisticsItem(stringDate, 0, totalCompletedTime, 0,
                         totalIncompleteTime, 0, 0));
@@ -254,7 +271,51 @@ public class StatisticsActivity extends AppCompatActivity {
                 totalCompletedTime = 0;
                 totalIncompleteTime = 0;
             }
+
+            if (today.get(Calendar.MONTH) == nextDay.get(Calendar.MONTH) &&
+                    today.get(Calendar.YEAR) == nextDay.get(Calendar.YEAR) &&
+                    i == days.size() - 2) {
+
+                totalCompletedTime += days.get(i + 1).getCompletedWorkTime();
+                totalIncompleteTime += days.get(i + 1).getIncompleteWorkTime();
+
+                String stringDate = calendarToString(nextDay);
+
+                months.add(new StatisticsItem(stringDate, 0, totalCompletedTime, 0,
+                        totalIncompleteTime, 0, 0));
+            }
         }
+
+        if (days.size() == 1) {
+            Date todayDate = stringToDate(days.get(0).getDate());
+
+            if (todayDate == null) {
+                return;
+            }
+
+            Calendar todayCalendar = Calendar.getInstance();
+            todayCalendar.setTime(todayDate);
+
+            String stringDate = calendarToString(todayCalendar);
+
+            months.add(new StatisticsItem(stringDate, 0, days.get(0).getCompletedWorkTime(), 0,
+                    days.get(0).getIncompleteWorkTime(), 0, 0));
+        }
+    }
+
+    private static String calendarToString(Calendar calendar) {
+        StringBuilder result = new StringBuilder();
+
+        result.append(calendar.get(Calendar.YEAR));
+        result.append("-");
+
+        if (calendar.get(Calendar.MONTH) + 1 < 10) {
+            result.append("0");
+        }
+
+        result.append((calendar.get(Calendar.MONTH) + 1));
+        result.append("-01");
+        return result.toString();
     }
 
     private static Date stringToDate(String date) {
@@ -270,6 +331,13 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private static void prepareDaysForChart() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.US);
+
+        if (days.size() == 1) {
+            if (!days.get(0).getDate().equals(Utility.getCurrentDate())) {
+                days.add(new StatisticsItem(Utility.getCurrentDate(), 0,
+                        0, 0, 0, 0, 0));
+            }
+        }
 
         for (int i = 0; i < days.size() - 1; i++) {
             Date todayDate = stringToDate(days.get(i).getDate());
@@ -304,22 +372,12 @@ public class StatisticsActivity extends AppCompatActivity {
             }
         }
 
-        if (days.size() == 1) {
-            Date today = stringToDate(days.get(0).getDate());
-
-            if (today != null) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(today);
-
-                if (!new SimpleDateFormat(datePattern, Locale.US).format(calendar.getTime()).equals(Utility.getCurrentDate())) {
-                    calendar.add(Calendar.DATE, 1);
-                    days.add(new StatisticsItem(new SimpleDateFormat(datePattern, Locale.US).format(calendar.getTime()), 0,
-                            0, 0, 0, 0, 0));
-                }
-            }
+        if (days.size() == 0) {
+            days.add(new StatisticsItem(Utility.getCurrentDate(), 0,
+                    0, 0, 0, 0, 0));
         }
 
-        if (days.size() < 12 && days.size() != 0) {
+        if (days.size() < 12) {
             Date firstDay = stringToDate(days.get(0).getDate());
 
             if (firstDay == null) {
@@ -435,16 +493,43 @@ public class StatisticsActivity extends AppCompatActivity {
 
             days = statisticsActivity.database.pomodoroDao().getAll();
 
+            // 50m
+//            days.add(new StatisticsItem(Utility.getCurrentDate(), 3, 3000000, 0, 0, 0, 0));
+
+            // 8h
+//            days.add(new StatisticsItem(Utility.getCurrentDate(), 3, 28800000, 0, 0, 0, 0));
+
+            // 70h
+//            days.add(new StatisticsItem(Utility.getCurrentDate(), 3, 252000000, 0, 0, 0, 0));
+
+            // 160h
+//            days.add(new StatisticsItem(Utility.getCurrentDate(), 3, 576000000, 0, 0, 0, 0));
+
+            // 2h
+//            days.add(new StatisticsItem(Utility.getCurrentDate(), 3, 7200000, 0, 0, 0, 0));
+
+            // 1h
+//            days.add(new StatisticsItem(Utility.getCurrentDate(), 3, 3600000, 0, 0, 0, 0));
+
+            // Yesterday
+//            days.add(new StatisticsItem("2020-03-18", 3, 3000000, 0, 0, 0, 0));
+
+            // year, two months old
+//            days.add(new StatisticsItem("2019-01-19", 3, 3000000, 0, 0, 0, 0));
+
+            // Month old
+//            days.add(new StatisticsItem("2020-02-19", 3, 3000000, 0, 0, 0, 0));
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.d(TAG, "=============days:");
-            for (StatisticsItem statisticsItem : days) {
-                Log.d(TAG, statisticsItem.getDate());
-            }
-            Log.d(TAG, "onPostExecute: ");
+//            Log.d(TAG, "=============days:");
+//            for (StatisticsItem statisticsItem : days) {
+//                Log.d(TAG, statisticsItem.getDate());
+//            }
+//            Log.d(TAG, "onPostExecute: ");
 
             StatisticsActivity statisticsActivity = activityWeakReference.get();
 
@@ -487,13 +572,21 @@ public class StatisticsActivity extends AppCompatActivity {
 
             createMonthsArray();
 
-            for (StatisticsItem statisticsItem : months) {
-                Log.d(TAG, "onPostExecute: " + statisticsItem.getDate());
-            }
+//            for (StatisticsItem statisticsItem : months) {
+//                Log.d(TAG, "After createMonthsArray(): " + statisticsItem.getDate());
+//            }
 
             prepareMonthsForChart();
 
+//            for (StatisticsItem statisticsItem : months) {
+//                Log.d(TAG, "After prepareMonthsForChart(): " + statisticsItem.getDate());
+//            }
+
             prepareDaysForChart();
+
+//            for (StatisticsItem statisticsItem : days) {
+//                Log.d(TAG, "onPostExecute: " + statisticsItem.getDate());
+//            }
 
             setupChart(statisticsActivity);
         }

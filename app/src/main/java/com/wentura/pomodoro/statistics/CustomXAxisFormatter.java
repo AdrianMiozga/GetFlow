@@ -1,7 +1,5 @@
 package com.wentura.pomodoro.statistics;
 
-import android.util.Log;
-
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
@@ -28,7 +26,7 @@ public class CustomXAxisFormatter extends ValueFormatter {
             return "";
         }
 
-        Log.d(TAG, "getAxisLabel: " + value);
+//        Log.d(TAG, "getAxisLabel: " + value);
 
         String date = statisticsItems.get((int) value).getDate();
         SimpleDateFormat fromPattern = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -59,7 +57,7 @@ public class CustomXAxisFormatter extends ValueFormatter {
                     result = month.format(parse);
                 }
 
-                if (value == axis.mEntries[0]) {
+                if (result.equals("Jan") || value == axis.mEntries[0]) {
                     result = month.format(parse) + "\n" + year.format(parse);
                 }
 
