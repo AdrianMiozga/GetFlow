@@ -20,18 +20,23 @@
         app:layout_constraintVertical_bias="0.418"
         tools:text="25:00" />
 
-    <ImageButton
+    <Button
         android:id="@+id/skip_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/ic_skip_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/skip_button"
-        app:backgroundTint="@color/colorPrimary"
+        android:text="@string/skip"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countdown_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/countdown_text_view"
+        app:layout_constraintVertical_bias="0.461" />
 
     <ImageView
         android:id="@+id/work_icon"
