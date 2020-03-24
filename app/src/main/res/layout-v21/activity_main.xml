@@ -42,10 +42,10 @@
     <ImageView
         android:id="@+id/break_icon"
         android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_height="18dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="28dp"
         android:background="@drawable/break_icon"
         android:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/break_icon"
