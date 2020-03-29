@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="start_button">Start</string>
-    <string name="stop_button">Stop</string>
     <string name="settings">Ustawienia</string>
     <string name="work_duration_title">Czas pracy</string>
     <string name="break_duration">Długość przerwy</string>
     <string name="dialog_go_to_settings">Idź do ustawień</string>
     <string name="cancel">Anuluj</string>
-    <string name="dialog_stop">Czy jesteś pewien, że chcesz zakończyć sesję?</string>
-    <string name="dialog_yes">Tak</string>
-    <string name="dialog_no">Nie</string>
     <string name="skip_button">Pomiń</string>
     <string name="skip">Pomiń</string>
     <string name="pause">Pauza</string>
@@ -20,11 +15,7 @@
     <string name="break_time_left">Do końca przerwy: %s</string>
     <string name="work_time_left">Do końca sesji: %s</string>
     <string name="statistics">Statystyki</string>
-    <string name="completed">Ukończono</string>
-    <string name="breaks">Przerw</string>
     <string name="today">Dzisiaj</string>
-    <string name="pause_button">Pauza</string>
-    <string name="incomplete">Niekompletne</string>
     <string name="total">Łącznie</string>
     <string name="overview">Przegląd</string>
     <string name="week">Tydzień</string>

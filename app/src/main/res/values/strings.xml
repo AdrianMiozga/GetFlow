@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Focus</string>
-    <string name="start_button">Start</string>
-    <string name="stop_button">Stop</string>
     <string name="work_icon">Work</string>
     <string name="break_icon">Break</string>
     <string name="do_not_disturb_summary">Enable do not disturb during work session</string>
@@ -12,9 +10,6 @@
     <string name="dialog_access_policy_not_granted">You need to grant Do Not Disturb access for this app</string>
     <string name="dialog_go_to_settings">Go to settings</string>
     <string name="cancel">Cancel</string>
-    <string name="dialog_stop">Are you sure you want to stop?</string>
-    <string name="dialog_yes">Yes</string>
-    <string name="dialog_no">No</string>
     <string name="skip_button">Skip</string>
     <string name="skip">Skip</string>
     <string name="pause">Pause</string>
@@ -25,11 +20,7 @@
     <string name="break_time_left">Break time left: %s</string>
     <string name="work_time_left">Work time left: %s</string>
     <string name="statistics">Statistics</string>
-    <string name="completed">Completed</string>
-    <string name="breaks">Breaks</string>
     <string name="today">Today</string>
-    <string name="pause_button">Pause</string>
-    <string name="incomplete">Incomplete</string>
     <string name="total">Total</string>
     <string name="do_not_disturb_break_summary">Keep DND on breaks</string>
     <string name="overview">Overview</string>
