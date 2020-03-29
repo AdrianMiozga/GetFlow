@@ -10,7 +10,6 @@
     <string name="dialog_access_policy_not_granted">You need to grant Do Not Disturb access for this app</string>
     <string name="dialog_go_to_settings">Go to settings</string>
     <string name="cancel">Cancel</string>
-    <string name="skip_button">Skip</string>
     <string name="skip">Skip</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
