@@ -71,11 +71,21 @@ public class NotificationService extends Service {
             }
 
             if (isBreakState) {
-                builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
-                        Utility.formatTimeForNotification(timeLeft)));
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
+                            Utility.formatTimeForNotification(timeLeft)));
+                } else {
+                    builder.setContentTitle(getApplicationContext().getString(R.string.break_time_left,
+                            Utility.formatTimeForNotification(timeLeft)));
+                }
             } else {
-                builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
-                        Utility.formatTimeForNotification(timeLeft)));
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
+                            Utility.formatTimeForNotification(timeLeft)));
+                } else {
+                    builder.setContentTitle(getApplicationContext().getString(R.string.work_time_left,
+                            Utility.formatTimeForNotification(timeLeft)));
+                }
             }
 
             startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
@@ -137,11 +147,21 @@ public class NotificationService extends Service {
                     preferenceEditor.apply();
 
                     if (isBreakState) {
-                        builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
-                                Utility.formatTimeForNotification(millisUntilFinished)));
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                            builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
+                                    Utility.formatTimeForNotification(millisUntilFinished)));
+                        } else {
+                            builder.setContentTitle(getApplicationContext().getString(R.string.break_time_left,
+                                    Utility.formatTimeForNotification(millisUntilFinished)));
+                        }
                     } else {
-                        builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
-                                Utility.formatTimeForNotification(millisUntilFinished)));
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                            builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
+                                    Utility.formatTimeForNotification(millisUntilFinished)));
+                        } else {
+                            builder.setContentTitle(getApplicationContext().getString(R.string.work_time_left,
+                                    Utility.formatTimeForNotification(millisUntilFinished)));
+                        }
                     }
 
                     Intent updateTimer = new Intent(Constants.ON_TICK);
