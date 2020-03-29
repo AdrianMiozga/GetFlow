@@ -93,6 +93,8 @@ public class Utility {
 
     @SuppressLint("DefaultLocale")
     static String formatTimeForNotification(long milliseconds) {
+        milliseconds += 999;
+
         long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
