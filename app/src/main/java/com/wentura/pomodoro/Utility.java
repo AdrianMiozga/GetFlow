@@ -91,6 +91,27 @@ public class Utility {
         }
     }
 
+    @SuppressLint("DefaultLocale")
+    static String formatTimeForNotification(long milliseconds) {
+        long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
+
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds));
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds));
+
+        if (hours > 0) {
+            return String.format("%dh %dm", hours, minutes);
+        } else if (minutes > 0 && seconds > 0) {
+            return String.format("%dm %ds", minutes, seconds);
+        } else if (minutes > 0 && seconds == 0) {
+            return String.format("%dm", minutes);
+        } else {
+            return String.format("%ds", seconds);
+        }
+    }
+
     static void toggleKeepScreenOn(Context context) {
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(context);

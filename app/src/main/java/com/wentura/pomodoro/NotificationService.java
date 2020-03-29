@@ -72,10 +72,10 @@ public class NotificationService extends Service {
 
             if (isBreakState) {
                 builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
-                        Utility.formatTime(timeLeft)));
+                        Utility.formatTimeForNotification(timeLeft)));
             } else {
                 builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
-                        Utility.formatTime(timeLeft)));
+                        Utility.formatTimeForNotification(timeLeft)));
             }
 
             startForeground(Constants.TIME_LEFT_NOTIFICATION, builder.build());
@@ -138,10 +138,10 @@ public class NotificationService extends Service {
 
                     if (isBreakState) {
                         builder.setContentText(getApplicationContext().getString(R.string.break_time_left,
-                                Utility.formatTime(millisUntilFinished)));
+                                Utility.formatTimeForNotification(millisUntilFinished)));
                     } else {
                         builder.setContentText(getApplicationContext().getString(R.string.work_time_left,
-                                Utility.formatTime(millisUntilFinished)));
+                                Utility.formatTimeForNotification(millisUntilFinished)));
                     }
 
                     Intent updateTimer = new Intent(Constants.ON_TICK);
