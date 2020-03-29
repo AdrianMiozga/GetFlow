@@ -23,7 +23,7 @@
     <string name="loading_chart">Ładowanie…</string>
     <string name="work_icon">Praca</string>
     <string name="break_icon">Przerwa</string>
-    <string name="do_not_disturb_summary">Włącz nie przeszkadzać podczas pracy</string>
+    <string name="do_not_disturb_summary">Włącz tryb nie przeszkadzać podczas pracy</string>
     <string name="do_not_disturb_title">Nie przeszkadzać</string>
     <string name="dialog_access_policy_not_granted">Musisz zezwolić na dostęp do trybu Nie
         przeszkadzać dla tej aplikacji</string>
