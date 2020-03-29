@@ -14,6 +14,7 @@ public class Constants {
     static final String IS_PAUSE_BUTTON_VISIBLE = "is_pause_button_visible";
     static final String IS_WORK_ICON_VISIBLE = "is_work_icon_visible";
     static final String IS_BREAK_ICON_VISIBLE = "is_break_icon_visible";
+    static final String IS_TIMER_BLINKING = "is_timer_blinking";
 
     // Last session duration is needed when the user changes, for example,
     // work duration setting when the work timer is already running.

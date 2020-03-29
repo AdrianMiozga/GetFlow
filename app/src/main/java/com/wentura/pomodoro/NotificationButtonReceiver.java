@@ -56,6 +56,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
                 editPreferences.putInt(Constants.TIME_LEFT, 0);
+                editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, false);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.UPDATE_UI);
@@ -78,6 +79,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 int timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
                 editPreferences.putInt(Constants.TIME_LEFT, 0);
+                editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, false);
 
                 if (isBreakState) {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, false);
@@ -124,6 +126,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
+                editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, false);
                 editPreferences.apply();
 
                 stopEndNotificationService(context);

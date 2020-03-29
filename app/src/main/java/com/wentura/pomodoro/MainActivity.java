@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                     stopTimerUI();
                     break;
                 case Constants.BUTTON_PAUSE:
-                case Constants.END_TIMER:
                     startBlinkingAnimation();
                     break;
             }
@@ -374,6 +373,10 @@ public class MainActivity extends AppCompatActivity {
             breakIcon.setVisibility(View.VISIBLE);
         } else {
             breakIcon.setVisibility(View.INVISIBLE);
+        }
+
+        if (sharedPreferences.getBoolean(Constants.IS_TIMER_BLINKING, false)) {
+            startBlinkingAnimation();
         }
     }
 

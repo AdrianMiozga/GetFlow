@@ -21,7 +21,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.IOException;
 
@@ -81,6 +80,7 @@ public class EndNotificationService extends Service {
         preferenceEditor.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
         preferenceEditor.putBoolean(Constants.IS_START_BUTTON_VISIBLE, true);
         preferenceEditor.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
+        preferenceEditor.putBoolean(Constants.IS_TIMER_BLINKING, true);
 
         if (isBreakState) {
             preferenceEditor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
@@ -105,12 +105,8 @@ public class EndNotificationService extends Service {
                     preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
         }
 
-        Intent updateUI = new Intent(Constants.UPDATE_UI);
-        updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.END_TIMER);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(updateUI);
-
         Intent displayMainActivity = new Intent(getApplicationContext(), MainActivity.class);
-        displayMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        displayMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(displayMainActivity);
 
         showEndNotification();
