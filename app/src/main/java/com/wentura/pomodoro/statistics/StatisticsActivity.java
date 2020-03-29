@@ -409,7 +409,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         Paint paint = chart.getPaint(Chart.PAINT_INFO);
         paint.setColor(getResources().getColor(R.color.white));
-        chart.setNoDataText(getString(R.string.loadingChart));
+        chart.setNoDataText(getString(R.string.loading_chart));
         chart.invalidate();
 
         database = Database.getInstance(this);

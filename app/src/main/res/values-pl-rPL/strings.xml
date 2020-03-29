@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="start_button">Start</string>
+    <string name="stop_button">Stop</string>
+    <string name="settings">Ustawienia</string>
+    <string name="work_duration_title">Czas pracy</string>
+    <string name="break_duration">Długość przerwy</string>
+    <string name="dialog_go_to_settings">Idź do ustawień</string>
+    <string name="cancel">Anuluj</string>
+    <string name="dialog_stop">Czy jesteś pewien, że chcesz zakończyć sesję?</string>
+    <string name="dialog_yes">Tak</string>
+    <string name="dialog_no">Nie</string>
+    <string name="skip_button">Pomiń</string>
+    <string name="skip">Pomiń</string>
+    <string name="pause">Pauza</string>
+    <string name="stop">Stop</string>
+    <string name="resume">Wznów</string>
+    <string name="work_time">Czas wrócić do pracy!</string>
+    <string name="break_time">Czas na przerwę!</string>
+    <string name="break_time_left">Do końca przerwy: %s</string>
+    <string name="work_time_left">Do końca sesji: %s</string>
+    <string name="statistics">Statystyki</string>
+    <string name="completed">Ukończono</string>
+    <string name="breaks">Przerw</string>
+    <string name="today">Dzisiaj</string>
+    <string name="pause_button">Pauza</string>
+    <string name="incomplete">Niekompletne</string>
+    <string name="total">Łącznie</string>
+    <string name="overview">Przegląd</string>
+    <string name="week">Tydzień</string>
+    <string name="month">Miesiąc</string>
+    <string name="history">Historia</string>
+    <string name="loading_chart">Ładowanie…</string>
+    <string name="work_icon">Praca</string>
+    <string name="break_icon">Przerwa</string>
+    <string name="do_not_disturb_summary">Włącz nie przeszkadzać podczas pracy</string>
+    <string name="do_not_disturb_title">Nie przeszkadzać</string>
+    <string name="dialog_access_policy_not_granted">Musisz zezwolić na dostęp do trybu Nie
+        przeszkadzać dla tej aplikacji</string>
+    <string name="do_not_disturb_break_summary">Utrzymuj nie przeszkadzać podczas przerwy</string>
+    <string name="keep_screen_on">Utrzymuj włączony ekran</string>
+    <string name="days">Dni</string>
+    <string name="months">Miesiące</string>
+</resources>

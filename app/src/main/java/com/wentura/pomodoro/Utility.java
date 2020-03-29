@@ -10,10 +10,12 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.WindowManager;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -111,6 +113,14 @@ public class Utility {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM", Locale.US);
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    public static String getFirstMonthOfTheYear(int month) {
+        DateFormat formatter = new SimpleDateFormat("MMM", Locale.getDefault());
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.MONTH, month);
+        return formatter.format(calendar.getTime());
     }
 
     /**

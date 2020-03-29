@@ -2,6 +2,7 @@ package com.wentura.pomodoro.statistics;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.wentura.pomodoro.Utility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,7 +37,7 @@ public class CustomXAxisFormatter extends ValueFormatter {
         switch (spinnerOption) {
             case DAYS: {
                 SimpleDateFormat toPattern = new SimpleDateFormat("d", Locale.US);
-                SimpleDateFormat month = new SimpleDateFormat("MMM", Locale.US);
+                SimpleDateFormat month = new SimpleDateFormat("MMM", Locale.getDefault());
                 SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.US);
 
                 Date parse = null;
@@ -57,14 +58,14 @@ public class CustomXAxisFormatter extends ValueFormatter {
                     result = month.format(parse);
                 }
 
-                if (result.equals("Jan") || value == axis.mEntries[0]) {
+                if (result.equals(Utility.getFirstMonthOfTheYear(0)) || value == axis.mEntries[0]) {
                     result = month.format(parse) + "\n" + year.format(parse);
                 }
 
                 break;
             }
             case MONTHS: {
-                SimpleDateFormat toPattern = new SimpleDateFormat("MMM", Locale.US);
+                SimpleDateFormat toPattern = new SimpleDateFormat("MMM", Locale.getDefault());
                 SimpleDateFormat year = new SimpleDateFormat("yyyy", Locale.US);
 
                 Date parse = null;
@@ -81,7 +82,7 @@ public class CustomXAxisFormatter extends ValueFormatter {
 
                 result = toPattern.format(parse);
 
-                if (result.equals("Jan") || value == axis.mEntries[0]) {
+                if (result.equals(Utility.getFirstMonthOfTheYear(0)) || value == axis.mEntries[0]) {
                     result += "\n" + year.format(parse);
                 }
                 break;

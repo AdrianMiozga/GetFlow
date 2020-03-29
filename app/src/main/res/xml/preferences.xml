@@ -18,10 +18,11 @@
         app:defaultValue="false"
         app:isPreferenceVisible="false"
         app:key="do_not_disturb_break"
+        app:singleLineTitle="false"
         app:title="@string/do_not_disturb_break_summary" />
 
     <SwitchPreferenceCompat
         app:defaultValue="false"
         app:key="keep_screen_on"
-        app:title="Keep screen on" />
+        app:title="@string/keep_screen_on" />
 </PreferenceScreen>
