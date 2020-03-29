@@ -30,7 +30,6 @@ public class Constants {
     public static final String DEFAULT_WORK_TIME = "25";
     public static final String DEFAULT_BREAK_TIME = "5";
     static final long VIBRATION_REMINDER_FREQUENCY = 30000;
-    public static final int HOW_MANY_DAYS_TO_SHOW = 7;
 
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
@@ -60,7 +59,6 @@ public class Constants {
     static final String BUTTON_START = "button_start";
     static final String BUTTON_PAUSE = "button_pause";
     static final String TIME_LEFT_INTENT = "time_left_intent";
-    static final String END_TIMER = "end_timer";
 
     // TimerNotification Channels
     static final String CHANNEL_TIMER = "Pomodoro Timer";

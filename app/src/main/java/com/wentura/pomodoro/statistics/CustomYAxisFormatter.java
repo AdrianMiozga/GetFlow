@@ -1,7 +1,5 @@
 package com.wentura.pomodoro.statistics;
 
-import android.util.Log;
-
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
@@ -18,8 +16,6 @@ class CustomYAxisFormatter extends ValueFormatter {
         if (value <= 0) {
             return "";
         }
-
-        Log.d(TAG, "getAxisLabel: = " + value / 3_600_000);
 
         if (axis.mAxisMaximum > 3_600_000) {
             result = Math.round(value / 3_600_000) + "h";

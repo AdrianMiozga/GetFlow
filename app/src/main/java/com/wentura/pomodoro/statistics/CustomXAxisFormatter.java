@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Locale;
 
 class CustomXAxisFormatter extends ValueFormatter {
-
-    private static final String TAG = "Hello";
     private List<StatisticsItem> statisticsItems;
     private SpinnerOption spinnerOption;
 
@@ -26,8 +24,6 @@ class CustomXAxisFormatter extends ValueFormatter {
         if (value >= statisticsItems.size()) {
             return "";
         }
-
-//        Log.d(TAG, "getAxisLabel: " + value);
 
         String date = statisticsItems.get((int) value).getDate();
         SimpleDateFormat fromPattern = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
