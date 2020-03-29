@@ -157,9 +157,17 @@ public class EndNotificationService extends Service {
         boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
         if (isBreakState) {
-            builder.setContentText(getString(R.string.break_time));
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                builder.setContentText(getString(R.string.break_time));
+            } else {
+                builder.setContentTitle(getString(R.string.break_time));
+            }
         } else {
-            builder.setContentText(getString(R.string.work_time));
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                builder.setContentText(getString(R.string.work_time));
+            } else {
+                builder.setContentTitle(getString(R.string.work_time));
+            }
         }
 
         startForeground(Constants.ON_FINISH_NOTIFICATION, builder.build());
