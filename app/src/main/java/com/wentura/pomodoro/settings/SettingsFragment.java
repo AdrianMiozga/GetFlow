@@ -132,6 +132,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
                                     return;
                                 }
                                 switchPreference.setChecked(false);
+
+                                SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
+
+                                if (doNotDisturbBreakSwitch == null) {
+                                    return;
+                                }
+                                doNotDisturbBreakSwitch.setVisible(false);
+
                             }
                         }).show();
             }
