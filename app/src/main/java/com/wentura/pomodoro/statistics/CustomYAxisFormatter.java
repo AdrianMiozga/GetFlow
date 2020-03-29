@@ -5,8 +5,7 @@ import android.util.Log;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
-
-public class CustomYAxisFormatter extends ValueFormatter {
+class CustomYAxisFormatter extends ValueFormatter {
     private static final String TAG = "Hello";
 
     CustomYAxisFormatter() {

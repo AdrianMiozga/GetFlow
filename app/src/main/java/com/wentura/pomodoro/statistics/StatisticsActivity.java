@@ -41,7 +41,7 @@ import static com.wentura.pomodoro.statistics.SpinnerOption.DAYS;
 import static com.wentura.pomodoro.statistics.SpinnerOption.MONTHS;
 
 public class StatisticsActivity extends AppCompatActivity {
-    public static final String datePattern = "yyyy-MM-dd";
+    private static final String datePattern = "yyyy-MM-dd";
     private Database database;
     private static final String TAG = "Help";
     private static List<StatisticsItem> days = new ArrayList<>();

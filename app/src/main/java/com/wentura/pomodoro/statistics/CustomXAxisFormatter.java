@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CustomXAxisFormatter extends ValueFormatter {
+class CustomXAxisFormatter extends ValueFormatter {
 
     private static final String TAG = "Hello";
     private List<StatisticsItem> statisticsItems;
