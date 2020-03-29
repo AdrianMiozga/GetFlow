@@ -392,10 +392,8 @@ public class MainActivity extends AppCompatActivity {
         workIcon.setVisibility(View.VISIBLE);
         breakIcon.setVisibility(View.INVISIBLE);
 
-        if (blinkingAnimation != null) {
-            blinkingAnimation.cancel();
-        }
         revertTimerAnimation();
+        timerTextView.clearAnimation();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -404,10 +402,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void skipTimer() {
-        if (blinkingAnimation != null) {
-            blinkingAnimation.cancel();
-        }
         revertTimerAnimation();
+        timerTextView.clearAnimation();
 
         Intent intent = new Intent(this, NotificationButtonReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_SKIP);
