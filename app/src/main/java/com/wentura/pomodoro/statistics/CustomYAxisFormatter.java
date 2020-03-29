@@ -4,7 +4,6 @@ import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 class CustomYAxisFormatter extends ValueFormatter {
-    private static final String TAG = "Hello";
 
     CustomYAxisFormatter() {
     }

@@ -8,6 +8,7 @@ import com.wentura.pomodoro.database.Database;
 import com.wentura.pomodoro.database.Pomodoro;
 
 class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
+    private static final String TAG = UpdateDatabaseBreaks.class.getSimpleName();
     private Database database;
     private int time;
 
@@ -20,7 +21,7 @@ class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         String currentDate = Utility.getCurrentDate();
 
-        Log.d("Pomodoro", "doInBackground: Update database breaks");
+        Log.d(TAG, "doInBackground: Update database breaks");
 
         if (database.pomodoroDao().getLatestDate() != null && database.pomodoroDao().getLatestDate().equals(currentDate)) {
             database.pomodoroDao().updateBreaks(database.pomodoroDao().getBreaks(currentDate) + 1, currentDate);

@@ -20,7 +20,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class NotificationService extends Service {
-    private static final String TAG = "Hello";
+    private static final String TAG = NotificationService.class.getSimpleName();
     private boolean isBreakState;
     private int timeLeft;
     private CountDownTimer countDownTimer;

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.wentura.pomodoro.R;
 
 public class SettingsActivity extends AppCompatActivity {
-    private static final String TAG = "Hello";
+    private static final String TAG = SettingsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

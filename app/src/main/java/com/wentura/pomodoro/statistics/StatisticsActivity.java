@@ -43,7 +43,7 @@ import static com.wentura.pomodoro.statistics.SpinnerOption.MONTHS;
 public class StatisticsActivity extends AppCompatActivity {
     private static final String datePattern = "yyyy-MM-dd";
     private Database database;
-    private static final String TAG = "Help";
+    private static final String TAG = StatisticsActivity.class.getSimpleName();
     private static List<StatisticsItem> days = new ArrayList<>();
     private static List<StatisticsItem> months = new ArrayList<>();
     private static List<Entry> entries = new ArrayList<>();
