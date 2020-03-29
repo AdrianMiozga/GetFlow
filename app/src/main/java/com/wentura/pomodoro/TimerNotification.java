@@ -3,6 +3,7 @@ package com.wentura.pomodoro;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -26,6 +27,10 @@ class TimerNotification {
                 .setOngoing(true)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setShowWhen(false);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            builder.setContentTitle(context.getString(R.string.app_name));
+        }
 
         if (isTimerRunning) {
             builder.addAction(R.drawable.ic_play_button, context.getString(R.string.pause),

@@ -135,12 +135,15 @@ public class EndNotificationService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
                 .setSmallIcon(R.drawable.notification_icon)
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
-                .setContentTitle(getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setOngoing(true)
                 .setLights(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
                         500, 2000);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            builder.setContentTitle(getString(R.string.app_name));
+        }
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
