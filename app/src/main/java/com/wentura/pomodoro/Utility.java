@@ -7,8 +7,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.view.WindowManager;
+
+import androidx.preference.PreferenceManager;
 
 import java.text.DateFormat;
 import java.text.ParseException;
