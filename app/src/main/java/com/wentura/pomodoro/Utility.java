@@ -85,11 +85,15 @@ public class Utility {
             minutes++;
         }
 
+        if (hours > 0 && minutes == 0) {
+            return String.format("%dh", hours);
+        }
+
         if (hours > 0) {
             return String.format("%dh %dm", hours, minutes);
-        } else {
-            return String.format("%dm", minutes);
         }
+
+        return String.format("%dm", minutes);
     }
 
     @SuppressLint("DefaultLocale")
@@ -104,15 +108,22 @@ public class Utility {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds));
 
-        if (hours > 0) {
+        if (hours > 0 && minutes != 0) {
             return String.format("%dh %dm", hours, minutes);
-        } else if (minutes > 0 && seconds > 0) {
-            return String.format("%dm %ds", minutes, seconds);
-        } else if (minutes > 0 && seconds == 0) {
-            return String.format("%dm", minutes);
-        } else {
-            return String.format("%ds", seconds);
         }
+
+        if (hours > 0) {
+            return String.format("%dh", hours);
+        }
+
+        if (minutes > 0 && seconds > 0) {
+            return String.format("%dm %ds", minutes, seconds);
+        }
+
+        if (minutes > 0 && seconds == 0) {
+            return String.format("%dm", minutes);
+        }
+        return String.format("%ds", seconds);
     }
 
     static void toggleKeepScreenOn(Context context) {
