@@ -139,7 +139,7 @@ public class Utility {
     public static String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
         return simpleDateFormat.format(calendar.getTime());
     }
 
@@ -165,15 +165,41 @@ public class Utility {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -days);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
         return simpleDateFormat.format(calendar.getTime());
+    }
+
+    public static String calendarToString(Calendar calendar) {
+        StringBuilder result = new StringBuilder();
+
+        result.append(calendar.get(Calendar.YEAR));
+        result.append("-");
+
+        if (calendar.get(Calendar.MONTH) + 1 < 10) {
+            result.append("0");
+        }
+
+        result.append((calendar.get(Calendar.MONTH) + 1));
+        result.append("-01");
+        return result.toString();
+    }
+
+    public static Date stringToDate(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
+
+        try {
+            return dateFormat.parse(date);
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * Changes date format from for example 2019-02-20 to February 20
      */
     public static String formatDate(String date) {
-        SimpleDateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        SimpleDateFormat oldDateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
         Date oldDate = null;
         try {
             oldDate = oldDateFormat.parse(date);

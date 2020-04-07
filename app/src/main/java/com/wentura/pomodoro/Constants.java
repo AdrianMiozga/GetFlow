@@ -30,6 +30,7 @@ public class Constants {
     public static final String DEFAULT_WORK_TIME = "25";
     public static final String DEFAULT_BREAK_TIME = "5";
     static final long VIBRATION_REMINDER_FREQUENCY = 30000;
+    public static final String datePattern = "yyyy-MM-dd";
 
     // Database
     public static final String DATABASE_NAME = "Pomodoro.db";
