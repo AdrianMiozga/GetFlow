@@ -22,7 +22,7 @@ class MonthData extends ChartData {
 
     public void generate() {
         createMonthsArray();
-        prepareMonths();
+        prepareMonths(Utility.getCurrentDate());
         createEntries(months);
     }
 
@@ -31,14 +31,14 @@ class MonthData extends ChartData {
         return months;
     }
 
-    private void prepareMonths() {
+    private void prepareMonths(String currentDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.US);
 
         // The loop below this condition works only when the months array has two entries. I'm
         // using this block of code to generate the second entry if it doesn't exist.
         if (months.size() == 1) {
             Date thisMonth = stringToDate(months.get(0).getDate());
-            Date currentMonth = stringToDate(Utility.getCurrentDate());
+            Date currentMonth = stringToDate(currentDate);
 
             if (thisMonth != null && currentMonth != null) {
                 Calendar thisCalendar = Calendar.getInstance();
