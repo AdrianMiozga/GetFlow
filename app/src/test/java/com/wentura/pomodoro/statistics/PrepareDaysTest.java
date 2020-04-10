@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +15,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assume.assumeThat;
+import static org.junit.runners.Parameterized.Parameter;
+import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class PrepareDaysTest {
@@ -27,7 +27,7 @@ public class PrepareDaysTest {
     private DayData dayData;
 
     @Parameters(name = "{index}: {0}")
-    public static Iterable<? extends Object> dates() {
+    public static Iterable<String> dates() {
         return Arrays.asList(
                 currentDate,
                 "2020-03-09",
@@ -61,8 +61,9 @@ public class PrepareDaysTest {
 
     private void countDays() {
         LocalDate localDate = LocalDate.parse(currentDate);
-        for (int i = data.size() - 1; i >= 0; i--) {
-            assertThat("At i = " + i, data.get(i).getDate(), equalTo(localDate.toString()));
+        for (int i = dayData.getGeneratedData().size() - 1; i >= 0; i--) {
+            assertThat("At i = " + i, dayData.getGeneratedData().get(i).getDate(),
+                    equalTo(localDate.toString()));
             localDate = localDate.minusDays(1);
         }
     }

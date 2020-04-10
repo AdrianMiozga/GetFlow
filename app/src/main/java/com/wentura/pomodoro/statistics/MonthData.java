@@ -14,7 +14,7 @@ import static com.wentura.pomodoro.Utility.calendarToString;
 import static com.wentura.pomodoro.Utility.stringToDate;
 
 class MonthData extends ChartData {
-    private List<StatisticsItem> months;
+    private List<StatisticsItem> months = new ArrayList<>();
 
     MonthData(List<StatisticsItem> data) {
         super(data);
@@ -28,10 +28,10 @@ class MonthData extends ChartData {
 
     @Override
     List<StatisticsItem> getGeneratedData() {
-        return months;
+        return new ArrayList<>(months);
     }
 
-    private void prepareMonths(String currentDate) {
+    void prepareMonths(String currentDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern, Locale.US);
 
         // The loop below this condition works only when the months array has two entries. I'm
@@ -47,18 +47,16 @@ class MonthData extends ChartData {
                 Calendar currentCalendar = Calendar.getInstance();
                 currentCalendar.setTime(currentMonth);
 
-                if (thisCalendar.get(Calendar.MONTH) != currentCalendar.get(Calendar.MONTH) || thisCalendar.get(Calendar.YEAR) != currentCalendar.get(Calendar.YEAR)) {
+                if (thisCalendar.get(Calendar.MONTH) != currentCalendar.get(Calendar.MONTH) ||
+                        thisCalendar.get(Calendar.YEAR) != currentCalendar.get(Calendar.YEAR)) {
                     String date = calendarToString(currentCalendar);
 
-                    months.add(new StatisticsItem(date, 0, 0, 0, 0, 0, 0));
+                    months.add(new StatisticsItem(date));
                 }
             }
         }
 
         for (int i = 0; i < months.size() - 1; i++) {
-            if (i == 200) {
-                break;
-            }
             Date thisMonth = stringToDate(months.get(i).getDate());
             Date nextMonth = stringToDate(months.get(i + 1).getDate());
 
@@ -78,30 +76,31 @@ class MonthData extends ChartData {
             if (nextCalendar.get(Calendar.MONTH) != thisCalendar.get(Calendar.MONTH) ||
                     nextCalendar.get(Calendar.YEAR) != thisCalendar.get(Calendar.YEAR)) {
                 insertDate = dateFormat.format(thisCalendar.getTime());
-                months.add(i + 1, new StatisticsItem(insertDate,
-                        0, 0, 0, 0, 0, 0));
+                months.add(i + 1, new StatisticsItem(insertDate));
                 continue;
             }
 
             if (i + 1 == months.size() - 1 &&
-                    !new SimpleDateFormat("MMMM", Locale.US).format(nextCalendar.getTime()).equals(Utility.getCurrentMonth())) {
+                    !new SimpleDateFormat("MMMM", Locale.US).format(nextCalendar.getTime()).equals(Utility.getMonth(currentDate))) {
                 thisCalendar.add(Calendar.MONTH, 1);
                 insertDate = dateFormat.format(thisCalendar.getTime());
 
-                months.add(new StatisticsItem(insertDate,
-                        0, 0, 0, 0, 0, 0));
+                months.add(new StatisticsItem(insertDate));
             }
         }
 
         if (months.size() == 0) {
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MONTH, -11);
+            Date date = stringToDate(currentDate);
+            if (date != null) {
+                calendar.setTime(date);
+                calendar.add(Calendar.MONTH, -11);
 
-            for (int i = 0; i < 12; i++) {
-                months.add(new StatisticsItem(dateFormat.format(calendar.getTime()), 0, 0, 0, 0, 0,
-                        0));
+                for (int i = 0; i < 12; i++) {
+                    months.add(new StatisticsItem(dateFormat.format(calendar.getTime())));
 
-                calendar.add(Calendar.MONTH, 1);
+                    calendar.add(Calendar.MONTH, 1);
+                }
             }
         }
 
@@ -115,16 +114,15 @@ class MonthData extends ChartData {
                 for (int i = 12 - months.size(); i > 0; i--) {
                     calendar.add(Calendar.MONTH, -1);
 
-                    months.add(0, new StatisticsItem(dateFormat.format(calendar.getTime()), 0, 0, 0, 0, 0, 0));
+                    months.add(0, new StatisticsItem(dateFormat.format(calendar.getTime())));
                 }
             }
         }
     }
 
-    private void createMonthsArray() {
+    void createMonthsArray() {
         int totalCompletedTime = 0;
         int totalIncompleteTime = 0;
-        months = new ArrayList<>();
         List<StatisticsItem> days = getData();
 
         for (int i = 0; i < days.size() - 1; i++) {
@@ -155,17 +153,25 @@ class MonthData extends ChartData {
                 totalIncompleteTime = 0;
             }
 
-            if (today.get(Calendar.MONTH) == nextDay.get(Calendar.MONTH) &&
-                    today.get(Calendar.YEAR) == nextDay.get(Calendar.YEAR) &&
-                    i == days.size() - 2) {
+            if (i == days.size() - 2) {
+                if (today.get(Calendar.MONTH) == nextDay.get(Calendar.MONTH) &&
+                        today.get(Calendar.YEAR) == nextDay.get(Calendar.YEAR) &&
+                        i == days.size() - 2) {
 
-                totalCompletedTime += days.get(i + 1).getCompletedWorkTime();
-                totalIncompleteTime += days.get(i + 1).getIncompleteWorkTime();
+                    totalCompletedTime += days.get(i + 1).getCompletedWorkTime();
+                    totalIncompleteTime += days.get(i + 1).getIncompleteWorkTime();
 
-                String stringDate = calendarToString(nextDay);
+                    String stringDate = calendarToString(nextDay);
 
-                months.add(new StatisticsItem(stringDate, 0, totalCompletedTime, 0,
-                        totalIncompleteTime, 0, 0));
+                    months.add(new StatisticsItem(stringDate, 0, totalCompletedTime, 0,
+                            totalIncompleteTime, 0, 0));
+                }
+
+                if (today.get(Calendar.MONTH) != nextDay.get(Calendar.MONTH) ||
+                        today.get(Calendar.YEAR) != nextDay.get(Calendar.YEAR)) {
+
+                    months.add(days.get(i + 1));
+                }
             }
         }
 

@@ -3,6 +3,7 @@ package com.wentura.pomodoro.statistics;
 import com.wentura.pomodoro.Utility;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,7 @@ class DayData extends ChartData {
 
     @Override
     List<StatisticsItem> getGeneratedData() {
-        return days;
+        return new ArrayList<>(days);
     }
 
     void prepareDays(String currentDate) {
@@ -34,8 +35,7 @@ class DayData extends ChartData {
 
         if (days.size() == 1) {
             if (!days.get(0).getDate().equals(currentDate)) {
-                days.add(new StatisticsItem(currentDate, 0,
-                        0, 0, 0, 0, 0));
+                days.add(new StatisticsItem(currentDate));
             }
         }
 
@@ -58,8 +58,7 @@ class DayData extends ChartData {
 
             if (calendarNext.compareTo(todayCalendar) != 0) {
                 insertDate = dateFormat.format(todayCalendar.getTime());
-                days.add(i + 1, new StatisticsItem(insertDate,
-                        0, 0, 0, 0, 0, 0));
+                days.add(i + 1, new StatisticsItem(insertDate));
                 continue;
             }
 
@@ -67,14 +66,12 @@ class DayData extends ChartData {
                 todayCalendar.add(Calendar.DATE, 1);
                 insertDate = dateFormat.format(todayCalendar.getTime());
 
-                days.add(new StatisticsItem(insertDate,
-                        0, 0, 0, 0, 0, 0));
+                days.add(new StatisticsItem(insertDate));
             }
         }
 
         if (days.size() == 0) {
-            days.add(new StatisticsItem(currentDate, 0,
-                    0, 0, 0, 0, 0));
+            days.add(new StatisticsItem(currentDate));
         }
 
         if (days.size() < 12) {
@@ -90,7 +87,7 @@ class DayData extends ChartData {
             for (int i = 12 - days.size(); i > 0; i--) {
                 calendar.add(Calendar.DATE, -1);
 
-                days.add(0, new StatisticsItem(dateFormat.format(calendar.getTime()), 0, 0, 0, 0, 0, 0));
+                days.add(0, new StatisticsItem(dateFormat.format(calendar.getTime())));
             }
         }
     }

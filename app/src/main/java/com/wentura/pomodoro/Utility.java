@@ -143,8 +143,15 @@ public class Utility {
         return simpleDateFormat.format(calendar.getTime());
     }
 
-    public static String getCurrentMonth() {
+    public static String getMonth(String fromDate) {
+        Date date = stringToDate(fromDate);
+
+        if (date == null) {
+            return "";
+        }
+
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM", Locale.US);
         return simpleDateFormat.format(calendar.getTime());

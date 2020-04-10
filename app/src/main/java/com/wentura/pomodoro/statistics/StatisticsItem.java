@@ -1,6 +1,7 @@
 package com.wentura.pomodoro.statistics;
 
 import androidx.annotation.NonNull;
+import androidx.room.Ignore;
 
 public class StatisticsItem implements Comparable<StatisticsItem> {
     private String Date;
@@ -20,6 +21,11 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
         this.IncompleteWorkTime = IncompleteWorkTime;
         this.Breaks = Breaks;
         this.BreakTime = BreakTime;
+    }
+
+    @Ignore
+    public StatisticsItem(String Date) {
+        this(Date, 0, 0, 0, 0, 0, 0);
     }
 
     String getDate() {

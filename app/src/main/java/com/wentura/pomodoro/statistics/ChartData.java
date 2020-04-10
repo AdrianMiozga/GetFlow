@@ -36,7 +36,7 @@ abstract class ChartData {
     }
 
     List<Entry> getEntries() {
-        return entries;
+        return new ArrayList<>(entries);
     }
 
     long getSize() {
@@ -48,6 +48,6 @@ abstract class ChartData {
     }
 
     List<StatisticsItem> getData() {
-        return data;
+        return new ArrayList<>(data);
     }
 }
