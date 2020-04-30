@@ -288,25 +288,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         Log.d(TAG, "onDestroy: ");
-
-        SharedPreferences.Editor editor =
-                PreferenceManager.getDefaultSharedPreferences(this).edit();
-
-        if (skipButton.getVisibility() == View.VISIBLE) {
-            editor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, true);
-        } else {
-            editor.putBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false);
-        }
-
-        if (workIcon.getVisibility() == View.VISIBLE) {
-            editor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
-            editor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
-        } else {
-            editor.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
-            editor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
-        }
-
-        editor.apply();
     }
 
     @Override
