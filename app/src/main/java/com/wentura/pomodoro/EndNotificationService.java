@@ -68,10 +68,21 @@ public class EndNotificationService extends Service {
             } else {
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             }
+
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    mediaPlayer.reset();
+                    mediaPlayer.release();
+                }
+            });
+
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException exception) {
             exception.printStackTrace();
+            mediaPlayer.reset();
+            mediaPlayer.release();
         }
 
         preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
