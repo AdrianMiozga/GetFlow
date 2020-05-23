@@ -22,8 +22,6 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.wentura.focus.Constants;
 import com.wentura.focus.R;
 
-import java.util.Objects;
-
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -77,7 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         Log.d(TAG, "onResume: ");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            NotificationManager notificationManager = (NotificationManager) Objects.requireNonNull(getContext()).getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (notificationManager == null) {
                 return;
@@ -104,7 +102,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
         if (key.equals(Constants.DO_NOT_DISTURB_SETTING) && sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTING, false)) {
-            NotificationManager notificationManager = (NotificationManager) Objects.requireNonNull(getContext()).getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (notificationManager == null) {
                 return;
@@ -115,7 +113,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     return;
                 }
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 builder.setMessage(R.string.dialog_access_policy_not_granted)
                         .setPositiveButton(R.string.dialog_go_to_settings, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
