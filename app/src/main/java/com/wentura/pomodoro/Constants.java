@@ -33,7 +33,7 @@ public class Constants {
     public static final String datePattern = "yyyy-MM-dd";
 
     // Database
-    public static final String DATABASE_NAME = "Pomodoro.db";
+    public static final String DATABASE_NAME = "Focus.db";
 
     // TimerNotification Ids
     static final int TIME_LEFT_NOTIFICATION = 1;
