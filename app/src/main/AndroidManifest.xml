@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.wentura.pomodoro">
+    package="com.wentura.focus">
 
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -15,10 +15,10 @@
         android:theme="@style/AppTheme"
         android:icon="@mipmap/ic_launcher"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <receiver android:name="com.wentura.pomodoro.NotificationButtonReceiver" />
+        <receiver android:name="com.wentura.focus.NotificationButtonReceiver" />
 
         <activity
-            android:name="com.wentura.pomodoro.MainActivity"
+            android:name="com.wentura.focus.MainActivity"
             android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,21 +27,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.wentura.pomodoro.settings.SettingsActivity"
+            android:name="com.wentura.focus.settings.SettingsActivity"
             android:label="@string/settings"
             android:theme="@style/Theme.NoPreviewWindow"
             android:configChanges="orientation"
-            android:parentActivityName="com.wentura.pomodoro.MainActivity" />
+            android:parentActivityName="com.wentura.focus.MainActivity" />
 
         <activity
-            android:name="com.wentura.pomodoro.statistics.StatisticsActivity"
+            android:name="com.wentura.focus.statistics.StatisticsActivity"
             android:label="@string/statistics"
             android:theme="@style/Theme.NoPreviewWindow"
             android:configChanges="orientation"
-            android:parentActivityName="com.wentura.pomodoro.MainActivity" />
+            android:parentActivityName="com.wentura.focus.MainActivity" />
 
-        <service android:name="com.wentura.pomodoro.NotificationService" />
-        <service android:name="com.wentura.pomodoro.EndNotificationService" />
+        <service android:name="com.wentura.focus.NotificationService" />
+        <service android:name="com.wentura.focus.EndNotificationService" />
     </application>
 
 </manifest>
