@@ -22,6 +22,7 @@ local.properties
 .idea/copyright/profiles_settings.xml
 .idea/encodings.xml
 .idea/modules.xml
+.idea/dictionaries/
 .idea/scopes/scope_settings.xml
 .idea/navEditor.xml
 *.iml

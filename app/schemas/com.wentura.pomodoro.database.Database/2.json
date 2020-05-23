@@ -1,0 +1,58 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "b117f13f99521f4b930772e6a9547c09",
+    "entities": [
+      {
+        "tableName": "Pomodoro",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `CompletedWorksTime` INTEGER NOT NULL, `CompletedBreaksTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
+        "fields": [
+          {
+            "fieldPath": "date",
+            "columnName": "Date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completedWorks",
+            "columnName": "CompletedWorks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "Breaks",
+            "columnName": "Breaks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completedWorksTime",
+            "columnName": "CompletedWorksTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completedBreaksTime",
+            "columnName": "CompletedBreaksTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "Date"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b117f13f99521f4b930772e6a9547c09')"
+    ]
+  }
+}
