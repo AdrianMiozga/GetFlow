@@ -49,10 +49,10 @@ public class NotificationService extends Service {
         if (timeLeft == 0) {
             if (isBreakState) {
                 timeLeft = Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
-                        Constants.DEFAULT_BREAK_TIME)) /* * 60000 */;
+                        Constants.DEFAULT_BREAK_TIME)) * 60000;
             } else {
                 timeLeft = Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                        Constants.DEFAULT_WORK_TIME) /* * 60000 */);
+                        Constants.DEFAULT_WORK_TIME)) * 60000;
             }
         }
 
