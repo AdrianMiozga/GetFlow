@@ -25,6 +25,7 @@ local.properties
 .idea/dictionaries/
 .idea/scopes/scope_settings.xml
 .idea/navEditor.xml
+.idea/copyright/
 *.iml
 
 # Intellij
