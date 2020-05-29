@@ -19,7 +19,6 @@ package com.wentura.focus;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.wentura.focus.database.Database;
 import com.wentura.focus.database.Pomodoro;
@@ -37,8 +36,6 @@ class UpdateDatabaseIncompleteWorks extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         String currentDate = Utility.getCurrentDate();
-
-        Log.d(TAG, "doInBackground: Update database incomplete works");
 
         if (database.pomodoroDao().getLatestDate() != null && database.pomodoroDao().getLatestDate().equals(currentDate)) {
             database.pomodoroDao().updateIncompleteWorks(database.pomodoroDao().getIncompleteWorks(currentDate) + 1,

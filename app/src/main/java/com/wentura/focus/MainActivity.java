@@ -30,7 +30,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -68,11 +67,8 @@ public class MainActivity extends AppCompatActivity {
             String action = intent.getStringExtra(Constants.UPDATE_UI_ACTION);
 
             if (action == null) {
-                Log.d(TAG, "onReceive: Action null");
                 return;
             }
-
-            Log.d(TAG, "onReceive: " + action);
 
             switch (action) {
                 case Constants.BUTTON_SKIP:
@@ -147,8 +143,6 @@ public class MainActivity extends AppCompatActivity {
         breakIcon = findViewById(R.id.break_icon);
         skipButton = findViewById(R.id.skip_button);
 
-        Log.d(TAG, "onCreate: ");
-
         setupNotificationChannels();
 
         ActionBar actionbar = getSupportActionBar();
@@ -161,8 +155,6 @@ public class MainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-                Log.d(TAG, "handleOnBackPressed: ");
 
                 if (sharedPreferences.getInt(Constants.TIME_LEFT, 0) == 0) {
                     finish();
@@ -211,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
                             isScaleAnimationDone = true;
                             if (isTimerTextViewActionUpCalled) {
                                 revertTimerAnimation();
-                                Log.d(TAG, "onAnimationEnd: isTimerTextViewActionUpCalled");
                                 isTimerTextViewActionUpCalled = false;
                             }
                         }
@@ -233,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 stopTimer();
-                Log.d(TAG, "onLongClick: ");
                 isScaleAnimationDone = true;
                 return true;
             }
@@ -303,8 +293,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
@@ -385,7 +373,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopTimerUI() {
-        Log.d(TAG, "stopTimerUI: ");
         skipButton.setVisibility(View.INVISIBLE);
         workIcon.setVisibility(View.VISIBLE);
         breakIcon.setVisibility(View.INVISIBLE);

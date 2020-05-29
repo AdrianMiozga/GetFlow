@@ -18,7 +18,6 @@
 package com.wentura.focus.settings;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -40,6 +39,5 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         overridePendingTransition(R.anim.background_down, R.anim.foreground_down);
-        Log.d(TAG, "onPause: ");
     }
 }

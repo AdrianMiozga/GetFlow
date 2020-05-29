@@ -26,7 +26,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputType;
-import android.util.Log;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -78,7 +77,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
         SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
 
-        Log.d(TAG, "onResume: " + doNotDisturbSwitch + ", " + doNotDisturbBreakSwitch);
         if (doNotDisturbSwitch != null && doNotDisturbBreakSwitch != null) {
             doNotDisturbBreakSwitch.setVisible(doNotDisturbSwitch.isChecked());
         }
@@ -88,8 +86,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
-        Log.d(TAG, "onResume: ");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);

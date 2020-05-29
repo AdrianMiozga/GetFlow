@@ -29,7 +29,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -72,8 +71,6 @@ public class NotificationService extends Service {
                         Constants.DEFAULT_WORK_TIME)) * 60000;
             }
         }
-
-        Log.d(TAG, "onStartCommand: timeLeft = " + timeLeft);
 
         preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, timeLeft);
 
@@ -190,7 +187,6 @@ public class NotificationService extends Service {
 
                 @Override
                 public void onFinish() {
-                    Log.d(TAG, "onFinish: ");
                     stopSelf();
                 }
             }.start();

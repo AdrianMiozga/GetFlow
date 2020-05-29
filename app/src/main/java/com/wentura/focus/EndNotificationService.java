@@ -60,8 +60,6 @@ public class EndNotificationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand: ");
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor preferenceEditor = preferences.edit();
 
@@ -234,7 +232,6 @@ public class EndNotificationService extends Service {
                 }
 
                 if (wakeLock != null) {
-                    Log.d(TAG, "vibrate: wakeLock != null");
                     wakeLock.acquire(Constants.VIBRATION_REMINDER_FREQUENCY + vibrationPatternLength);
                 }
                 start();

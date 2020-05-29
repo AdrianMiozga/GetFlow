@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -80,13 +79,10 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_STOP);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
-                Log.d(TAG, "onReceive: Button Stop");
-
                 Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
                 break;
             }
             case Constants.BUTTON_SKIP: {
-                Log.d("Pomodoro", "onReceive: SKIP");
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
                 stopEndNotificationService(context);
                 stopNotificationService(context);
