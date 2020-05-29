@@ -17,7 +17,6 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.wentura.focus">
 
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
@@ -31,7 +30,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:icon="@mipmap/ic_launcher"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        android:fullBackupContent="@xml/backup_descriptor">
         <receiver android:name="com.wentura.focus.NotificationButtonReceiver" />
 
         <activity
