@@ -47,6 +47,8 @@
     <string name="keep_screen_on">Keep screen on</string>
     <string name="days">Days</string>
     <string name="months">Months</string>
+    <string name="first_tutorial_message">Press on the timer to start or pause</string>
+    <string name="second_tutorial_message">Long press the timer to stop</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>

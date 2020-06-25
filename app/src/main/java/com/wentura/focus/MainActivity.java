@@ -48,8 +48,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.wentura.focus.settings.SettingsActivity;
 import com.wentura.focus.statistics.StatisticsActivity;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -252,6 +256,42 @@ public class MainActivity extends AppCompatActivity {
                 skipTimer();
             }
         });
+
+        showHelpingSnackbars();
+    }
+
+    private void showHelpingSnackbars() {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+
+        final int currentStep = sharedPreferences.getInt(Constants.TUTORIAL_STEP, 0);
+
+        List<String> messages = Arrays.asList(getString(R.string.first_tutorial_message),
+                getString(R.string.second_tutorial_message));
+
+        if (currentStep >= messages.size()) {
+            return;
+        }
+
+        final SharedPreferences.Editor editPreferences =
+                sharedPreferences.edit();
+
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.main_activity), messages.get(currentStep),
+                Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+
+                editPreferences.putInt(Constants.TUTORIAL_STEP, currentStep + 1).apply();
+                showHelpingSnackbars();
+            }
+        });
+
+        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.grey_snackbar));
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        snackbar.show();
     }
 
     private AnimatorSet startTimerAnimation() {

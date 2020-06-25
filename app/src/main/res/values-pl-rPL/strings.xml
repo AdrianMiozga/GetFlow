@@ -48,4 +48,6 @@
     <string name="keep_screen_on">Utrzymuj włączony ekran</string>
     <string name="days">Dni</string>
     <string name="months">Miesiące</string>
+    <string name="first_tutorial_message">Naciśnij na licznik, aby zacząć lub spauzować sesję</string>
+    <string name="second_tutorial_message">Przytrzymaj licznik, aby anulować sesję</string>
 </resources>
