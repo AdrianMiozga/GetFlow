@@ -32,7 +32,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -121,7 +120,6 @@ public class EndNotificationService extends Service {
             preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
             preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, false);
         }
-        preferenceEditor.apply();
 
         if (isBreakState) {
             new UpdateDatabaseBreaks(getApplicationContext(),
@@ -129,7 +127,11 @@ public class EndNotificationService extends Service {
         } else {
             new UpdateDatabaseCompletedWorks(getApplicationContext(),
                     preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
+
+            preferenceEditor.putInt(Constants.WORK_SESSION_COUNTER,
+                    preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);
         }
+        preferenceEditor.apply();
 
         Intent displayMainActivity = new Intent(getApplicationContext(), MainActivity.class);
         displayMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

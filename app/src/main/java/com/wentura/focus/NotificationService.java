@@ -55,6 +55,8 @@ public class NotificationService extends Service {
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
         final TimerNotification timerNotification = new TimerNotification();
         boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
+        boolean areLongBreaksEnabled = preferences.getBoolean(Constants.LONG_BREAK_SETTING, true);
+        int workSessionCounter = preferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
         final NotificationCompat.Builder builder =
                 timerNotification.buildNotification(getApplicationContext(), isTimerRunning);
 
@@ -64,11 +66,16 @@ public class NotificationService extends Service {
 
         if (timeLeft == 0) {
             if (isBreakState) {
-                timeLeft = Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
-                        Constants.DEFAULT_BREAK_TIME)) * 60000;
+                if (workSessionCounter != 0 && workSessionCounter % 4 == 0 && areLongBreaksEnabled) {
+                    timeLeft = Integer.parseInt(preferences.getString(Constants.LONG_BREAK_DURATION_SETTING,
+                            Constants.DEFAULT_LONG_BREAK_TIME)) * 60_000;
+                } else {
+                    timeLeft = Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
+                            Constants.DEFAULT_BREAK_TIME)) * 60_000;
+                }
             } else {
                 timeLeft = Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                        Constants.DEFAULT_WORK_TIME)) * 60000;
+                        Constants.DEFAULT_WORK_TIME)) * 60_000;
             }
         }
 

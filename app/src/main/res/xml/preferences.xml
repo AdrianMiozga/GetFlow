@@ -25,6 +25,16 @@
         app:key="break_duration"
         app:title="@string/break_duration" />
 
+    <EditTextPreference
+        app:key="long_break_duration"
+        app:title="@string/long_break_duration" />
+
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:key="long_breaks"
+        app:singleLineTitle="false"
+        app:title="@string/enable_long_breaks_title" />
+
     <SwitchPreferenceCompat
         app:defaultValue="false"
         app:key="do_not_disturb"

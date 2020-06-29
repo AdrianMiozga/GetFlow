@@ -23,6 +23,8 @@ public class Constants {
     public static final String DO_NOT_DISTURB_BREAK_SETTING = "do_not_disturb_break";
     public static final String WORK_DURATION_SETTING = "work_duration";
     public static final String BREAK_DURATION_SETTING = "break_duration";
+    public static final String LONG_BREAK_SETTING = "long_breaks";
+    public static final String LONG_BREAK_DURATION_SETTING = "long_break_duration";
     public static final String SPINNER_SETTING = "spinner_setting";
     static final String KEEP_SCREEN_ON_SETTING = "keep_screen_on";
     static final String IS_STOP_BUTTON_VISIBLE = "is_stop_button_visible";
@@ -33,6 +35,7 @@ public class Constants {
     static final String IS_BREAK_ICON_VISIBLE = "is_break_icon_visible";
     static final String IS_TIMER_BLINKING = "is_timer_blinking";
     static final String TUTORIAL_STEP = "tutorial_step";
+    static final String WORK_SESSION_COUNTER = "work_session_counter";
 
     // Last session duration is needed when the user changes, for example,
     // work duration setting when the work timer is already running.
@@ -47,6 +50,7 @@ public class Constants {
     // Defaults
     public static final String DEFAULT_WORK_TIME = "25";
     public static final String DEFAULT_BREAK_TIME = "5";
+    public static final String DEFAULT_LONG_BREAK_TIME = "20";
     static final long VIBRATION_REMINDER_FREQUENCY = 30000;
     public static final String datePattern = "yyyy-MM-dd";
 

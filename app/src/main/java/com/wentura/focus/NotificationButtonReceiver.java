@@ -73,6 +73,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
                 editPreferences.putInt(Constants.TIME_LEFT, 0);
                 editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, false);
+                editPreferences.putInt(Constants.WORK_SESSION_COUNTER, 0);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.UPDATE_UI);
@@ -104,6 +105,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
+                    editPreferences.putInt(Constants.WORK_SESSION_COUNTER,
+                            preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);
 
                     if (!preferences.getBoolean(Constants.DO_NOT_DISTURB_BREAK_SETTING, false)) {
                         Utility.setDoNotDisturb(context, AudioManager.RINGER_MODE_NORMAL);

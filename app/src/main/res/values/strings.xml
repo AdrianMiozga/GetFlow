@@ -49,6 +49,8 @@
     <string name="months">Months</string>
     <string name="first_tutorial_message">Press on the timer to start or pause</string>
     <string name="second_tutorial_message">Long press the timer to stop</string>
+    <string name="enable_long_breaks_title">Enable long breaks</string>
+    <string name="long_break_duration">Long break duration</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>

@@ -73,6 +73,20 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     });
         }
 
+        EditTextPreference longBreakDurationSetting =
+                findPreference(Constants.LONG_BREAK_DURATION_SETTING);
+
+        if (longBreakDurationSetting != null) {
+            longBreakDurationSetting.setOnBindEditTextListener(
+                    new EditTextPreference.OnBindEditTextListener() {
+                        @Override
+                        public void onBindEditText(@NonNull EditText editText) {
+                            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                            editText.selectAll();
+                        }
+                    });
+        }
+
         SwitchPreferenceCompat doNotDisturbSwitch = findPreference(Constants.DO_NOT_DISTURB_SETTING);
 
         SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
@@ -161,6 +175,17 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public boolean onPreferenceTreeClick(Preference preference) {
         String key = preference.getKey();
 
+        if (key.equals(Constants.LONG_BREAK_SETTING)) {
+            EditTextPreference longBrakeDurationSetting =
+                    findPreference(Constants.LONG_BREAK_DURATION_SETTING);
+
+            SwitchPreferenceCompat longBreakEnabled = findPreference(key);
+
+            if (longBreakEnabled != null && longBrakeDurationSetting != null) {
+                longBrakeDurationSetting.setVisible(longBreakEnabled.isChecked());
+            }
+        }
+
         if (key.equals(Constants.DO_NOT_DISTURB_SETTING)) {
             SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
 
@@ -171,7 +196,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             }
         }
 
-        if (key.equals(Constants.BREAK_DURATION_SETTING) || key.equals(Constants.WORK_DURATION_SETTING)) {
+        if (key.equals(Constants.BREAK_DURATION_SETTING) || key.equals(Constants.WORK_DURATION_SETTING) || key.equals(Constants.LONG_BREAK_DURATION_SETTING)) {
             EditTextPreference editTextPreference = findPreference(key);
 
             if (editTextPreference == null) {
@@ -189,6 +214,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
             if (key.equals(Constants.WORK_DURATION_SETTING)) {
                 if (editText == null || editText.equals("")) {
                     editTextPreference.setText(Constants.DEFAULT_WORK_TIME);
+                }
+            }
+
+            if (key.equals(Constants.LONG_BREAK_DURATION_SETTING)) {
+                if (editText == null || editText.equals("")) {
+                    editTextPreference.setText(Constants.DEFAULT_LONG_BREAK_TIME);
                 }
             }
         }

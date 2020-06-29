@@ -369,12 +369,19 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
+        boolean areLongBreaksEnabled = sharedPreferences.getBoolean(Constants.LONG_BREAK_SETTING, true);
+        int workSessionCounter = sharedPreferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
         int timeLeft = sharedPreferences.getInt(Constants.TIME_LEFT, 0);
 
         if (timeLeft == 0) {
             if (isBreakState) {
-                updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.BREAK_DURATION_SETTING,
-                        Constants.DEFAULT_BREAK_TIME)) * 60_000);
+                if (workSessionCounter != 0 && workSessionCounter % 4 == 0 && areLongBreaksEnabled) {
+                    updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.LONG_BREAK_DURATION_SETTING,
+                            Constants.DEFAULT_LONG_BREAK_TIME)) * 60_000);
+                } else {
+                    updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.BREAK_DURATION_SETTING,
+                            Constants.DEFAULT_BREAK_TIME)) * 60_000);
+                }
             } else {
                 updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
                         Constants.DEFAULT_WORK_TIME)) * 60_000);
