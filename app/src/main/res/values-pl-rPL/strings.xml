@@ -19,7 +19,7 @@
 <resources>
     <string name="settings">Ustawienia</string>
     <string name="work_duration_title">Czas pracy</string>
-    <string name="break_duration">Długość przerwy</string>
+    <string name="break_duration">Czas trwania przerwy</string>
     <string name="dialog_go_to_settings">Idź do ustawień</string>
     <string name="cancel">Anuluj</string>
     <string name="skip">Pomiń</string>
