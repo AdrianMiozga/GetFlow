@@ -18,30 +18,36 @@
 
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <EditTextPreference
+        app:iconSpaceReserved="false"
         app:key="work_duration"
         app:title="@string/work_duration_title" />
 
     <EditTextPreference
+        app:iconSpaceReserved="false"
         app:key="break_duration"
         app:title="@string/break_duration" />
 
     <EditTextPreference
+        app:iconSpaceReserved="false"
         app:key="long_break_duration"
         app:title="@string/long_break_duration" />
 
     <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
         app:defaultValue="true"
         app:key="long_breaks"
         app:singleLineTitle="false"
         app:title="@string/enable_long_breaks_title" />
 
     <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
         app:defaultValue="false"
         app:key="do_not_disturb"
         app:summary="@string/do_not_disturb_summary"
         app:title="@string/do_not_disturb_title" />
 
     <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
         app:defaultValue="false"
         app:isPreferenceVisible="false"
         app:key="do_not_disturb_break"
@@ -49,11 +55,13 @@
         app:title="@string/do_not_disturb_break_summary" />
 
     <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
         app:defaultValue="false"
         app:key="keep_screen_on"
         app:title="@string/keep_screen_on" />
 
     <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
         app:defaultValue="false"
         app:key="disable_wifi"
         app:title="@string/disable_wifi_title"
