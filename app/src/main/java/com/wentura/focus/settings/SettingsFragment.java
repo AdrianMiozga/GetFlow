@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -50,6 +51,20 @@ public class SettingsFragment extends PreferenceFragmentCompat
         EditTextPreference workDurationSetting = findPreference(Constants.WORK_DURATION_SETTING);
 
         if (workDurationSetting != null) {
+            workDurationSetting.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
+                @Override
+                public CharSequence provideSummary(EditTextPreference preference) {
+                    String text = preference.getText();
+
+                    if (TextUtils.isEmpty(text)){
+                        return Constants.DEFAULT_WORK_TIME + "m";
+                    }
+                    return text + "m";
+                }
+            });
+        }
+
+        if (workDurationSetting != null) {
             workDurationSetting.setOnBindEditTextListener(
                     new EditTextPreference.OnBindEditTextListener() {
                         @Override
@@ -61,6 +76,20 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
 
         EditTextPreference breakDurationSetting = findPreference(Constants.BREAK_DURATION_SETTING);
+
+        if (breakDurationSetting != null) {
+            breakDurationSetting.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
+                @Override
+                public CharSequence provideSummary(EditTextPreference preference) {
+                    String text = preference.getText();
+
+                    if (TextUtils.isEmpty(text)){
+                        return Constants.DEFAULT_BREAK_TIME + "m";
+                    }
+                    return text + "m";
+                }
+            });
+        }
 
         if (breakDurationSetting != null) {
             breakDurationSetting.setOnBindEditTextListener(
@@ -75,6 +104,20 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
         EditTextPreference longBreakDurationSetting =
                 findPreference(Constants.LONG_BREAK_DURATION_SETTING);
+
+        if (longBreakDurationSetting != null) {
+            longBreakDurationSetting.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
+                @Override
+                public CharSequence provideSummary(EditTextPreference preference) {
+                    String text = preference.getText();
+
+                    if (TextUtils.isEmpty(text)){
+                        return Constants.DEFAULT_LONG_BREAK_TIME + "m";
+                    }
+                    return text + "m";
+                }
+            });
+        }
 
         if (longBreakDurationSetting != null) {
             longBreakDurationSetting.setOnBindEditTextListener(
