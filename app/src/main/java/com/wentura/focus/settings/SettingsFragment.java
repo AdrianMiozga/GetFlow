@@ -137,6 +137,15 @@ public class SettingsFragment extends PreferenceFragmentCompat
         if (doNotDisturbSwitch != null && doNotDisturbBreakSwitch != null) {
             doNotDisturbBreakSwitch.setVisible(doNotDisturbSwitch.isChecked());
         }
+
+        EditTextPreference longBrakeDurationSetting =
+                findPreference(Constants.LONG_BREAK_DURATION_SETTING);
+
+        SwitchPreferenceCompat longBreakEnabled = findPreference(Constants.LONG_BREAK_SETTING);
+
+        if (longBreakEnabled != null && longBrakeDurationSetting != null) {
+            longBrakeDurationSetting.setVisible(longBreakEnabled.isChecked());
+        }
     }
 
     @Override
