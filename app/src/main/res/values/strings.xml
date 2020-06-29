@@ -51,6 +51,8 @@
     <string name="second_tutorial_message">Long press the timer to stop</string>
     <string name="enable_long_breaks_title">Enable long breaks</string>
     <string name="long_break_duration">Long break duration</string>
+    <string name="disable_wifi_title">Disable Wi-Fi</string>
+    <string name="disable_wifi_summary">Disables Wi-Fi during work session</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>

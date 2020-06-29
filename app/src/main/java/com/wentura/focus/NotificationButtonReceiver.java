@@ -49,6 +49,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 stopNotificationService(context);
                 stopEndNotificationService(context);
 
+                Utility.setWifiEnabled(context, true);
+
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
                 int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
@@ -101,6 +103,7 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
 
                     Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
+                    Utility.setWifiEnabled(context, false);
                 } else {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
@@ -111,6 +114,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                     if (!preferences.getBoolean(Constants.DO_NOT_DISTURB_BREAK_SETTING, false)) {
                         Utility.setDoNotDisturb(context, AudioManager.RINGER_MODE_NORMAL);
                     }
+
+                    Utility.setWifiEnabled(context, true);
                 }
 
                 if (timeLeft != 0) {
@@ -154,6 +159,9 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
 
                 if (!isBreakState) {
                     Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
+                    Utility.setWifiEnabled(context, false);
+                } else {
+                    Utility.setWifiEnabled(context, true);
                 }
                 break;
             }
@@ -166,6 +174,8 @@ public class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
                 editPreferences.apply();
+
+                Utility.setWifiEnabled(context, true);
 
                 if (!isBreakState) {
                     Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);

@@ -36,6 +36,7 @@ public class Constants {
     static final String IS_TIMER_BLINKING = "is_timer_blinking";
     static final String TUTORIAL_STEP = "tutorial_step";
     static final String WORK_SESSION_COUNTER = "work_session_counter";
+    static final String DISABLE_WIFI = "disable_wifi";
 
     // Last session duration is needed when the user changes, for example,
     // work duration setting when the work timer is already running.

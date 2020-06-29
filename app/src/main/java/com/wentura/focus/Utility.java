@@ -23,6 +23,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.view.WindowManager;
 
@@ -38,6 +39,22 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
+
+    static void setWifiEnabled(Context context, boolean enable) {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+
+        if (!sharedPreferences.getBoolean(Constants.DISABLE_WIFI, false)) {
+            return;
+        }
+
+        WifiManager wifiManager =
+                (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        if (wifiManager != null) {
+            wifiManager.setWifiEnabled(enable);
+        }
+    }
 
     static void setDoNotDisturb(Context context, int mode) {
         SharedPreferences sharedPreferences =

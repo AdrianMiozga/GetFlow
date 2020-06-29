@@ -52,4 +52,10 @@
         app:defaultValue="false"
         app:key="keep_screen_on"
         app:title="@string/keep_screen_on" />
+
+    <SwitchPreferenceCompat
+        app:defaultValue="false"
+        app:key="disable_wifi"
+        app:title="@string/disable_wifi_title"
+        app:summary="@string/disable_wifi_summary"/>
 </PreferenceScreen>
