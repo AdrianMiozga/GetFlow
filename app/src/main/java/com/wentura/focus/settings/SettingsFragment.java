@@ -38,6 +38,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.wentura.focus.Constants;
 import com.wentura.focus.R;
+import com.wentura.focus.applicationlock.ApplicationLockActivity;
 
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -246,6 +247,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
             if (doNotDisturbSwitch != null && doNotDisturbBreakSwitch != null) {
                 doNotDisturbBreakSwitch.setVisible(doNotDisturbSwitch.isChecked());
             }
+        }
+
+        if (key.equals(Constants.APPLICATION_LOCK_PREFERENCE)) {
+            Intent intent = new Intent(getContext(), ApplicationLockActivity.class);
+            preference.setIntent(intent);
         }
 
         if (key.equals(Constants.BREAK_DURATION_SETTING) || key.equals(Constants.WORK_DURATION_SETTING) || key.equals(Constants.LONG_BREAK_DURATION_SETTING)) {

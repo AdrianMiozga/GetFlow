@@ -61,7 +61,7 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
-        spinner = findViewById(R.id.spinner);
+        spinner = findViewById(R.id.loading_bar);
         numberTodayTextView = findViewById(R.id.numberTodayTextView);
         numberWeekTextView = findViewById(R.id.numberWeekTextView);
         numberMonthTextView = findViewById(R.id.numberMonthTextView);

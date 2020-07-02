@@ -16,7 +16,8 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
         app:iconSpaceReserved="false"
         app:key="work_duration"
@@ -66,4 +67,10 @@
         app:key="disable_wifi"
         app:title="@string/disable_wifi_title"
         app:summary="@string/disable_wifi_summary"/>
+
+    <Preference
+        app:iconSpaceReserved="false"
+        android:key="application_lock_preference"
+        android:title="@string/app_lock"/>
+
 </PreferenceScreen>

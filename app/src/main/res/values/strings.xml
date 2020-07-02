@@ -53,6 +53,11 @@
     <string name="long_break_duration">Long break duration</string>
     <string name="disable_wifi_title">Disable Wi-Fi</string>
     <string name="disable_wifi_summary">Disables Wi-Fi during work session</string>
+    <string name="app_lock">Block applications</string>
+    <string name="application_icon">Application Icon</string>
+    <string name="accessibility_service_description">To allow Focus to block other Android applications during work session enable this accessibility service.</string>
+    <string name="app_lock_switch_description">Block applications when the work session is on</string>
+    <string name="accessibility_not_enabled_dialog">To allow Focus to block other Android applications you need to enable accessibility service.</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>

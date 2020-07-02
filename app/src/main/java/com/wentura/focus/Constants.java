@@ -26,6 +26,9 @@ public class Constants {
     public static final String LONG_BREAK_SETTING = "long_breaks";
     public static final String LONG_BREAK_DURATION_SETTING = "long_break_duration";
     public static final String SPINNER_SETTING = "spinner_setting";
+    public static final String APPLICATION_LOCK_PREFERENCE = "application_lock_preference";
+    public static final String LOCKED_APPLICATIONS_LIST = "locked_applications_list";
+    public static final String MASTER_LOCK_APPLICATION_SETTING = "master_lock_application_setting";
     static final String KEEP_SCREEN_ON_SETTING = "keep_screen_on";
     static final String IS_STOP_BUTTON_VISIBLE = "is_stop_button_visible";
     static final String IS_SKIP_BUTTON_VISIBLE = "is_skip_button_visible";
@@ -44,8 +47,8 @@ public class Constants {
     static final String LAST_SESSION_DURATION = "last_session_duration";
 
     static final String TIME_LEFT = "time_left";
-    static final String IS_TIMER_RUNNING = "is_timer_running";
-    static final String IS_BREAK_STATE = "is_break_state";
+    public static final String IS_TIMER_RUNNING = "is_timer_running";
+    public static final String IS_BREAK_STATE = "is_break_state";
     static final String CENTER_BUTTONS = "center_buttons";
 
     // Defaults
