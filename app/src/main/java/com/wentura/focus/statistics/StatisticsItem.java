@@ -20,14 +20,14 @@ package com.wentura.focus.statistics;
 import androidx.annotation.NonNull;
 import androidx.room.Ignore;
 
-public class StatisticsItem implements Comparable<StatisticsItem> {
-    private String Date;
-    private int CompletedWorks;
-    private int CompletedWorkTime;
-    private int IncompleteWorks;
-    private int IncompleteWorkTime;
-    private int Breaks;
-    private int BreakTime;
+public final class StatisticsItem implements Comparable<StatisticsItem> {
+    private final String Date;
+    private final int CompletedWorks;
+    private final int CompletedWorkTime;
+    private final int IncompleteWorks;
+    private final int IncompleteWorkTime;
+    private final int Breaks;
+    private final int BreakTime;
 
     public StatisticsItem(String Date, int CompletedWorks, int CompletedWorkTime,
                           int IncompleteWorks, int IncompleteWorkTime, int Breaks, int BreakTime) {
@@ -47,10 +47,6 @@ public class StatisticsItem implements Comparable<StatisticsItem> {
 
     String getDate() {
         return Date;
-    }
-
-    public void setDate(String date) {
-        Date = date;
     }
 
     int getCompletedWorks() {

@@ -30,8 +30,8 @@ import static com.wentura.focus.Constants.datePattern;
 import static com.wentura.focus.Utility.calendarToString;
 import static com.wentura.focus.Utility.stringToDate;
 
-class MonthData extends ChartData {
-    private List<StatisticsItem> months = new ArrayList<>();
+final class MonthData extends ChartData {
+    private final List<StatisticsItem> months = new ArrayList<>();
 
     MonthData(List<StatisticsItem> data) {
         super(data);

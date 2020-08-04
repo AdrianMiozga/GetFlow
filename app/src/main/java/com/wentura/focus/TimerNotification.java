@@ -26,7 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-class TimerNotification {
+final class TimerNotification {
     private Context context;
     private boolean isTimerRunning;
 

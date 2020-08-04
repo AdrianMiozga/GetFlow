@@ -38,7 +38,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class Utility {
+public final class Utility {
 
     static void setWifiEnabled(Context context, boolean enable) {
         SharedPreferences sharedPreferences =

@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class ChartData {
-    private List<Entry> entries;
-    private List<StatisticsItem> data;
+    private final List<Entry> entries;
+    private final List<StatisticsItem> data;
     private long maxValue = 0;
 
     ChartData(List<StatisticsItem> data) {

@@ -29,7 +29,7 @@ import java.util.Locale;
 import static com.wentura.focus.Constants.datePattern;
 import static com.wentura.focus.Utility.stringToDate;
 
-class DayData extends ChartData {
+final class DayData extends ChartData {
     private List<StatisticsItem> days;
 
     DayData(List<StatisticsItem> data) {

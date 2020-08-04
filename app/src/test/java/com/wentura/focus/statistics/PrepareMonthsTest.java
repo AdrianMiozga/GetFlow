@@ -28,8 +28,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PrepareMonthsTest {
-    private static String currentDate = "2020-03-10";
-    private List<StatisticsItem> data = new ArrayList<>();
+    private static final String currentDate = "2020-03-10";
+    private final List<StatisticsItem> data = new ArrayList<>();
     private MonthData monthData;
 
     @Test

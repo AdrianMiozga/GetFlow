@@ -26,7 +26,7 @@ import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
-class CustomXAxisRenderer extends XAxisRenderer {
+final class CustomXAxisRenderer extends XAxisRenderer {
     CustomXAxisRenderer(ViewPortHandler viewPortHandler, XAxis xAxis, Transformer trans) {
         super(viewPortHandler, xAxis, trans);
     }

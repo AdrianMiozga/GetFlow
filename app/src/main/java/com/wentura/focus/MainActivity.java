@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isScaleAnimationDone = false;
     private boolean isTimerTextViewActionUpCalled = false;
 
-    private BroadcastReceiver statusReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver statusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getStringExtra(Constants.UPDATE_UI_ACTION);
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BroadcastReceiver updateTimerTextView = new BroadcastReceiver() {
+    private final BroadcastReceiver updateTimerTextView = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             SharedPreferences sharedPreferences =

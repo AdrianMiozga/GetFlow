@@ -28,10 +28,10 @@ import static com.wentura.focus.statistics.SpinnerOption.DAYS;
 import static com.wentura.focus.statistics.SpinnerOption.MONTHS;
 
 class HistoryChart {
-    private LineChart chart;
-    private StatisticsActivity statisticsActivity;
-    private XAxis xAxis;
-    private YAxis yAxis;
+    private final LineChart chart;
+    private final StatisticsActivity statisticsActivity;
+    private final XAxis xAxis;
+    private final YAxis yAxis;
 
     HistoryChart(StatisticsActivity statisticsActivity) {
         this.statisticsActivity = statisticsActivity;

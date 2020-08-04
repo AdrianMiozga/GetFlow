@@ -27,9 +27,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-class CustomXAxisFormatter extends ValueFormatter {
-    private List<StatisticsItem> statisticsItems;
-    private SpinnerOption spinnerOption;
+final class CustomXAxisFormatter extends ValueFormatter {
+    private final List<StatisticsItem> statisticsItems;
+    private final SpinnerOption spinnerOption;
 
     CustomXAxisFormatter(List<StatisticsItem> statisticsItems, SpinnerOption spinnerOption) {
         this.statisticsItems = statisticsItems;

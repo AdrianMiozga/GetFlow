@@ -29,7 +29,7 @@ import androidx.preference.PreferenceManager;
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 
-public class NotificationButtonReceiver extends BroadcastReceiver {
+public final class NotificationButtonReceiver extends BroadcastReceiver {
 
     private static final String TAG = NotificationButtonReceiver.class.getSimpleName();
 

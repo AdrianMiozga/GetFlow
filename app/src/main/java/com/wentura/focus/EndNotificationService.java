@@ -45,8 +45,8 @@ public class EndNotificationService extends Service {
     private static final String TAG = EndNotificationService.class.getSimpleName();
     private CountDownTimer reminderCountDownTimer;
     private PowerManager.WakeLock wakeLock = null;
-    private long[] vibrationPattern = new long[]{0, 500, 250, 500};
-    private long vibrationPatternLength = sumArrayElements(vibrationPattern);
+    private final long[] vibrationPattern = new long[]{0, 500, 250, 500};
+    private final long vibrationPatternLength = sumArrayElements(vibrationPattern);
 
     private long sumArrayElements(long[] vibrationPattern) {
         int sum = 0;

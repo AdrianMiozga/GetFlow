@@ -37,14 +37,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ViewHolder> {
-    private List<Application> applicationList;
-    private SharedPreferences sharedPreferences;
+final class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ViewHolder> {
+    private final List<Application> applicationList;
+    private final SharedPreferences sharedPreferences;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView applicationName;
-        ImageView applicationIcon;
-        SwitchCompat lockApplicationSwitch;
+        final TextView applicationName;
+        final ImageView applicationIcon;
+        final SwitchCompat lockApplicationSwitch;
 
         ViewHolder(View view) {
             super(view);

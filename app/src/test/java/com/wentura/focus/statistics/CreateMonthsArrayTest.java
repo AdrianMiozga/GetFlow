@@ -26,7 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CreateMonthsArrayTest {
-    private List<StatisticsItem> data = new ArrayList<>();
+    private final List<StatisticsItem> data = new ArrayList<>();
     private MonthData monthData;
 
     @Test

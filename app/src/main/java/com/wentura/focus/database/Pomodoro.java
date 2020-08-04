@@ -23,29 +23,29 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Pomodoro {
+public final class Pomodoro {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "Date")
-    private String Date;
+    private final String Date;
 
     @ColumnInfo(name = "CompletedWorks")
-    private int CompletedWorks;
+    private final int CompletedWorks;
 
     @ColumnInfo(name = "CompletedWorkTime")
-    private int CompletedWorkTime;
+    private final int CompletedWorkTime;
 
     @ColumnInfo(name = "IncompleteWorks")
-    private int IncompleteWorks;
+    private final int IncompleteWorks;
 
     @ColumnInfo(name = "IncompleteWorkTime")
-    private int IncompleteWorkTime;
+    private final int IncompleteWorkTime;
 
     @ColumnInfo(name = "Breaks")
-    private int Breaks;
+    private final int Breaks;
 
     @ColumnInfo(name = "BreakTime")
-    private int BreakTime;
+    private final int BreakTime;
 
     public Pomodoro(@NonNull String Date, int CompletedWorks, int CompletedWorkTime,
                     int IncompleteWorks, int IncompleteWorkTime, int Breaks, int BreakTime) {

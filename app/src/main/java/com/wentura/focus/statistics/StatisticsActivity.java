@@ -130,7 +130,7 @@ public class StatisticsActivity extends AppCompatActivity {
         List<StatisticsItem> statisticsItemsMonth;
         List<StatisticsItem> statisticsItemsTotal;
 
-        private WeakReference<StatisticsActivity> activityWeakReference;
+        private final WeakReference<StatisticsActivity> activityWeakReference;
 
         LoadFromDatabase(StatisticsActivity context) {
             this.activityWeakReference = new WeakReference<>(context);

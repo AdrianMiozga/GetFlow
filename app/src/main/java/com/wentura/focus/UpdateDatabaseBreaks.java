@@ -23,10 +23,10 @@ import android.os.AsyncTask;
 import com.wentura.focus.database.Database;
 import com.wentura.focus.database.Pomodoro;
 
-class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
+final class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
     private static final String TAG = UpdateDatabaseBreaks.class.getSimpleName();
-    private Database database;
-    private int time;
+    private final Database database;
+    private final int time;
 
     UpdateDatabaseBreaks(Context context, int time) {
         this.database = Database.getInstance(context);

@@ -37,7 +37,7 @@ import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class PrepareDaysTest {
-    private static String currentDate = "2020-03-10";
+    private static final String currentDate = "2020-03-10";
     @Parameter
     public String date;
     private List<StatisticsItem> data;
