@@ -128,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 statusReceiver, new IntentFilter(Constants.UPDATE_UI));
-
-        overridePendingTransition(R.anim.background_down, R.anim.foreground_down);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -324,8 +322,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
-
-        overridePendingTransition(R.anim.foreground_up, R.anim.background_up);
     }
 
     @Override

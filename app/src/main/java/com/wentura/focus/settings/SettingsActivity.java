@@ -21,8 +21,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.wentura.focus.R;
-
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -32,11 +30,5 @@ public class SettingsActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(R.anim.background_down, R.anim.foreground_down);
     }
 }

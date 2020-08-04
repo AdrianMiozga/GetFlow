@@ -218,10 +218,4 @@ public class StatisticsActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(R.anim.background_down, R.anim.foreground_down);
-    }
 }
