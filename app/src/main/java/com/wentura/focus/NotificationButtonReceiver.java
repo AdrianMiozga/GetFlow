@@ -171,6 +171,7 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_PAUSE_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_STOP_BUTTON_VISIBLE, true);
                 editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
+                editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, true);
                 editPreferences.apply();
 
                 Utility.setWifiEnabled(context, true);
