@@ -39,6 +39,10 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public final class Utility {
+    // Suppress default constructor for noninstantiability
+    private Utility() {
+        throw new AssertionError();
+    }
 
     static void setWifiEnabled(Context context, boolean enable) {
         SharedPreferences sharedPreferences =
