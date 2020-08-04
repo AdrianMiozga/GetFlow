@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView workIcon;
     private ImageView breakIcon;
     private TextView timerTextView;
-    private Animation blinkingAnimation;
     private boolean isScaleAnimationDone = false;
     private boolean isTimerTextViewActionUpCalled = false;
 
@@ -455,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startBlinkingAnimation() {
-        blinkingAnimation = new AlphaAnimation(1.0f, 0.5f);
+        Animation blinkingAnimation = new AlphaAnimation(1.0f, 0.5f);
         blinkingAnimation.setDuration(1000);
         blinkingAnimation.setRepeatMode(Animation.REVERSE);
         blinkingAnimation.setRepeatCount(Animation.INFINITE);
