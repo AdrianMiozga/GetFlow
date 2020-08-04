@@ -17,7 +17,12 @@
 
 package com.wentura.focus;
 
-public class Constants {
+public final class Constants {
+    // Suppress default constructor for noninstantiability
+    private Constants() {
+        throw new AssertionError();
+    }
+
     // SharedPreferences Keys
     public static final String DO_NOT_DISTURB_SETTING = "do_not_disturb";
     public static final String DO_NOT_DISTURB_BREAK_SETTING = "do_not_disturb_break";
