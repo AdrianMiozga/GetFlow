@@ -42,7 +42,6 @@ import java.io.IOException;
 
 public class EndNotificationService extends Service {
 
-    private static final String TAG = EndNotificationService.class.getSimpleName();
     private CountDownTimer reminderCountDownTimer;
     private PowerManager.WakeLock wakeLock = null;
     private final long[] vibrationPattern = new long[]{0, 500, 250, 500};

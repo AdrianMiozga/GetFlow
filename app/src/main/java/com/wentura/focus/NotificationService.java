@@ -36,7 +36,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 public class NotificationService extends Service {
-    private static final String TAG = NotificationService.class.getSimpleName();
     private boolean isBreakState;
     private int timeLeft;
     private CountDownTimer countDownTimer;

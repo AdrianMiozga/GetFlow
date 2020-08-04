@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatisticsActivity extends AppCompatActivity {
-    private static final String TAG = StatisticsActivity.class.getSimpleName();
     private Database database;
     private static List<StatisticsItem> data = new ArrayList<>();
     private TextView numberTodayTextView;

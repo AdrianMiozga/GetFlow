@@ -56,7 +56,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
     private Button skipButton;
     private ImageView workIcon;
     private ImageView breakIcon;
@@ -328,11 +327,6 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
 
         overridePendingTransition(R.anim.foreground_up, R.anim.background_up);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override

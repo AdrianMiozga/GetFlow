@@ -24,7 +24,6 @@ import com.wentura.focus.database.Database;
 import com.wentura.focus.database.Pomodoro;
 
 final class UpdateDatabaseBreaks extends AsyncTask<Void, Void, Void> {
-    private static final String TAG = UpdateDatabaseBreaks.class.getSimpleName();
     private final Database database;
     private final int time;
 

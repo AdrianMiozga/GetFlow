@@ -31,8 +31,6 @@ import static android.media.AudioManager.RINGER_MODE_SILENT;
 
 public final class NotificationButtonReceiver extends BroadcastReceiver {
 
-    private static final String TAG = NotificationButtonReceiver.class.getSimpleName();
-
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra(Constants.BUTTON_ACTION);
