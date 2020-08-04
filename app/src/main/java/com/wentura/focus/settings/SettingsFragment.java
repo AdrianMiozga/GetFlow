@@ -25,8 +25,11 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -55,23 +58,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 public CharSequence provideSummary(EditTextPreference preference) {
                     String text = preference.getText();
 
-                    if (TextUtils.isEmpty(text)){
+                    if (TextUtils.isEmpty(text)) {
                         return Constants.DEFAULT_WORK_TIME + "m";
                     }
                     return text + "m";
                 }
             });
-        }
 
-        if (workDurationSetting != null) {
-            workDurationSetting.setOnBindEditTextListener(
-                    new EditTextPreference.OnBindEditTextListener() {
-                        @Override
-                        public void onBindEditText(@NonNull EditText editText) {
-                            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                            editText.selectAll();
-                        }
-                    });
+            workDurationSetting.setOnBindEditTextListener(new MyOnBindEditText());
         }
 
         EditTextPreference breakDurationSetting = findPreference(Constants.BREAK_DURATION_SETTING);
@@ -82,23 +76,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 public CharSequence provideSummary(EditTextPreference preference) {
                     String text = preference.getText();
 
-                    if (TextUtils.isEmpty(text)){
+                    if (TextUtils.isEmpty(text)) {
                         return Constants.DEFAULT_BREAK_TIME + "m";
                     }
                     return text + "m";
                 }
             });
-        }
 
-        if (breakDurationSetting != null) {
-            breakDurationSetting.setOnBindEditTextListener(
-                    new EditTextPreference.OnBindEditTextListener() {
-                        @Override
-                        public void onBindEditText(@NonNull EditText editText) {
-                            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                            editText.selectAll();
-                        }
-                    });
+            breakDurationSetting.setOnBindEditTextListener(new MyOnBindEditText());
         }
 
         EditTextPreference longBreakDurationSetting =
@@ -110,23 +95,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 public CharSequence provideSummary(EditTextPreference preference) {
                     String text = preference.getText();
 
-                    if (TextUtils.isEmpty(text)){
+                    if (TextUtils.isEmpty(text)) {
                         return Constants.DEFAULT_LONG_BREAK_TIME + "m";
                     }
                     return text + "m";
                 }
             });
-        }
 
-        if (longBreakDurationSetting != null) {
-            longBreakDurationSetting.setOnBindEditTextListener(
-                    new EditTextPreference.OnBindEditTextListener() {
-                        @Override
-                        public void onBindEditText(@NonNull EditText editText) {
-                            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                            editText.selectAll();
-                        }
-                    });
+            longBreakDurationSetting.setOnBindEditTextListener(new MyOnBindEditText());
         }
 
         SwitchPreferenceCompat doNotDisturbSwitch = findPreference(Constants.DO_NOT_DISTURB_SETTING);
@@ -215,7 +191,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
                                     return;
                                 }
                                 doNotDisturbBreakSwitch.setVisible(false);
-
                             }
                         }).show();
             }
@@ -280,5 +255,40 @@ public class SettingsFragment extends PreferenceFragmentCompat
             }
         }
         return super.onPreferenceTreeClick(preference);
+    }
+
+    static class MyOnBindEditText implements EditTextPreference.OnBindEditTextListener {
+        @Override
+        public void onBindEditText(@NonNull final EditText editText) {
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editText.selectAll();
+            editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
+
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        if (editable.toString().equals("") ||
+                                Integer.parseInt(editable.toString()) < 1 ||
+                                Integer.parseInt(editable.toString()) > 999 ||
+                                editable.charAt(0) == '0') {
+                            editText.getRootView().findViewById(android.R.id.button1).setEnabled(false);
+                        } else {
+                            editText.getRootView().findViewById(android.R.id.button1).setEnabled(true);
+                        }
+                    } catch (NumberFormatException e) {
+                        editText.getRootView().findViewById(android.R.id.button1).setEnabled(false);
+                    }
+                }
+            });
+        }
     }
 }
