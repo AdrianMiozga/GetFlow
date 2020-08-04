@@ -115,7 +115,8 @@ public class ApplicationLockActivity extends AppCompatActivity {
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                                     recyclerView.setLayoutManager(layoutManager);
 
-                                    RecyclerView.Adapter adapter = new ApplicationAdapter(getApplicationContext(), applicationList);
+                                    RecyclerView.Adapter<ApplicationAdapter.ViewHolder> adapter =
+                                            new ApplicationAdapter(getApplicationContext(), applicationList);
                                     recyclerView.setAdapter(adapter);
                                 }
                             });
