@@ -19,7 +19,6 @@ package com.wentura.focus.applicationlock;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -61,74 +60,54 @@ public class ApplicationLockActivity extends AppCompatActivity {
         final SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        masterLockApplicationSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences.Editor editPreferences =
-                        sharedPreferences.edit();
+        masterLockApplicationSwitch.setOnClickListener(view -> {
+            SharedPreferences.Editor editPreferences =
+                    sharedPreferences.edit();
 
-                if (masterLockApplicationSwitch.isChecked()) {
-                    if (!isAccessibilityServiceEnabled(getApplicationContext(),
-                            ApplicationLockService.class)) {
-                        AlertDialog.Builder builder =
-                                new AlertDialog.Builder(ApplicationLockActivity.this);
-                        builder.setMessage(R.string.accessibility_not_enabled_dialog)
-                                .setPositiveButton(R.string.dialog_go_to_settings, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                                        startActivity(intent);
-                                    }
-                                })
-                                .setCancelable(false)
-                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        masterLockApplicationSwitch.performClick();
-                                    }
-                                }).show();
-                    }
-
-                    editPreferences.putBoolean(Constants.MASTER_LOCK_APPLICATION_SETTING, true);
-                    editPreferences.apply();
-
-                    recyclerView.setVisibility(View.VISIBLE);
-
-                    if (recyclerView.getAdapter() != null) {
-                        return;
-                    }
-
-                    loadingBar.setVisibility(View.VISIBLE);
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final List<Application> applicationList = getApplicationList();
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ProgressBar loadingBar = findViewById(R.id.loading_bar);
-                                    loadingBar.setVisibility(View.GONE);
-
-                                    RecyclerView recyclerView = findViewById(R.id.application_list);
-                                    recyclerView.setHasFixedSize(true);
-
-                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-                                    recyclerView.setLayoutManager(layoutManager);
-
-                                    RecyclerView.Adapter<ApplicationAdapter.ViewHolder> adapter =
-                                            new ApplicationAdapter(getApplicationContext(), applicationList);
-                                    recyclerView.setAdapter(adapter);
-                                }
-                            });
-                        }
-                    }).start();
-                } else {
-                    loadingBar.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.INVISIBLE);
-
-                    editPreferences.putBoolean(Constants.MASTER_LOCK_APPLICATION_SETTING, false);
-                    editPreferences.apply();
+            if (masterLockApplicationSwitch.isChecked()) {
+                if (!isAccessibilityServiceEnabled(getApplicationContext(),
+                        ApplicationLockService.class)) {
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(ApplicationLockActivity.this);
+                    builder.setMessage(R.string.accessibility_not_enabled_dialog)
+                            .setPositiveButton(R.string.dialog_go_to_settings, (dialog, id) -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+                            .setCancelable(false)
+                            .setNegativeButton(R.string.cancel, (dialog, id) -> masterLockApplicationSwitch.performClick()).show();
                 }
+
+                editPreferences.putBoolean(Constants.MASTER_LOCK_APPLICATION_SETTING, true);
+                editPreferences.apply();
+
+                recyclerView.setVisibility(View.VISIBLE);
+
+                if (recyclerView.getAdapter() != null) {
+                    return;
+                }
+
+                loadingBar.setVisibility(View.VISIBLE);
+
+                new Thread(() -> {
+                    final List<Application> applicationList = getApplicationList();
+
+                    runOnUiThread(() -> {
+                        loadingBar.setVisibility(View.GONE);
+
+                        recyclerView.setHasFixedSize(true);
+
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                        recyclerView.setLayoutManager(layoutManager);
+
+                        RecyclerView.Adapter<ApplicationAdapter.ViewHolder> adapter =
+                                new ApplicationAdapter(getApplicationContext(), applicationList);
+                        recyclerView.setAdapter(adapter);
+                    });
+                }).start();
+            } else {
+                loadingBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.INVISIBLE);
+
+                editPreferences.putBoolean(Constants.MASTER_LOCK_APPLICATION_SETTING, false);
+                editPreferences.apply();
             }
         });
 

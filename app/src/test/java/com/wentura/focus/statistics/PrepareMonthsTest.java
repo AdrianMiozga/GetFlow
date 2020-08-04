@@ -122,7 +122,7 @@ public class PrepareMonthsTest {
     private void countMonths() {
         LocalDate localDate = LocalDate.parse(currentDate);
         for (int i = monthData.getGeneratedData().size() - 1; i >= 0; i--) {
-            assertThat("At i = " + i, monthData.getGeneratedData().get(i).getDate().substring(0, 7),
+            assertThat("At i = " + i, monthData.getGeneratedData().get(i).getDate().toString().substring(0, 7),
                     equalTo(localDate.toString().substring(0, 7)));
             localDate = localDate.minusMonths(1);
         }

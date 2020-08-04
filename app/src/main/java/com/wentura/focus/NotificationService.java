@@ -124,14 +124,8 @@ public class NotificationService extends Service {
                     wakeLock.acquire(timeLeft + 1000);
                 }
 
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(getApplicationContext(),
-                                EndNotificationService.class);
-                        startService(intent);
-                    }
-                }, timeLeft);
+                handler.postDelayed(() -> startService(new Intent(getApplicationContext(),
+                        EndNotificationService.class)), timeLeft);
             } else {
                 AlarmManager alarmManager =
                         (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);

@@ -29,13 +29,6 @@ import android.view.WindowManager;
 
 import androidx.preference.PreferenceManager;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public final class Utility {
@@ -171,92 +164,6 @@ public final class Utility {
             ((Activity) context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else {
             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-    }
-
-    public static String getCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
-        return simpleDateFormat.format(calendar.getTime());
-    }
-
-    public static String getMonth(String fromDate) {
-        Date date = stringToDate(fromDate);
-
-        if (date == null) {
-            return "";
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM", Locale.US);
-        return simpleDateFormat.format(calendar.getTime());
-    }
-
-    public static String getFirstMonthOfTheYear(int month) {
-        DateFormat formatter = new SimpleDateFormat("MMM", Locale.getDefault());
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.MONTH, month);
-        return formatter.format(calendar.getTime());
-    }
-
-    /**
-     * Returns date in format 2019-02-20
-     */
-    public static String subtractDaysFromCurrentDate(int days) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -days);
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
-        return simpleDateFormat.format(calendar.getTime());
-    }
-
-    public static String calendarToString(Calendar calendar) {
-        StringBuilder result = new StringBuilder();
-
-        result.append(calendar.get(Calendar.YEAR));
-        result.append("-");
-
-        if (calendar.get(Calendar.MONTH) + 1 < 10) {
-            result.append("0");
-        }
-
-        result.append((calendar.get(Calendar.MONTH) + 1));
-        result.append("-01");
-        return result.toString();
-    }
-
-    public static Date stringToDate(String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
-
-        try {
-            return dateFormat.parse(date);
-        } catch (ParseException parseException) {
-            parseException.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Changes date format from for example 2019-02-20 to February 20
-     */
-    public static String formatDate(String date) {
-        SimpleDateFormat oldDateFormat = new SimpleDateFormat(Constants.datePattern, Locale.US);
-        Date oldDate = null;
-        try {
-            oldDate = oldDateFormat.parse(date);
-        } catch (ParseException exception) {
-            exception.printStackTrace();
-        }
-
-        if (oldDate == null) {
-            return "";
-        } else {
-            SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM dd", Locale.US);
-            return newDateFormat.format(oldDate);
         }
     }
 }

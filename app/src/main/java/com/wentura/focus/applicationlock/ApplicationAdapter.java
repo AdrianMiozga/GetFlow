@@ -80,28 +80,25 @@ final class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.V
         holder.applicationIcon.setImageDrawable(applicationList.get(position).getApplicationIcon());
 
         Set<String> applicationList = sharedPreferences.getStringSet(Constants.LOCKED_APPLICATIONS_LIST,
-                new HashSet<String>());
+                new HashSet<>());
 
         if (applicationList.contains(this.applicationList.get(position).getPackageName())) {
             holder.lockApplicationSwitch.setChecked(true);
         }
 
-        holder.lockApplicationSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences.Editor editPreferences =
-                        sharedPreferences.edit();
+        holder.lockApplicationSwitch.setOnClickListener(view -> {
+            SharedPreferences.Editor editPreferences =
+                    sharedPreferences.edit();
 
-                Set<String> applicationList = sharedPreferences.getStringSet(Constants.LOCKED_APPLICATIONS_LIST,
-                        new HashSet<String>());
+            Set<String> applicationList1 = sharedPreferences.getStringSet(Constants.LOCKED_APPLICATIONS_LIST,
+                    new HashSet<>());
 
-                if (holder.lockApplicationSwitch.isChecked()) {
-                    applicationList.add(ApplicationAdapter.this.applicationList.get(position).getPackageName());
-                } else {
-                    applicationList.remove(ApplicationAdapter.this.applicationList.get(position).getPackageName());
-                }
-                editPreferences.putStringSet(Constants.LOCKED_APPLICATIONS_LIST, applicationList).apply();
+            if (holder.lockApplicationSwitch.isChecked()) {
+                applicationList1.add(ApplicationAdapter.this.applicationList.get(position).getPackageName());
+            } else {
+                applicationList1.remove(ApplicationAdapter.this.applicationList.get(position).getPackageName());
             }
+            editPreferences.putStringSet(Constants.LOCKED_APPLICATIONS_LIST, applicationList1).apply();
         });
     }
 

@@ -50,7 +50,7 @@ public class ApplicationLockService extends AccessibilityService {
 
         String packageName = String.valueOf(event.getPackageName());
 
-        Set<String> applicationList = sharedPreferences.getStringSet(Constants.LOCKED_APPLICATIONS_LIST, new HashSet<String>());
+        Set<String> applicationList = sharedPreferences.getStringSet(Constants.LOCKED_APPLICATIONS_LIST, new HashSet<>());
 
         if (applicationList.contains(packageName)) {
             Intent intent = new Intent(Intent.ACTION_MAIN);

@@ -61,7 +61,6 @@ public final class Constants {
     public static final String DEFAULT_BREAK_TIME = "5";
     public static final String DEFAULT_LONG_BREAK_TIME = "20";
     static final long VIBRATION_REMINDER_FREQUENCY = 30000;
-    public static final String datePattern = "yyyy-MM-dd";
 
     // Database
     public static final String DATABASE_NAME = "Focus.db";

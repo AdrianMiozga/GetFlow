@@ -39,6 +39,7 @@ import com.wentura.focus.Utility;
 import com.wentura.focus.database.Database;
 
 import java.lang.ref.WeakReference;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,18 +144,18 @@ public class StatisticsActivity extends AppCompatActivity {
                 return null;
             }
 
-            statisticsItemToday = statisticsActivity.database.pomodoroDao().getAll(Utility.getCurrentDate());
+            statisticsItemToday = statisticsActivity.database.pomodoroDao().getAll(LocalDate.now().toString());
 
             statisticsItemsWeek =
-                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(6),
-                            Utility.subtractDaysFromCurrentDate(1));
+                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(LocalDate.now().minusDays(6).toString(),
+                            LocalDate.now().minusDays(1).toString());
 
             statisticsItemsMonth =
-                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(Utility.subtractDaysFromCurrentDate(29),
-                            Utility.subtractDaysFromCurrentDate(7));
+                    statisticsActivity.database.pomodoroDao().getAllDatesBetween(LocalDate.now().minusDays(29).toString(),
+                            LocalDate.now().minusDays(7).toString());
 
             statisticsItemsTotal =
-                    statisticsActivity.database.pomodoroDao().getAllDateLess(Utility.subtractDaysFromCurrentDate(29));
+                    statisticsActivity.database.pomodoroDao().getAllDateLess(LocalDate.now().minusDays(29).toString());
 
             data = statisticsActivity.database.pomodoroDao().getAll();
 

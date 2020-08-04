@@ -63,7 +63,7 @@ public class PrepareDaysTest {
 
     @Test
     public void prepareDaysTest() {
-        dayData.prepareDays(currentDate);
+        dayData.prepareDays(LocalDate.parse(currentDate));
         countDays();
     }
 
@@ -72,14 +72,14 @@ public class PrepareDaysTest {
         data.add(new StatisticsItem(currentDate, 0, 0, 0, 0, 0, 0));
         assumeThat(data.get(0).getDate(), is(not(data.get(1).getDate())));
 
-        dayData.prepareDays(currentDate);
+        dayData.prepareDays(LocalDate.parse(currentDate));
         countDays();
     }
 
     private void countDays() {
         LocalDate localDate = LocalDate.parse(currentDate);
         for (int i = dayData.getGeneratedData().size() - 1; i >= 0; i--) {
-            assertThat("At i = " + i, dayData.getGeneratedData().get(i).getDate(),
+            assertThat("At i = " + i, dayData.getGeneratedData().get(i).getDate().toString(),
                     equalTo(localDate.toString()));
             localDate = localDate.minusDays(1);
         }

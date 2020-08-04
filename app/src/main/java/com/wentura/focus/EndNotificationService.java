@@ -82,12 +82,9 @@ public class EndNotificationService extends Service {
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             }
 
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    mediaPlayer.reset();
-                    mediaPlayer.release();
-                }
+            mediaPlayer.setOnCompletionListener(player -> {
+                player.reset();
+                player.release();
             });
 
             mediaPlayer.prepare();

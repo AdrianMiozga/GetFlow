@@ -19,7 +19,6 @@ package com.wentura.focus.settings;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -53,16 +52,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
         EditTextPreference workDurationSetting = findPreference(Constants.WORK_DURATION_SETTING);
 
         if (workDurationSetting != null) {
-            workDurationSetting.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
-                @Override
-                public CharSequence provideSummary(EditTextPreference preference) {
-                    String text = preference.getText();
+            workDurationSetting.setSummaryProvider((Preference.SummaryProvider<EditTextPreference>) preference -> {
+                String text = preference.getText();
 
-                    if (TextUtils.isEmpty(text)) {
-                        return Constants.DEFAULT_WORK_TIME + "m";
-                    }
-                    return text + "m";
+                if (TextUtils.isEmpty(text)) {
+                    return Constants.DEFAULT_WORK_TIME + "m";
                 }
+                return text + "m";
             });
 
             workDurationSetting.setOnBindEditTextListener(new MyOnBindEditText());
@@ -71,16 +67,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
         EditTextPreference breakDurationSetting = findPreference(Constants.BREAK_DURATION_SETTING);
 
         if (breakDurationSetting != null) {
-            breakDurationSetting.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
-                @Override
-                public CharSequence provideSummary(EditTextPreference preference) {
-                    String text = preference.getText();
+            breakDurationSetting.setSummaryProvider((Preference.SummaryProvider<EditTextPreference>) preference -> {
+                String text = preference.getText();
 
-                    if (TextUtils.isEmpty(text)) {
-                        return Constants.DEFAULT_BREAK_TIME + "m";
-                    }
-                    return text + "m";
+                if (TextUtils.isEmpty(text)) {
+                    return Constants.DEFAULT_BREAK_TIME + "m";
                 }
+                return text + "m";
             });
 
             breakDurationSetting.setOnBindEditTextListener(new MyOnBindEditText());
@@ -90,16 +83,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 findPreference(Constants.LONG_BREAK_DURATION_SETTING);
 
         if (longBreakDurationSetting != null) {
-            longBreakDurationSetting.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
-                @Override
-                public CharSequence provideSummary(EditTextPreference preference) {
-                    String text = preference.getText();
+            longBreakDurationSetting.setSummaryProvider((Preference.SummaryProvider<EditTextPreference>) preference -> {
+                String text = preference.getText();
 
-                    if (TextUtils.isEmpty(text)) {
-                        return Constants.DEFAULT_LONG_BREAK_TIME + "m";
-                    }
-                    return text + "m";
+                if (TextUtils.isEmpty(text)) {
+                    return Constants.DEFAULT_LONG_BREAK_TIME + "m";
                 }
+                return text + "m";
             });
 
             longBreakDurationSetting.setOnBindEditTextListener(new MyOnBindEditText());
@@ -169,29 +159,22 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 builder.setMessage(R.string.dialog_access_policy_not_granted)
-                        .setPositiveButton(R.string.dialog_go_to_settings, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                                startActivity(intent);
-                            }
-                        })
+                        .setPositiveButton(R.string.dialog_go_to_settings, (dialog, id) -> startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)))
                         .setCancelable(false)
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                SwitchPreferenceCompat switchPreference = findPreference(Constants.DO_NOT_DISTURB_SETTING);
+                        .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                            SwitchPreferenceCompat switchPreference = findPreference(Constants.DO_NOT_DISTURB_SETTING);
 
-                                if (switchPreference == null) {
-                                    return;
-                                }
-                                switchPreference.setChecked(false);
-
-                                SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
-
-                                if (doNotDisturbBreakSwitch == null) {
-                                    return;
-                                }
-                                doNotDisturbBreakSwitch.setVisible(false);
+                            if (switchPreference == null) {
+                                return;
                             }
+                            switchPreference.setChecked(false);
+
+                            SwitchPreferenceCompat doNotDisturbBreakSwitch = findPreference(Constants.DO_NOT_DISTURB_BREAK_SETTING);
+
+                            if (doNotDisturbBreakSwitch == null) {
+                                return;
+                            }
+                            doNotDisturbBreakSwitch.setVisible(false);
                         }).show();
             }
         }

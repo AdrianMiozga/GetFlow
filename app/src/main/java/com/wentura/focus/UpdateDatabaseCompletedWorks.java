@@ -23,6 +23,8 @@ import android.os.AsyncTask;
 import com.wentura.focus.database.Database;
 import com.wentura.focus.database.Pomodoro;
 
+import java.time.LocalDate;
+
 final class UpdateDatabaseCompletedWorks extends AsyncTask<Void, Void, Void> {
     private final Database database;
     private final int time;
@@ -34,7 +36,7 @@ final class UpdateDatabaseCompletedWorks extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        String currentDate = Utility.getCurrentDate();
+        String currentDate = LocalDate.now().toString();
 
         if (database.pomodoroDao().getLatestDate() != null && database.pomodoroDao().getLatestDate().equals(currentDate)) {
             database.pomodoroDao().updateCompletedWorks(database.pomodoroDao().getCompletedWorks(currentDate) + 1, currentDate);

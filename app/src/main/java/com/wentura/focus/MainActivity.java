@@ -166,67 +166,58 @@ public class MainActivity extends AppCompatActivity {
 
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
 
-        timerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        timerTextView.setOnClickListener(view -> {
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false)) {
-                    pauseTimer();
-                } else {
-                    startTimer();
-                }
+            if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false)) {
+                pauseTimer();
+            } else {
+                startTimer();
             }
         });
 
-        timerTextView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    isTimerTextViewActionUpCalled = true;
-                    if (isScaleAnimationDone) {
-                        revertTimerAnimation();
-                        isScaleAnimationDone = false;
+        timerTextView.setOnTouchListener((view, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                isTimerTextViewActionUpCalled = true;
+                if (isScaleAnimationDone) {
+                    revertTimerAnimation();
+                    isScaleAnimationDone = false;
+                }
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                isTimerTextViewActionUpCalled = false;
+                AnimatorSet animatorSet = startTimerAnimation();
+
+                animatorSet.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
                     }
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    isTimerTextViewActionUpCalled = false;
-                    AnimatorSet animatorSet = startTimerAnimation();
 
-                    animatorSet.addListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        isScaleAnimationDone = true;
+                        if (isTimerTextViewActionUpCalled) {
+                            revertTimerAnimation();
+                            isTimerTextViewActionUpCalled = false;
                         }
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            isScaleAnimationDone = true;
-                            if (isTimerTextViewActionUpCalled) {
-                                revertTimerAnimation();
-                                isTimerTextViewActionUpCalled = false;
-                            }
-                        }
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                    }
 
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-                        }
-                    });
-                }
-                return false;
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                });
             }
+            return false;
         });
 
-        timerTextView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                stopTimer();
-                isScaleAnimationDone = true;
-                return true;
-            }
+        timerTextView.setOnLongClickListener(view -> {
+            stopTimer();
+            isScaleAnimationDone = true;
+            return true;
         });
 
 //        stopButton.setOnClickListener(new View.OnClickListener() {
@@ -246,12 +237,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                skipTimer();
-            }
-        });
+        skipButton.setOnClickListener(view -> skipTimer());
 
         showHelpingSnackbars();
     }
@@ -275,14 +261,11 @@ public class MainActivity extends AppCompatActivity {
         final Snackbar snackbar = Snackbar.make(findViewById(R.id.main_activity), messages.get(currentStep),
                 Snackbar.LENGTH_INDEFINITE);
 
-        snackbar.setAction("OK", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar.dismiss();
+        snackbar.setAction("OK", view -> {
+            snackbar.dismiss();
 
-                editPreferences.putInt(Constants.TUTORIAL_STEP, currentStep + 1).apply();
-                showHelpingSnackbars();
-            }
+            editPreferences.putInt(Constants.TUTORIAL_STEP, currentStep + 1).apply();
+            showHelpingSnackbars();
         });
 
         snackbar.getView().setBackgroundColor(getResources().getColor(R.color.grey_snackbar));
