@@ -87,18 +87,14 @@ final class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.V
         }
 
         holder.lockApplicationSwitch.setOnClickListener(view -> {
-            SharedPreferences.Editor editPreferences =
-                    sharedPreferences.edit();
-
-            Set<String> applicationList1 = sharedPreferences.getStringSet(Constants.LOCKED_APPLICATIONS_LIST,
-                    new HashSet<>());
+            SharedPreferences.Editor editPreferences = sharedPreferences.edit();
 
             if (holder.lockApplicationSwitch.isChecked()) {
-                applicationList1.add(ApplicationAdapter.this.applicationList.get(position).getPackageName());
+                applicationList.add(ApplicationAdapter.this.applicationList.get(position).getPackageName());
             } else {
-                applicationList1.remove(ApplicationAdapter.this.applicationList.get(position).getPackageName());
+                applicationList.remove(ApplicationAdapter.this.applicationList.get(position).getPackageName());
             }
-            editPreferences.putStringSet(Constants.LOCKED_APPLICATIONS_LIST, applicationList1).apply();
+            editPreferences.putStringSet(Constants.LOCKED_APPLICATIONS_LIST, applicationList).apply();
         });
     }
 
