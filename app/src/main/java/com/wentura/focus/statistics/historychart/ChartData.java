@@ -15,34 +15,34 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.wentura.focus.statistics;
+package com.wentura.focus.statistics.historychart;
 
 import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class ChartData {
+public abstract class ChartData {
     private final List<Entry> entries;
-    private final List<StatisticsItem> data;
+    private final List<HistoryChartItem> data;
     private long maxValue = 0;
 
-    ChartData(List<StatisticsItem> data) {
+    ChartData(List<HistoryChartItem> data) {
         this.data = data;
         entries = new ArrayList<>();
     }
 
-    abstract void generate();
+    public abstract void generate();
 
-    abstract List<StatisticsItem> getGeneratedData();
+    abstract List<HistoryChartItem> getGeneratedData();
 
-    void createEntries(List<StatisticsItem> statisticsItems) {
+    void createEntries(List<HistoryChartItem> historyChartItems) {
         entries.clear();
 
         maxValue = 0;
 
-        for (int i = 0; i < statisticsItems.size(); i++) {
-            long totalTime = statisticsItems.get(i).getCompletedWorkTime() + statisticsItems.get(i).getIncompleteWorkTime();
+        for (int i = 0; i < historyChartItems.size(); i++) {
+            long totalTime = historyChartItems.get(i).getCompletedWorkTime() + historyChartItems.get(i).getIncompleteWorkTime();
 
             entries.add(new Entry(i, totalTime));
 
@@ -64,7 +64,7 @@ abstract class ChartData {
         return maxValue;
     }
 
-    List<StatisticsItem> getData() {
+    List<HistoryChartItem> getData() {
         return new ArrayList<>(data);
     }
 }

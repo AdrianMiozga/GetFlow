@@ -21,7 +21,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.wentura.focus.statistics.StatisticsItem;
+import com.wentura.focus.statistics.activitychart.PieChartItem;
+import com.wentura.focus.statistics.historychart.HistoryChartItem;
 
 import java.util.List;
 
@@ -30,54 +31,101 @@ public interface PomodoroDao {
     @Insert
     void insertPomodoro(Pomodoro pomodoro);
 
-    @Query("SELECT Date FROM Pomodoro ORDER BY Date DESC LIMIT 1")
-    String getLatestDate();
+    @Query("SELECT " +
+            "SUM(Pomodoro.CompletedWorkTime) + SUM(Pomodoro.IncompleteWorkTime) AS TotalTime, " +
+            "0 AS Percent, " +
+            "Activity.Name AS ActivityName " +
+            "FROM Pomodoro INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID GROUP BY ActivityId")
+    List<PieChartItem> getAllPieChartItems();
 
-    @Query("SELECT * FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate ORDER BY Date DESC")
-    List<StatisticsItem> getAllDatesBetween(String startDate, String endDate);
+    @Query("SELECT " +
+            "SUM(Pomodoro.CompletedWorkTime) + SUM(Pomodoro.IncompleteWorkTime) AS TotalTime, " +
+            "0 AS Percent, " +
+            "Activity.Name AS ActivityName " +
+            "FROM Pomodoro INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID " +
+            "WHERE Pomodoro.Date BETWEEN :startDate AND :endDate " +
+            "GROUP BY ActivityId")
+    List<PieChartItem> getPieChartItems(String startDate, String endDate);
 
-    @Query("SELECT * FROM Pomodoro WHERE Date = :date ORDER BY Date DESC")
-    StatisticsItem getAll(String date);
+    @Query("SELECT " +
+            "SUM(Pomodoro.CompletedWorkTime) + SUM(Pomodoro.IncompleteWorkTime) AS TotalTime, " +
+            "0 AS Percent, " +
+            "Activity.Name AS ActivityName " +
+            "FROM Pomodoro INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID " +
+            "WHERE Pomodoro.Date = :date " +
+            "GROUP BY ActivityId")
+    List<PieChartItem> getPieChartItems(String date);
 
-    @Query("SELECT * FROM Pomodoro")
-    List<StatisticsItem> getAll();
+    @Query("SELECT 1 FROM Pomodoro WHERE ActivityId = :activityId")
+    boolean isDataWrittenWithActivity(int activityId);
 
-    @Query("SELECT * FROM Pomodoro WHERE Date < :date ORDER BY Date DESC")
-    List<StatisticsItem> getAllDateLess(String date);
+    @Query("DELETE FROM Pomodoro WHERE ActivityId = :activityId")
+    void deleteAllDataWithActivityId(int activityId);
 
-    @Query("UPDATE Pomodoro SET CompletedWorks = :completedWorks WHERE Date = :date")
-    void updateCompletedWorks(int completedWorks, String date);
+    @Query("SELECT ID FROM Pomodoro WHERE Date = :date AND ActivityId = :activityId")
+    int getId(String date, int activityId);
 
-    @Query("UPDATE Pomodoro SET CompletedWorkTime = :completedWorkTime WHERE Date = :date")
-    void updateCompletedWorkTime(int completedWorkTime, String date);
+    @Query("SELECT Date AS date, " +
+            "SUM(CompletedWorkTime) AS completedWorkTime, " +
+            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "ActivityId AS activityId " +
+            "FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate GROUP BY Date ORDER BY Date")
+    List<HistoryChartItem> getAllDatesBetweenGroupByDate(String startDate, String endDate);
 
-    @Query("UPDATE Pomodoro SET IncompleteWorks = :incompleteWorks WHERE Date = :date")
-    void updateIncompleteWorks(int incompleteWorks, String date);
+    @Query("SELECT Date AS date, " +
+            "SUM(CompletedWorkTime) AS completedWorkTime, " +
+            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "ActivityId AS activityId " +
+            "FROM Pomodoro WHERE Date = :date GROUP BY Date")
+    HistoryChartItem getAllGroupByDate(String date);
 
-    @Query("UPDATE Pomodoro SET IncompleteWorkTime = :incompleteWorkTime WHERE Date = :date")
-    void updateIncompleteWorkTime(int incompleteWorkTime, String date);
+    @Query("SELECT Date AS date, " +
+            "SUM(CompletedWorkTime) AS completedWorkTime, " +
+            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "ActivityId AS activityId " +
+            "FROM Pomodoro GROUP BY Date ORDER BY Date")
+    List<HistoryChartItem> getAllGroupByDate();
 
-    @Query("UPDATE Pomodoro SET Breaks = :breaks WHERE Date = :date")
-    void updateBreaks(int breaks, String date);
+    @Query("SELECT Date AS date, " +
+            "SUM(CompletedWorkTime) AS completedWorkTime, " +
+            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "ActivityId AS activityId " +
+            "FROM Pomodoro WHERE Date < :date GROUP BY Date ORDER BY Date")
+    List<HistoryChartItem> getAllDateLessGroupByDate(String date);
 
-    @Query("UPDATE Pomodoro SET BreakTime = :BreakTime WHERE Date = :date")
-    void updateBreakTime(int BreakTime, String date);
+    @Query("UPDATE Pomodoro SET CompletedWorks = :completedWorks WHERE ID = :id")
+    void updateCompletedWorks(int completedWorks, int id);
 
-    @Query("SELECT CompletedWorks FROM Pomodoro WHERE Date = :date")
-    int getCompletedWorks(String date);
+    @Query("UPDATE Pomodoro SET CompletedWorkTime = :completedWorkTime WHERE ID = :id")
+    void updateCompletedWorkTime(int completedWorkTime, int id);
 
-    @Query("SELECT CompletedWorkTime FROM Pomodoro WHERE Date = :date")
-    int getCompletedWorkTime(String date);
+    @Query("UPDATE Pomodoro SET IncompleteWorks = :incompleteWorks WHERE ID = :id")
+    void updateIncompleteWorks(int incompleteWorks, int id);
 
-    @Query("SELECT IncompleteWorks FROM Pomodoro WHERE Date = :date")
-    int getIncompleteWorks(String date);
+    @Query("UPDATE Pomodoro SET IncompleteWorkTime = :incompleteWorkTime WHERE ID = :id")
+    void updateIncompleteWorkTime(int incompleteWorkTime, int id);
 
-    @Query("SELECT IncompleteWorkTime FROM Pomodoro WHERE Date = :date")
-    int getIncompleteWorkTime(String date);
+    @Query("UPDATE Pomodoro SET Breaks = :breaks WHERE ID = :id")
+    void updateBreaks(int breaks, int id);
 
-    @Query("SELECT Breaks FROM Pomodoro WHERE Date = :date")
-    int getBreaks(String date);
+    @Query("UPDATE Pomodoro SET BreakTime = :BreakTime WHERE ID = :id")
+    void updateBreakTime(int BreakTime, int id);
 
-    @Query("SELECT BreakTime FROM Pomodoro WHERE Date = :date")
-    int getBreakTime(String date);
+    @Query("SELECT CompletedWorks FROM Pomodoro WHERE ID = :id")
+    int getCompletedWorks(int id);
+
+    @Query("SELECT CompletedWorkTime FROM Pomodoro WHERE ID = :id")
+    int getCompletedWorkTime(int id);
+
+    @Query("SELECT IncompleteWorks FROM Pomodoro WHERE ID = :id")
+    int getIncompleteWorks(int id);
+
+    @Query("SELECT IncompleteWorkTime FROM Pomodoro WHERE ID = :id")
+    int getIncompleteWorkTime(int id);
+
+    @Query("SELECT Breaks FROM Pomodoro WHERE ID = :id")
+    int getBreaks(int id);
+
+    @Query("SELECT BreakTime FROM Pomodoro WHERE ID = :id")
+    int getBreakTime(int id);
 }

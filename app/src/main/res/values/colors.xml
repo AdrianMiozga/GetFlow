@@ -24,4 +24,11 @@
     <color name="black">#000000</color>
     <color name="grey">#333333</color>
     <color name="grey_snackbar">#212121</color>
+
+    <color name="pie_chart_1">#4777C0</color>
+    <color name="pie_chart_2">#A374C6</color>
+    <color name="pie_chart_3">#6785C2</color>
+    <color name="pie_chart_4">#4FB3E8</color>
+    <color name="pie_chart_5">#EB6E7A</color>
+    <color name="pie_chart_6">#FD9A47</color>
 </resources>

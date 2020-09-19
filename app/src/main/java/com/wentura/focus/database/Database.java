@@ -24,9 +24,14 @@ import androidx.room.RoomDatabase;
 
 import com.wentura.focus.Constants;
 
-@androidx.room.Database(entities = {Pomodoro.class}, version = 1)
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@androidx.room.Database(entities = {Pomodoro.class, Activity.class}, version = 1)
 public abstract class Database extends RoomDatabase {
     private static volatile Database database;
+    public static final ExecutorService databaseExecutor =
+            Executors.newSingleThreadExecutor();
 
     private static Database buildDatabaseInstance(Context context) {
         if (database != null) {
@@ -48,4 +53,6 @@ public abstract class Database extends RoomDatabase {
     }
 
     public abstract PomodoroDao pomodoroDao();
+
+    public abstract ActivityDao activityDao();
 }

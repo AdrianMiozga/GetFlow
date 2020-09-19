@@ -38,6 +38,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
+import com.wentura.focus.database.Database;
+
 import java.io.IOException;
 
 public class EndNotificationService extends Service {
@@ -63,10 +65,15 @@ public class EndNotificationService extends Service {
 
         boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
-        if (!preferences.getBoolean(Constants.DO_NOT_DISTURB_BREAK_SETTING, false)) {
-            Utility.setDoNotDisturb(getApplicationContext(),
-                    AudioManager.RINGER_MODE_NORMAL);
-        }
+        int activityId = preferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
+
+        Database database = Database.getInstance(this);
+        Database.databaseExecutor.execute(() -> {
+            if (!database.activityDao().isDNDKeptOnBreaks(activityId)) {
+                Utility.setDoNotDisturb(getApplicationContext(),
+                        AudioManager.RINGER_MODE_NORMAL, activityId);
+            }
+        });
 
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {
@@ -118,11 +125,9 @@ public class EndNotificationService extends Service {
         }
 
         if (isBreakState) {
-            new UpdateDatabaseBreaks(getApplicationContext(),
-                    preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
+            Utility.updateDatabaseBreaks(getApplicationContext(), preferences.getInt(Constants.LAST_SESSION_DURATION, 0), activityId);
         } else {
-            new UpdateDatabaseCompletedWorks(getApplicationContext(),
-                    preferences.getInt(Constants.LAST_SESSION_DURATION, 0)).execute();
+            Utility.updateDatabaseCompletedWorks(getApplicationContext(), preferences.getInt(Constants.LAST_SESSION_DURATION, 0), activityId);
 
             preferenceEditor.putInt(Constants.WORK_SESSION_COUNTER,
                     preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);

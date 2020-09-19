@@ -22,32 +22,50 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.os.Bundle;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
+import com.wentura.focus.database.Database;
+
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 
-public final class NotificationButtonReceiver extends BroadcastReceiver {
+/**
+ * Receives actions like stop, pause, skip taken on the timer either from the notification buttons or inside of the
+ * app.
+ */
+public final class TimerActionReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getStringExtra(Constants.BUTTON_ACTION);
+        int activityId = intent.getIntExtra(Constants.CURRENT_ACTIVITY_ID_INTENT, 1);
+
+        Bundle extras = intent.getExtras();
+
+        if (extras == null) {
+            throw new AssertionError("Provide Activity ID and Button Action");
+        }
+
+        if (!extras.containsKey(Constants.CURRENT_ACTIVITY_ID_INTENT)) {
+            throw new AssertionError("No Activity ID");
+        }
+
+        if (action == null) {
+            throw new AssertionError("Provide Button Action");
+        }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editPreferences = preferences.edit();
-
-        if (action == null) {
-            return;
-        }
 
         switch (action) {
             case Constants.BUTTON_STOP: {
                 stopNotificationService(context);
                 stopEndNotificationService(context);
 
-                Utility.setWifiEnabled(context, true);
+                Utility.setWifiEnabled(context, true, activityId);
 
                 boolean isBreakState = preferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
@@ -56,9 +74,9 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
 
                 if (timeLeft != 0) {
                     if (isBreakState) {
-                        new UpdateDatabaseBreaks(context, lastSessionDuration - timeLeft).execute();
+                        Utility.updateDatabaseBreaks(context, lastSessionDuration - timeLeft, activityId);
                     } else {
-                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timeLeft).execute();
+                        Utility.updateDatabaseIncompleteWorks(context, lastSessionDuration - timeLeft, activityId);
                     }
                 }
 
@@ -80,7 +98,7 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
                 updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_STOP);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
-                Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
+                Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL, activityId);
                 break;
             }
             case Constants.BUTTON_SKIP: {
@@ -100,8 +118,8 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, true);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
 
-                    Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
-                    Utility.setWifiEnabled(context, false);
+                    Utility.setDoNotDisturb(context, RINGER_MODE_SILENT, activityId);
+                    Utility.setWifiEnabled(context, false, activityId);
                 } else {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
@@ -109,18 +127,21 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
                     editPreferences.putInt(Constants.WORK_SESSION_COUNTER,
                             preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);
 
-                    if (!preferences.getBoolean(Constants.DO_NOT_DISTURB_BREAK_SETTING, false)) {
-                        Utility.setDoNotDisturb(context, AudioManager.RINGER_MODE_NORMAL);
-                    }
+                    Database database = Database.getInstance(context);
+                    Database.databaseExecutor.execute(() -> {
+                        if (!database.activityDao().isDNDKeptOnBreaks(activityId)) {
+                            Utility.setDoNotDisturb(context, AudioManager.RINGER_MODE_NORMAL, activityId);
+                        }
+                    });
 
-                    Utility.setWifiEnabled(context, true);
+                    Utility.setWifiEnabled(context, true, activityId);
                 }
 
                 if (timeLeft != 0) {
                     if (isBreakState) {
-                        new UpdateDatabaseBreaks(context, lastSessionDuration - timeLeft).execute();
+                        Utility.updateDatabaseBreaks(context, lastSessionDuration - timeLeft, activityId);
                     } else {
-                        new UpdateDatabaseIncompleteWorks(context, lastSessionDuration - timeLeft).execute();
+                        Utility.updateDatabaseIncompleteWorks(context, lastSessionDuration - timeLeft, activityId);
                     }
                 }
 
@@ -156,10 +177,10 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateUI);
 
                 if (!isBreakState) {
-                    Utility.setDoNotDisturb(context, RINGER_MODE_SILENT);
-                    Utility.setWifiEnabled(context, false);
+                    Utility.setDoNotDisturb(context, RINGER_MODE_SILENT, activityId);
+                    Utility.setWifiEnabled(context, false, activityId);
                 } else {
-                    Utility.setWifiEnabled(context, true);
+                    Utility.setWifiEnabled(context, true, activityId);
                 }
                 break;
             }
@@ -174,16 +195,29 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, true);
                 editPreferences.apply();
 
-                Utility.setWifiEnabled(context, true);
+                Utility.setWifiEnabled(context, true, activityId);
 
                 if (!isBreakState) {
-                    Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL);
+                    Utility.setDoNotDisturb(context, RINGER_MODE_NORMAL, activityId);
                 }
 
-                Intent serviceIntent = new Intent(context, NotificationService.class);
-                serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE,
-                        Constants.NOTIFICATION_SERVICE_PAUSE);
-                context.startService(serviceIntent);
+                Database.databaseExecutor.execute(() -> {
+                    Database database = Database.getInstance(context);
+
+                    int workDuration = database.activityDao().getWorkDuration(activityId);
+                    int breakDuration = database.activityDao().getBreakDuration(activityId);
+                    int longBreakDuration = database.activityDao().getLongBreakDuration(activityId);
+                    boolean areLongBreaksEnabled = database.activityDao().areLongBreaksEnabled(activityId);
+
+                    Intent serviceIntent = new Intent(context, NotificationService.class);
+                    serviceIntent.putExtra(Constants.WORK_DURATION_INTENT, workDuration);
+                    serviceIntent.putExtra(Constants.BREAK_DURATION_INTENT, breakDuration);
+                    serviceIntent.putExtra(Constants.LONG_BREAK_DURATION_INTENT, longBreakDuration);
+                    serviceIntent.putExtra(Constants.ARE_LONG_BREAKS_ENABLED_INTENT, areLongBreaksEnabled);
+                    serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE,
+                            Constants.NOTIFICATION_SERVICE_PAUSE);
+                    context.startService(serviceIntent);
+                });
 
                 Intent updateUI = new Intent(Constants.UPDATE_UI);
                 updateUI.putExtra(Constants.UPDATE_UI_ACTION, Constants.BUTTON_PAUSE);
@@ -204,7 +238,23 @@ public final class NotificationButtonReceiver extends BroadcastReceiver {
     }
 
     private void startNotificationService(Context context) {
-        Intent startService = new Intent(context, NotificationService.class);
-        context.startService(startService);
+        Database database = Database.getInstance(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        int activityId = sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
+
+        Database.databaseExecutor.execute(() -> {
+            int workDuration = database.activityDao().getWorkDuration(activityId);
+            int breakDuration = database.activityDao().getBreakDuration(activityId);
+            int longBreakDuration = database.activityDao().getLongBreakDuration(activityId);
+            boolean areLongBreaksEnabled = database.activityDao().areLongBreaksEnabled(activityId);
+
+            Intent startService = new Intent(context, NotificationService.class);
+            startService.putExtra(Constants.WORK_DURATION_INTENT, workDuration);
+            startService.putExtra(Constants.BREAK_DURATION_INTENT, breakDuration);
+            startService.putExtra(Constants.LONG_BREAK_DURATION_INTENT, longBreakDuration);
+            startService.putExtra(Constants.ARE_LONG_BREAKS_ENABLED_INTENT, areLongBreaksEnabled);
+            context.startService(startService);
+        });
     }
 }

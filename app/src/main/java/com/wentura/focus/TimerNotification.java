@@ -20,11 +20,13 @@ package com.wentura.focus;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 final class TimerNotification {
     private Context context;
@@ -93,8 +95,12 @@ final class TimerNotification {
 
     @NonNull
     private Intent createButtonIntent(String actionValue) {
-        Intent buttonIntent = new Intent(context, NotificationButtonReceiver.class);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int activityId = sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
+
+        Intent buttonIntent = new Intent(context, TimerActionReceiver.class);
         buttonIntent.putExtra(Constants.BUTTON_ACTION, actionValue);
+        buttonIntent.putExtra(Constants.CURRENT_ACTIVITY_ID_INTENT, activityId);
         return buttonIntent;
     }
 }

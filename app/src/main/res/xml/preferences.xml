@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2020 Adrian Miozga <AdrianMiozga@outlook.com>
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -16,61 +15,31 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        app:iconSpaceReserved="false"
-        app:key="work_duration"
-        app:title="@string/work_duration_title" />
-
-    <EditTextPreference
-        app:iconSpaceReserved="false"
-        app:key="break_duration"
-        app:title="@string/break_duration" />
-
-    <EditTextPreference
-        app:iconSpaceReserved="false"
-        app:key="long_break_duration"
-        app:title="@string/long_break_duration" />
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <SwitchPreferenceCompat
-        app:iconSpaceReserved="false"
-        app:defaultValue="true"
-        app:key="long_breaks"
-        app:singleLineTitle="false"
-        app:title="@string/enable_long_breaks_title" />
-
-    <SwitchPreferenceCompat
-        app:iconSpaceReserved="false"
         app:defaultValue="false"
-        app:key="do_not_disturb"
-        app:summary="@string/do_not_disturb_summary"
-        app:title="@string/do_not_disturb_title" />
-
-    <SwitchPreferenceCompat
         app:iconSpaceReserved="false"
-        app:defaultValue="false"
-        app:isPreferenceVisible="false"
-        app:key="do_not_disturb_break"
-        app:singleLineTitle="false"
-        app:title="@string/do_not_disturb_break_summary" />
-
-    <SwitchPreferenceCompat
-        app:iconSpaceReserved="false"
-        app:defaultValue="false"
         app:key="keep_screen_on"
         app:title="@string/keep_screen_on" />
 
     <SwitchPreferenceCompat
-        app:iconSpaceReserved="false"
         app:defaultValue="false"
-        app:key="disable_wifi"
-        app:title="@string/disable_wifi_title"
-        app:summary="@string/disable_wifi_summary"/>
+        app:iconSpaceReserved="false"
+        app:key="automatically_start_activities"
+        app:summary="@string/automatically_start_activities_summary"
+        app:title="@string/automatically_start_new_activities" />
+
+    <SwitchPreferenceCompat
+        app:defaultValue="true"
+        app:iconSpaceReserved="false"
+        app:key="scroll_pie_chart_automatically"
+        app:summary="@string/scroll_pie_chart_automatically_summary"
+        app:title="@string/scroll_pie_chart_automatically_title" />
 
     <Preference
         app:iconSpaceReserved="false"
-        android:key="application_lock_preference"
-        android:title="@string/app_lock"/>
+        app:key="application_lock_preference"
+        app:title="@string/app_lock" />
 
 </PreferenceScreen>

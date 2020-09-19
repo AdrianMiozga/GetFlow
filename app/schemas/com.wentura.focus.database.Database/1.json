@@ -2,12 +2,18 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c686558cd9e3915b87e219ff448ebed1",
+    "identityHash": "b1191f6ad155a4aae714b7ddbcf1b173",
     "entities": [
       {
         "tableName": "Pomodoro",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `CompletedWorkTime` INTEGER NOT NULL, `IncompleteWorks` INTEGER NOT NULL, `IncompleteWorkTime` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `BreakTime` INTEGER NOT NULL, PRIMARY KEY(`Date`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `Date` TEXT NOT NULL, `CompletedWorks` INTEGER NOT NULL, `CompletedWorkTime` INTEGER NOT NULL, `IncompleteWorks` INTEGER NOT NULL, `IncompleteWorkTime` INTEGER NOT NULL, `Breaks` INTEGER NOT NULL, `BreakTime` INTEGER NOT NULL, `ActivityId` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "Date",
             "columnName": "Date",
@@ -49,13 +55,87 @@
             "columnName": "BreakTime",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "activityId",
+            "columnName": "ActivityId",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "Date"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Activity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `Name` TEXT, `WorkDuration` INTEGER NOT NULL, `BreakDuration` INTEGER NOT NULL, `LongBreaks` INTEGER NOT NULL, `LongBreakDuration` INTEGER NOT NULL, `DND` INTEGER NOT NULL, `KeepDNDOnBreaks` INTEGER NOT NULL, `WiFi` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "ID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "Name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "workDuration",
+            "columnName": "WorkDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "breakDuration",
+            "columnName": "BreakDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longBreaks",
+            "columnName": "LongBreaks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longBreakDuration",
+            "columnName": "LongBreakDuration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "DND",
+            "columnName": "DND",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "keepDNDOnBreaks",
+            "columnName": "KeepDNDOnBreaks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "WiFi",
+            "columnName": "WiFi",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "ID"
+          ],
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -64,7 +144,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c686558cd9e3915b87e219ff448ebed1')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b1191f6ad155a4aae714b7ddbcf1b173')"
     ]
   }
 }

@@ -24,8 +24,11 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public final class Pomodoro {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @NonNull
-    @PrimaryKey
     @ColumnInfo(name = "Date")
     private final String Date;
 
@@ -33,22 +36,25 @@ public final class Pomodoro {
     private final int CompletedWorks;
 
     @ColumnInfo(name = "CompletedWorkTime")
-    private final int CompletedWorkTime;
+    private final long CompletedWorkTime;
 
     @ColumnInfo(name = "IncompleteWorks")
     private final int IncompleteWorks;
 
     @ColumnInfo(name = "IncompleteWorkTime")
-    private final int IncompleteWorkTime;
+    private final long IncompleteWorkTime;
 
     @ColumnInfo(name = "Breaks")
     private final int Breaks;
 
     @ColumnInfo(name = "BreakTime")
-    private final int BreakTime;
+    private final long BreakTime;
+
+    @ColumnInfo(name = "ActivityId")
+    private final int activityId;
 
     public Pomodoro(@NonNull String Date, int CompletedWorks, int CompletedWorkTime,
-                    int IncompleteWorks, int IncompleteWorkTime, int Breaks, int BreakTime) {
+                    int IncompleteWorks, int IncompleteWorkTime, int Breaks, int BreakTime, int activityId) {
         this.Date = Date;
         this.CompletedWorks = CompletedWorks;
         this.CompletedWorkTime = CompletedWorkTime;
@@ -56,6 +62,19 @@ public final class Pomodoro {
         this.IncompleteWorkTime = IncompleteWorkTime;
         this.Breaks = Breaks;
         this.BreakTime = BreakTime;
+        this.activityId = activityId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getActivityId() {
+        return activityId;
     }
 
     @NonNull
@@ -67,7 +86,7 @@ public final class Pomodoro {
         return CompletedWorks;
     }
 
-    int getCompletedWorkTime() {
+    long getCompletedWorkTime() {
         return CompletedWorkTime;
     }
 
@@ -75,7 +94,7 @@ public final class Pomodoro {
         return IncompleteWorks;
     }
 
-    public int getIncompleteWorkTime() {
+    public long getIncompleteWorkTime() {
         return IncompleteWorkTime;
     }
 
@@ -83,7 +102,7 @@ public final class Pomodoro {
         return Breaks;
     }
 
-    int getBreakTime() {
+    long getBreakTime() {
         return BreakTime;
     }
 }

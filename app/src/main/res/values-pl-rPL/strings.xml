@@ -19,7 +19,7 @@
 <resources>
     <string name="settings">Ustawienia</string>
     <string name="work_duration_title">Czas pracy</string>
-    <string name="break_duration">Czas trwania przerwy</string>
+    <string name="break_duration_title">Czas trwania przerwy</string>
     <string name="dialog_go_to_settings">Idź do ustawień</string>
     <string name="cancel">Anuluj</string>
     <string name="skip">Pomiń</string>
@@ -51,7 +51,7 @@
     <string name="first_tutorial_message">Naciśnij na licznik, aby zacząć lub spauzować sesję</string>
     <string name="second_tutorial_message">Przytrzymaj licznik, aby anulować sesję</string>
     <string name="enable_long_breaks_title">Włącz długie przerwy</string>
-    <string name="long_break_duration">Czas trwania długiej przerwy</string>
+    <string name="long_break_duration_title">Czas trwania długiej przerwy</string>
     <string name="disable_wifi_title">Wyłącz Wi-Fi</string>
     <string name="disable_wifi_summary">Wyłącza Wi-Fi podczas pracy</string>
     <string name="app_lock">Blokada aplikacji</string>

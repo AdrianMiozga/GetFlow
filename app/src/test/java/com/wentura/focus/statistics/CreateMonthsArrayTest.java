@@ -17,6 +17,9 @@
 
 package com.wentura.focus.statistics;
 
+import com.wentura.focus.statistics.historychart.HistoryChartItem;
+import com.wentura.focus.statistics.historychart.MonthData;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -26,12 +29,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CreateMonthsArrayTest {
-    private final List<StatisticsItem> data = new ArrayList<>();
+    private final List<HistoryChartItem> data = new ArrayList<>();
     private MonthData monthData;
 
     @Test
     public void createMonthsArrayTest() {
-        data.add(new StatisticsItem("2020-03-10", 0, 2800, 0, 10000, 0, 0));
+        data.add(new HistoryChartItem("2020-03-10", 2800, 10000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
@@ -39,7 +42,7 @@ public class CreateMonthsArrayTest {
         assertThat(monthData.getGeneratedData().get(0).getCompletedWorkTime(), is(2800));
         assertThat(monthData.getGeneratedData().get(0).getIncompleteWorkTime(), is(10000));
 
-        data.add(0, new StatisticsItem("2020-03-02", 0, 3000, 0, 15000, 0, 0));
+        data.add(0, new HistoryChartItem("2020-03-02", 3000, 15000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
@@ -47,7 +50,7 @@ public class CreateMonthsArrayTest {
         assertThat(monthData.getGeneratedData().get(0).getCompletedWorkTime(), is(5800));
         assertThat(monthData.getGeneratedData().get(0).getIncompleteWorkTime(), is(25000));
 
-        data.add(0, new StatisticsItem("2019-02-02", 0, 5000, 0, 8000, 0, 0));
+        data.add(0, new HistoryChartItem("2019-02-02", 5000, 8000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
@@ -62,7 +65,7 @@ public class CreateMonthsArrayTest {
     public void createMonthsArrayTest2() {
         data.clear();
 
-        data.add(new StatisticsItem("2019-05-13"));
+        data.add(new HistoryChartItem("2019-05-13"));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 

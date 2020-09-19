@@ -54,7 +54,12 @@ public class NotificationService extends Service {
         final SharedPreferences.Editor preferenceEditor = preferences.edit();
         final TimerNotification timerNotification = new TimerNotification();
         boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
-        boolean areLongBreaksEnabled = preferences.getBoolean(Constants.LONG_BREAK_SETTING, true);
+        boolean areLongBreaksEnabled = false;
+
+        if (intent != null) {
+            areLongBreaksEnabled = intent.getBooleanExtra(Constants.ARE_LONG_BREAKS_ENABLED_INTENT, false);
+        }
+
         int workSessionCounter = preferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
         final NotificationCompat.Builder builder =
                 timerNotification.buildNotification(getApplicationContext(), isTimerRunning);
@@ -63,18 +68,15 @@ public class NotificationService extends Service {
 
         timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
-        if (timeLeft == 0) {
+        if (timeLeft == 0 && intent != null) {
             if (isBreakState) {
                 if (workSessionCounter != 0 && workSessionCounter % 4 == 0 && areLongBreaksEnabled) {
-                    timeLeft = Integer.parseInt(preferences.getString(Constants.LONG_BREAK_DURATION_SETTING,
-                            Constants.DEFAULT_LONG_BREAK_TIME)) * 60_000;
+                    timeLeft = intent.getIntExtra(Constants.LONG_BREAK_DURATION_INTENT, 0) * 60_000;
                 } else {
-                    timeLeft = Integer.parseInt(preferences.getString(Constants.BREAK_DURATION_SETTING,
-                            Constants.DEFAULT_BREAK_TIME)) * 60_000;
+                    timeLeft = intent.getIntExtra(Constants.BREAK_DURATION_INTENT, 0) * 60_000;
                 }
             } else {
-                timeLeft = Integer.parseInt(preferences.getString(Constants.WORK_DURATION_SETTING,
-                        Constants.DEFAULT_WORK_TIME)) * 60_000;
+                timeLeft = intent.getIntExtra(Constants.WORK_DURATION_INTENT, 0) * 60_000;
             }
         }
 

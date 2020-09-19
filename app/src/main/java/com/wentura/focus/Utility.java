@@ -25,10 +25,16 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import androidx.preference.PreferenceManager;
 
+import com.wentura.focus.database.Database;
+import com.wentura.focus.database.Pomodoro;
+import com.wentura.focus.database.PomodoroDao;
+
+import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 public final class Utility {
@@ -37,28 +43,33 @@ public final class Utility {
         throw new AssertionError();
     }
 
-    static void setWifiEnabled(Context context, boolean enable) {
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (!sharedPreferences.getBoolean(Constants.DISABLE_WIFI, false)) {
+    static void setWifiEnabled(Context context, boolean enable, int activityId) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
             return;
         }
 
-        WifiManager wifiManager =
-                (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        Database database = Database.getInstance(context);
 
-        if (wifiManager != null) {
-            wifiManager.setWifiEnabled(enable);
-        }
+        Database.databaseExecutor.execute(() -> {
+            if (database.activityDao().isWifiDisabledDuringWorkSession(activityId)) {
+                WifiManager wifiManager =
+                        (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+                if (wifiManager != null) {
+                    wifiManager.setWifiEnabled(enable);
+                }
+            }
+        });
     }
 
-    static void setDoNotDisturb(Context context, int mode) {
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(context);
-        if (sharedPreferences.getBoolean(Constants.DO_NOT_DISTURB_SETTING, false)) {
-            setRingerMode(context, mode);
-        }
+    static void setDoNotDisturb(Context context, int mode, int activityId) {
+        Database database = Database.getInstance(context);
+
+        Database.databaseExecutor.execute(() -> {
+            if (database.activityDao().isDNDEnabled(activityId)) {
+                setRingerMode(context, mode);
+            }
+        });
     }
 
     private static void setRingerMode(Context context, int mode) {
@@ -103,7 +114,7 @@ public final class Utility {
     }
 
     @SuppressLint("DefaultLocale")
-    public static String formatStatisticsTime(long milliseconds) {
+    public static String formatPieChartTime(long milliseconds) {
         long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
@@ -116,7 +127,12 @@ public final class Utility {
             minutes++;
         }
 
-        if (hours > 0 && minutes == 0) {
+        if (minutes == 60) {
+            minutes = 0;
+            hours++;
+        }
+
+        if (hours > 0 && minutes == 0 || hours > 9) {
             return String.format("%dh", hours);
         }
 
@@ -164,6 +180,69 @@ public final class Utility {
             ((Activity) context).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else {
             ((Activity) context).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+    }
+
+    public static float convertDpToPixel(float dp, Context context) {
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static void updateDatabaseBreaks(Context context, int time, int activityId) {
+        PomodoroDao pomodoroDao = Database.getInstance(context).pomodoroDao();
+
+        String currentDate = LocalDate.now().toString();
+
+        Database.databaseExecutor.execute(() -> {
+            int pomodoroId = pomodoroDao.getId(currentDate, activityId);
+
+            if (pomodoroId == 0) {
+                pomodoroDao.insertPomodoro(new Pomodoro(currentDate, 0, 0, 0, 0, 1, time, activityId));
+            } else {
+                pomodoroDao.updateBreaks(pomodoroDao.getBreaks(pomodoroId) + 1, pomodoroId);
+                pomodoroDao.updateBreakTime(pomodoroDao.getBreakTime(pomodoroId) + time, pomodoroId);
+            }
+        });
+    }
+
+    public static void updateDatabaseCompletedWorks(Context context, int time, int activityId) {
+        PomodoroDao pomodoroDao = Database.getInstance(context).pomodoroDao();
+
+        String currentDate = LocalDate.now().toString();
+
+        Database.databaseExecutor.execute(() -> {
+            int pomodoroId = pomodoroDao.getId(currentDate, activityId);
+
+            if (pomodoroId == 0) {
+                pomodoroDao.insertPomodoro(new Pomodoro(currentDate, 1, time, 0, 0, 0, 0, activityId));
+            } else {
+                pomodoroDao.updateCompletedWorks(pomodoroDao.getCompletedWorks(pomodoroId) + 1, pomodoroId);
+                pomodoroDao.updateCompletedWorkTime(pomodoroDao.getCompletedWorkTime(pomodoroId) + time, pomodoroId);
+            }
+        });
+    }
+
+    public static void updateDatabaseIncompleteWorks(Context context, int time, int activityId) {
+        PomodoroDao pomodoroDao = Database.getInstance(context).pomodoroDao();
+
+        String currentDate = LocalDate.now().toString();
+
+        Database.databaseExecutor.execute(() -> {
+            int pomodoroId = pomodoroDao.getId(currentDate, activityId);
+
+            if (pomodoroId == 0) {
+                pomodoroDao.insertPomodoro(new Pomodoro(currentDate, 0, 0, 1, time, 0, 0, activityId));
+            } else {
+                pomodoroDao.updateIncompleteWorks(pomodoroDao.getIncompleteWorks(pomodoroId) + 1, pomodoroId);
+                pomodoroDao.updateIncompleteWorkTime(pomodoroDao.getIncompleteWorkTime(pomodoroId) + time, pomodoroId);
+            }
+        });
+    }
+
+    public static String formatPieChartLegendPercent(Context context, double percent) {
+        if (percent < 1) {
+            return context.getString(R.string.activity_legend_percent_1, percent);
+        } else {
+            return context.getString(R.string.activity_legend_percent_2, percent);
         }
     }
 }

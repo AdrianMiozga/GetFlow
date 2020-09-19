@@ -23,7 +23,7 @@
     <string name="settings">Settings</string>
     <string name="do_not_disturb_title">Do Not Disturb</string>
     <string name="work_duration_title">Work duration</string>
-    <string name="break_duration">Break duration</string>
+    <string name="break_duration_title">Break duration</string>
     <string name="dialog_access_policy_not_granted">You need to grant Do Not Disturb access for this app</string>
     <string name="dialog_go_to_settings">Go to settings</string>
     <string name="cancel">Cancel</string>
@@ -46,11 +46,12 @@
     <string name="loading_chart">Loading…</string>
     <string name="keep_screen_on">Keep screen on</string>
     <string name="days">Days</string>
+    <string name="time">%dm</string>
     <string name="months">Months</string>
     <string name="first_tutorial_message">Press on the timer to start or pause</string>
     <string name="second_tutorial_message">Long press the timer to stop</string>
     <string name="enable_long_breaks_title">Enable long breaks</string>
-    <string name="long_break_duration">Long break duration</string>
+    <string name="long_break_duration_title">Long break duration</string>
     <string name="disable_wifi_title">Disable Wi-Fi</string>
     <string name="disable_wifi_summary">Disables Wi-Fi during work session</string>
     <string name="app_lock">Block applications</string>
@@ -58,9 +59,45 @@
     <string name="accessibility_service_description">To allow Focus to block other Android applications during work session enable this accessibility service.</string>
     <string name="app_lock_switch_description">Block applications when the work session is on</string>
     <string name="accessibility_not_enabled_dialog">To allow Focus to block other Android applications you need to enable accessibility service.</string>
+    <string name="new_activity_name">New Activity Name</string>
+    <string name="OK">OK</string>
+    <string name="activity_name">Activity Name</string>
+    <string name="delete_activity">Delete Activity</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete_activity_message">This action cannot be undone.</string>
+    <string name="cantDeleteDialog">You can not delete your last activity.</string>
+    <string name="default_activity_name">Default</string>
+    <string name="activity_with_that_name_exists">Activity with that name already exists</string>
+    <string name="Confirmation">Confirmation</string>
+    <string name="activity_already_running_dialog_message">You have timer already running. Changing activity will stop it.</string>
+    <string name="automatically_start_new_activities">Automatically start activities</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="you_have_data_with_this_activity">All statistics associated with this activity will be deleted. This
+        action cannot be undone.</string>
+    <string name="automatically_start_activities_summary">Selecting activity will automatically start the timer.</string>
+    <string name="activities">Activities</string>
+    <string name="activity_legend_percent_1">%.2f%%</string>
+    <string name="activity_legend_percent_2">%.0f%%</string>
+    <string name="others_text">Others (%.0f%%) consists of</string>
+    <string name="others_activity_name">Others</string>
+    <string name="day">Day</string>
+    <string name="last_day">Last Day</string>
+    <string name="last_week">Last Week</string>
+    <string name="last_month">Last Month</string>
+    <string name="activity_pie_chart_no_data">No data for this period</string>
+    <string name="scroll_pie_chart_automatically_summary">Scrolls activity chart in statistics to show Others section when changing time period.</string>
+    <string name="scroll_pie_chart_automatically_title">Scroll chart automatically</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>
         <item name="months">@string/months</item>
+    </string-array>
+
+    <string-array name="activities_spinner">
+        <item name="days">@string/last_day</item>
+        <item name="weeks">@string/last_week</item>
+        <item name="months">@string/last_month</item>
+        <item name="total">@string/total</item>
     </string-array>
 </resources>

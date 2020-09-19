@@ -17,6 +17,9 @@
 
 package com.wentura.focus.statistics;
 
+import com.wentura.focus.statistics.historychart.DayData;
+import com.wentura.focus.statistics.historychart.HistoryChartItem;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +43,7 @@ public class PrepareDaysTest {
     private static final String currentDate = "2020-03-10";
     @Parameter
     public String date;
-    private List<StatisticsItem> data;
+    private List<HistoryChartItem> data;
     private DayData dayData;
 
     @Parameters(name = "{index}: {0}")
@@ -57,7 +60,7 @@ public class PrepareDaysTest {
     @Before
     public void setUp() {
         data = new ArrayList<>();
-        data.add(new StatisticsItem(date, 0, 0, 0, 0, 0, 0));
+        data.add(new HistoryChartItem(date, 0, 0, 0));
         dayData = new DayData(data);
     }
 
@@ -69,7 +72,7 @@ public class PrepareDaysTest {
 
     @Test
     public void prepareDaysWithCurrentDateTest() {
-        data.add(new StatisticsItem(currentDate, 0, 0, 0, 0, 0, 0));
+        data.add(new HistoryChartItem(currentDate, 0, 0, 0));
         assumeThat(data.get(0).getDate(), is(not(data.get(1).getDate())));
 
         dayData.prepareDays(LocalDate.parse(currentDate));

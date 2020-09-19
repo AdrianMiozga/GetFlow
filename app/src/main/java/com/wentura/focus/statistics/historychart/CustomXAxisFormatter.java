@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.wentura.focus.statistics;
+package com.wentura.focus.statistics.historychart;
 
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
@@ -25,21 +25,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 final class CustomXAxisFormatter extends ValueFormatter {
-    private final List<StatisticsItem> statisticsItems;
+    private final List<HistoryChartItem> historyChartItems;
     private final SpinnerOption spinnerOption;
 
-    CustomXAxisFormatter(List<StatisticsItem> statisticsItems, SpinnerOption spinnerOption) {
-        this.statisticsItems = statisticsItems;
+    CustomXAxisFormatter(List<HistoryChartItem> historyChartItems, SpinnerOption spinnerOption) {
+        this.historyChartItems = historyChartItems;
         this.spinnerOption = spinnerOption;
     }
 
     @Override
     public String getAxisLabel(float value, AxisBase axis) {
-        if (value >= statisticsItems.size()) {
+        if (value >= historyChartItems.size()) {
             return "";
         }
 
-        LocalDate date = statisticsItems.get((int) value).getDate();
+        LocalDate date = historyChartItems.get((int) value).getDate();
 
         String result = "";
 

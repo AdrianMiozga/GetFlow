@@ -17,6 +17,9 @@
 
 package com.wentura.focus.statistics;
 
+import com.wentura.focus.statistics.historychart.HistoryChartItem;
+import com.wentura.focus.statistics.historychart.MonthData;
+
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -29,7 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PrepareMonthsTest {
     private static final String currentDate = "2020-03-10";
-    private final List<StatisticsItem> data = new ArrayList<>();
+    private final List<HistoryChartItem> data = new ArrayList<>();
     private MonthData monthData;
 
     @Test
@@ -46,7 +49,7 @@ public class PrepareMonthsTest {
         }
         countMonths();
 
-        data.add(0, new StatisticsItem(currentDate, 0, 20000, 0, 5000, 0, 0));
+        data.add(0, new HistoryChartItem(currentDate, 20000, 5000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
         monthData.prepareMonths(currentDate);
@@ -60,7 +63,7 @@ public class PrepareMonthsTest {
     @Test
     public void prepareMonthsTest2() {
         data.clear();
-        data.add(new StatisticsItem("2020-01-08", 0, 8300, 0, 2008, 0, 0));
+        data.add(new HistoryChartItem("2020-01-08", 8300, 2008, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
         monthData.prepareMonths(currentDate);
@@ -78,7 +81,7 @@ public class PrepareMonthsTest {
         }
         countMonths();
 
-        data.add(new StatisticsItem(currentDate));
+        data.add(new HistoryChartItem(currentDate));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
         monthData.prepareMonths(currentDate);
@@ -95,7 +98,7 @@ public class PrepareMonthsTest {
         }
         countMonths();
 
-        data.add(0, new StatisticsItem("2019-01-08", 0, 1200, 0, 5000, 0, 0));
+        data.add(0, new HistoryChartItem("2019-01-08", 1200, 5000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
         monthData.prepareMonths(currentDate);

@@ -41,7 +41,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -49,6 +48,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.wentura.focus.activities.Activities;
+import com.wentura.focus.database.Activity;
+import com.wentura.focus.database.Database;
 import com.wentura.focus.settings.SettingsActivity;
 import com.wentura.focus.statistics.StatisticsActivity;
 
@@ -60,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView workIcon;
     private ImageView breakIcon;
     private TextView timerTextView;
+    private Button activityTextView;
+    private Database database;
     private boolean isScaleAnimationDone = false;
     private boolean isTimerTextViewActionUpCalled = false;
 
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
                     boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
+                    skipButton.setVisibility(View.VISIBLE);
+
                     if (isBreakState) {
                         workIcon.setVisibility(View.INVISIBLE);
                         breakIcon.setVisibility(View.VISIBLE);
@@ -94,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     stopTimerUI();
                     break;
                 case Constants.BUTTON_PAUSE:
+                    skipButton.setVisibility(View.VISIBLE);
                     startBlinkingAnimation();
                     break;
             }
@@ -130,6 +137,18 @@ public class MainActivity extends AppCompatActivity {
                 statusReceiver, new IntentFilter(Constants.UPDATE_UI));
     }
 
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if (sharedPreferences.getInt(Constants.TIME_LEFT, 0) == 0) {
+            finish();
+        } else {
+            moveTaskToBack(true);
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,33 +157,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         timerTextView = findViewById(R.id.countdown_text_view);
+        activityTextView = findViewById(R.id.current_activity);
         workIcon = findViewById(R.id.work_icon);
         breakIcon = findViewById(R.id.break_icon);
         skipButton = findViewById(R.id.skip_button);
 
         setupNotificationChannels();
 
+        database = Database.getInstance(this);
+
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.setTitle("");
         }
 
-        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-                if (sharedPreferences.getInt(Constants.TIME_LEFT, 0) == 0) {
-                    finish();
-                } else {
-                    moveTaskToBack(true);
-                }
-            }
-        };
-
-        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
+        activityTextView.setOnClickListener(view -> startActivity(new Intent(this, Activities.class)));
 
         timerTextView.setOnClickListener(view -> {
             SharedPreferences sharedPreferences =
@@ -220,23 +229,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-//        stopButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-//                alertDialog.setMessage(R.string.dialog_stop)
-//                        .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                stopTimer();
-//                            }
-//                        })
-//                        .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                            }
-//                        }).show();
-//            }
-//        });
-
         skipButton.setOnClickListener(view -> skipTimer());
 
         showHelpingSnackbars();
@@ -261,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         final Snackbar snackbar = Snackbar.make(findViewById(R.id.main_activity), messages.get(currentStep),
                 Snackbar.LENGTH_INDEFINITE);
 
-        snackbar.setAction("OK", view -> {
+        snackbar.setAction(getString(R.string.OK), view -> {
             snackbar.dismiss();
 
             editPreferences.putInt(Constants.TUTORIAL_STEP, currentStep + 1).apply();
@@ -341,26 +333,39 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
-        boolean areLongBreaksEnabled = sharedPreferences.getBoolean(Constants.LONG_BREAK_SETTING, true);
         int workSessionCounter = sharedPreferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
         int timeLeft = sharedPreferences.getInt(Constants.TIME_LEFT, 0);
+        int activityId = sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
 
-        if (timeLeft == 0) {
-            if (isBreakState) {
-                if (workSessionCounter != 0 && workSessionCounter % 4 == 0 && areLongBreaksEnabled) {
-                    updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.LONG_BREAK_DURATION_SETTING,
-                            Constants.DEFAULT_LONG_BREAK_TIME)) * 60_000);
-                } else {
-                    updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.BREAK_DURATION_SETTING,
-                            Constants.DEFAULT_BREAK_TIME)) * 60_000);
-                }
-            } else {
-                updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
-                        Constants.DEFAULT_WORK_TIME)) * 60_000);
+        Database.databaseExecutor.execute(() -> {
+            int numberOfActivities = database.activityDao().getNumberOfActivities();
+
+            if (numberOfActivities < 1) {
+                database.activityDao().insertActivity(new Activity(getString(R.string.default_activity_name)));
             }
-        } else {
-            updateTimerTextView(timeLeft);
-        }
+
+            String activityName = database.activityDao().getName(activityId);
+            runOnUiThread(() -> activityTextView.setText(activityName));
+
+            boolean areLongBreaksEnabled = database.activityDao().areLongBreaksEnabled(activityId);
+
+            int duration;
+
+            if (timeLeft == 0) {
+                if (isBreakState) {
+                    if (workSessionCounter != 0 && workSessionCounter % 4 == 0 && areLongBreaksEnabled) {
+                        duration = database.activityDao().getLongBreakDuration(activityId);
+                    } else {
+                        duration = database.activityDao().getBreakDuration(activityId);
+                    }
+                } else {
+                    duration = database.activityDao().getWorkDuration(activityId);
+                }
+                runOnUiThread(() -> updateTimerTextView(duration * 60_000));
+            } else {
+                runOnUiThread(() -> updateTimerTextView(timeLeft));
+            }
+        });
 
         if (sharedPreferences.getBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false)) {
             skipButton.setVisibility(View.VISIBLE);
@@ -386,8 +391,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopTimer() {
-        Intent stopIntent = new Intent(this, NotificationButtonReceiver.class);
+        Intent stopIntent = new Intent(this, TimerActionReceiver.class);
         stopIntent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_STOP);
+        stopIntent.putExtra(Constants.CURRENT_ACTIVITY_ID_INTENT, getCurrentActivityId());
         sendBroadcast(stopIntent);
     }
 
@@ -401,34 +407,42 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        updateTimerTextView(Integer.parseInt(sharedPreferences.getString(Constants.WORK_DURATION_SETTING,
-                Constants.DEFAULT_WORK_TIME)) * 60_000);
+        Database.databaseExecutor.execute(() -> {
+            int duration =
+                    database.activityDao().getWorkDuration(sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1));
+
+            runOnUiThread(() -> updateTimerTextView(duration * 60_000));
+        });
     }
 
     private void skipTimer() {
         revertTimerAnimation();
         timerTextView.clearAnimation();
 
-        Intent intent = new Intent(this, NotificationButtonReceiver.class);
+        Intent intent = new Intent(this, TimerActionReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_SKIP);
+        intent.putExtra(Constants.CURRENT_ACTIVITY_ID_INTENT, getCurrentActivityId());
         sendBroadcast(intent);
     }
 
-    private void startTimer() {
-        skipButton.setVisibility(View.VISIBLE);
+    private int getCurrentActivityId() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
+    }
 
+    private void startTimer() {
         timerTextView.clearAnimation();
 
-        Intent intent = new Intent(this, NotificationButtonReceiver.class);
+        Intent intent = new Intent(this, TimerActionReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_START);
+        intent.putExtra(Constants.CURRENT_ACTIVITY_ID_INTENT, getCurrentActivityId());
         sendBroadcast(intent);
     }
 
     private void pauseTimer() {
-        skipButton.setVisibility(View.VISIBLE);
-
-        Intent intent = new Intent(this, NotificationButtonReceiver.class);
+        Intent intent = new Intent(this, TimerActionReceiver.class);
         intent.putExtra(Constants.BUTTON_ACTION, Constants.BUTTON_PAUSE);
+        intent.putExtra(Constants.CURRENT_ACTIVITY_ID_INTENT, getCurrentActivityId());
         sendBroadcast(intent);
     }
 

@@ -15,16 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.wentura.focus.statistics;
+package com.wentura.focus.statistics.historychart;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-final class DayData extends ChartData {
-    private List<StatisticsItem> days;
+public final class DayData extends ChartData {
+    private List<HistoryChartItem> days;
 
-    DayData(List<StatisticsItem> data) {
+    public DayData(List<HistoryChartItem> data) {
         super(data);
     }
 
@@ -34,16 +34,16 @@ final class DayData extends ChartData {
     }
 
     @Override
-    List<StatisticsItem> getGeneratedData() {
+    public List<HistoryChartItem> getGeneratedData() {
         return new ArrayList<>(days);
     }
 
-    void prepareDays(LocalDate currentDate) {
+    public void prepareDays(LocalDate currentDate) {
         days = getData();
 
         if (days.size() == 1) {
             if (!days.get(0).getDate().equals(currentDate)) {
-                days.add(StatisticsItem.of(currentDate));
+                days.add(HistoryChartItem.of(currentDate));
             }
         }
 
@@ -52,17 +52,17 @@ final class DayData extends ChartData {
             LocalDate nextDate = days.get(i + 1).getDate();
 
             if (!todayDate.equals(nextDate)) {
-                days.add(i + 1, StatisticsItem.of(todayDate));
+                days.add(i + 1, HistoryChartItem.of(todayDate));
                 continue;
             }
 
             if (i + 1 == days.size() - 1 && !days.get(i + 1).getDate().equals(currentDate)) {
-                days.add(StatisticsItem.of(todayDate.plusDays(1)));
+                days.add(HistoryChartItem.of(todayDate.plusDays(1)));
             }
         }
 
         if (days.size() == 0) {
-            days.add(StatisticsItem.of(currentDate));
+            days.add(HistoryChartItem.of(currentDate));
         }
 
         if (days.size() < 12) {
@@ -70,7 +70,7 @@ final class DayData extends ChartData {
 
             for (int i = 12 - days.size(); i > 0; i--) {
                 firstDay = firstDay.minusDays(1);
-                days.add(0, StatisticsItem.of(firstDay));
+                days.add(0, HistoryChartItem.of(firstDay));
             }
         }
     }

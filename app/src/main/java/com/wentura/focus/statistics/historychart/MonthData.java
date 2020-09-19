@@ -15,16 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.wentura.focus.statistics;
+package com.wentura.focus.statistics.historychart;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-final class MonthData extends ChartData {
-    private final List<StatisticsItem> months = new ArrayList<>();
+public final class MonthData extends ChartData {
+    private final List<HistoryChartItem> months = new ArrayList<>();
 
-    MonthData(List<StatisticsItem> data) {
+    public MonthData(List<HistoryChartItem> data) {
         super(data);
     }
 
@@ -35,11 +35,11 @@ final class MonthData extends ChartData {
     }
 
     @Override
-    List<StatisticsItem> getGeneratedData() {
+    public List<HistoryChartItem> getGeneratedData() {
         return new ArrayList<>(months);
     }
 
-    void prepareMonths(String currentDate) {
+    public void prepareMonths(String currentDate) {
         // The loop below this condition works only when the months array has two entries. I'm
         // using this block of code to generate the second entry if it doesn't exist.
         if (months.size() == 1) {
@@ -48,7 +48,7 @@ final class MonthData extends ChartData {
 
             if (thisMonth.getMonthValue() != currentMonth.getMonthValue() ||
                     thisMonth.getYear() != currentMonth.getYear()) {
-                months.add(StatisticsItem.of(currentMonth));
+                months.add(HistoryChartItem.of(currentMonth));
             }
         }
 
@@ -58,13 +58,13 @@ final class MonthData extends ChartData {
 
             if (thisMonth.getMonthValue() != nextMonth.getMonthValue() ||
                     thisMonth.getYear() != nextMonth.getYear()) {
-                months.add(i + 1, StatisticsItem.of(thisMonth));
+                months.add(i + 1, HistoryChartItem.of(thisMonth));
                 continue;
             }
 
             if (i + 1 == months.size() - 1 && nextMonth.getMonthValue() != LocalDate.parse(currentDate).getMonthValue()) {
                 thisMonth = thisMonth.plusMonths(1);
-                months.add(StatisticsItem.of(thisMonth));
+                months.add(HistoryChartItem.of(thisMonth));
             }
         }
 
@@ -72,7 +72,7 @@ final class MonthData extends ChartData {
             LocalDate localDate = LocalDate.parse(currentDate).minusMonths(11);
 
             for (int i = 0; i < 12; i++) {
-                months.add(StatisticsItem.of(localDate));
+                months.add(HistoryChartItem.of(localDate));
                 localDate = localDate.plusMonths(1);
             }
         }
@@ -82,15 +82,15 @@ final class MonthData extends ChartData {
 
             for (int i = 12 - months.size(); i > 0; i--) {
                 firstMonth = firstMonth.minusMonths(1);
-                months.add(0, StatisticsItem.of(firstMonth));
+                months.add(0, HistoryChartItem.of(firstMonth));
             }
         }
     }
 
-    void createMonthsArray() {
+    public void createMonthsArray() {
         int totalCompletedTime = 0;
         int totalIncompleteTime = 0;
-        List<StatisticsItem> days = getData();
+        List<HistoryChartItem> days = getData();
 
         for (int i = 0; i < days.size() - 1; i++) {
             LocalDate todayDate = days.get(i).getDate();
@@ -101,8 +101,8 @@ final class MonthData extends ChartData {
 
             if (todayDate.getMonthValue() != nextDate.getMonthValue() ||
                     todayDate.getYear() != nextDate.getYear()) {
-                months.add(StatisticsItem.of(todayDate, 0, totalCompletedTime, 0,
-                        totalIncompleteTime, 0, 0));
+                months.add(HistoryChartItem.of(todayDate, totalCompletedTime,
+                        totalIncompleteTime, 0));
 
                 totalCompletedTime = 0;
                 totalIncompleteTime = 0;
@@ -116,8 +116,8 @@ final class MonthData extends ChartData {
                     totalCompletedTime += days.get(i + 1).getCompletedWorkTime();
                     totalIncompleteTime += days.get(i + 1).getIncompleteWorkTime();
 
-                    months.add(StatisticsItem.of(nextDate, 0, totalCompletedTime, 0,
-                            totalIncompleteTime, 0, 0));
+                    months.add(HistoryChartItem.of(nextDate, totalCompletedTime,
+                            totalIncompleteTime, 0));
                 }
 
                 if (todayDate.getMonthValue() != nextDate.getMonthValue() ||
@@ -129,8 +129,8 @@ final class MonthData extends ChartData {
         }
 
         if (days.size() == 1) {
-            months.add(StatisticsItem.of(days.get(0).getDate(), 0, days.get(0).getCompletedWorkTime(), 0,
-                    days.get(0).getIncompleteWorkTime(), 0, 0));
+            months.add(HistoryChartItem.of(days.get(0).getDate(), days.get(0).getCompletedWorkTime(),
+                    days.get(0).getIncompleteWorkTime(), 0));
         }
     }
 }

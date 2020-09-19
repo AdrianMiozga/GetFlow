@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.wentura.focus.statistics;
+package com.wentura.focus.statistics.historychart;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -23,17 +23,18 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.wentura.focus.R;
+import com.wentura.focus.statistics.StatisticsActivity;
 
-import static com.wentura.focus.statistics.SpinnerOption.DAYS;
-import static com.wentura.focus.statistics.SpinnerOption.MONTHS;
+import static com.wentura.focus.statistics.historychart.SpinnerOption.DAYS;
+import static com.wentura.focus.statistics.historychart.SpinnerOption.MONTHS;
 
-class HistoryChart {
+public class HistoryChart {
     private final LineChart chart;
     private final StatisticsActivity statisticsActivity;
     private final XAxis xAxis;
     private final YAxis yAxis;
 
-    HistoryChart(StatisticsActivity statisticsActivity) {
+    public HistoryChart(StatisticsActivity statisticsActivity) {
         this.statisticsActivity = statisticsActivity;
         chart = statisticsActivity.findViewById(R.id.history_chart);
 
@@ -41,7 +42,7 @@ class HistoryChart {
         yAxis = chart.getAxisLeft();
     }
 
-    void setupChart() {
+    public void setupChart() {
         setupXAxis();
         setupYAxis();
         setupChartLook();
@@ -77,7 +78,7 @@ class HistoryChart {
         chart.getDescription().setEnabled(false);
     }
 
-    void displayData(ChartData chartData) {
+    public void displayData(ChartData chartData) {
         chart.setData(new LineData(setupDataSet(chartData)));
 
         setYAxisRange(chartData);
@@ -117,6 +118,7 @@ class HistoryChart {
     }
 
     private void setXAxisFormatter(ChartData chartData) {
+        // TODO: 05.09.2020 Improve
         if (chartData instanceof DayData) {
             xAxis.setValueFormatter(new CustomXAxisFormatter(chartData.getGeneratedData(), DAYS));
         } else {
