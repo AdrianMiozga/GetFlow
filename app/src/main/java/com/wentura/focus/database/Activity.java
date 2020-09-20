@@ -54,8 +54,11 @@ public final class Activity {
     @ColumnInfo(name = "WiFi")
     private final boolean WiFi;
 
+    @ColumnInfo(name = "showInStatistics")
+    private final boolean showInStatistics;
+
     public Activity(String name, int workDuration, int breakDuration, boolean longBreaks, int longBreakDuration,
-                    boolean DND, boolean keepDNDOnBreaks, boolean WiFi) {
+                    boolean DND, boolean keepDNDOnBreaks, boolean WiFi, boolean showInStatistics) {
         this.name = name;
         this.workDuration = workDuration;
         this.breakDuration = breakDuration;
@@ -64,11 +67,13 @@ public final class Activity {
         this.DND = DND;
         this.keepDNDOnBreaks = keepDNDOnBreaks;
         this.WiFi = WiFi;
+        this.showInStatistics = showInStatistics;
     }
 
     @Ignore
     public Activity(String name) {
-        this(name, Constants.DEFAULT_WORK_TIME, Constants.DEFAULT_BREAK_TIME, true, Constants.DEFAULT_LONG_BREAK_TIME, false, false, false);
+        this(name, Constants.DEFAULT_WORK_TIME, Constants.DEFAULT_BREAK_TIME, true, Constants.DEFAULT_LONG_BREAK_TIME
+                , false, false, false, true);
     }
 
     public void setId(int id) {
@@ -109,5 +114,9 @@ public final class Activity {
 
     public boolean isWiFi() {
         return WiFi;
+    }
+
+    public boolean isShowInStatistics() {
+        return showInStatistics;
     }
 }

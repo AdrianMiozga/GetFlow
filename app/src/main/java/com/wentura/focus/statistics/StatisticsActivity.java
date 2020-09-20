@@ -19,11 +19,13 @@ package com.wentura.focus.statistics;
 
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,7 +33,9 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,6 +53,7 @@ import com.wentura.focus.Utility;
 import com.wentura.focus.database.Database;
 import com.wentura.focus.statistics.activitychart.ActivityPieChartRenderer;
 import com.wentura.focus.statistics.activitychart.CustomPercentFormatter;
+import com.wentura.focus.statistics.activitychart.LabelElement;
 import com.wentura.focus.statistics.activitychart.LegendAdapter;
 import com.wentura.focus.statistics.activitychart.LegendItem;
 import com.wentura.focus.statistics.activitychart.PieChartItem;
@@ -58,22 +63,32 @@ import com.wentura.focus.statistics.historychart.HistoryChart;
 import com.wentura.focus.statistics.historychart.HistoryChartItem;
 import com.wentura.focus.statistics.historychart.MonthData;
 
-import java.lang.ref.WeakReference;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class StatisticsActivity extends AppCompatActivity {
-    private static List<HistoryChartItem> data = new ArrayList<>();
-    private static HistoryChart historyChart;
-    private static PieChart pieChart;
     private static int historySpinnerCurrentSelectedIndex;
     private static int activitiesSpinnerCurrentSelectedIndex;
+    private static List<HistoryChartItem> data = new ArrayList<>();
+    private static PieChart pieChart;
     private static ChartData monthData;
     private static ChartData dayData;
+    private boolean isActivitySpinnerSelectionFromTouch;
+    private boolean shouldScrollDown;
+    private HistoryChart historyChart;
     private Database database;
+    private PieData pieData;
+    private List<LegendItem> legendItems;
+
+    // Views
+    private LineChart historyChartView;
     private TextView numberTodayTextView;
     private TextView numberWeekTextView;
     private TextView numberMonthTextView;
@@ -82,10 +97,6 @@ public class StatisticsActivity extends AppCompatActivity {
     private Spinner activitiesSpinner;
     private RecyclerView legendRecyclerView;
     private TextView othersTextView;
-    private PieData pieData;
-    private boolean isActivitySpinnerSelectionFromTouch;
-    private List<LegendItem> legendItems;
-    private boolean shouldScrollDown;
     private ScrollView scrollView;
 
     @Override
@@ -99,6 +110,7 @@ public class StatisticsActivity extends AppCompatActivity {
         numberWeekTextView = findViewById(R.id.number_week_text_view);
         numberMonthTextView = findViewById(R.id.number_month_text_view);
         numberTotalTextView = findViewById(R.id.number_total_text_view);
+        historyChartView = findViewById(R.id.history_chart);
 
         scrollView = findViewById(R.id.statistics_scroll_view);
         scrollView.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
@@ -119,7 +131,61 @@ public class StatisticsActivity extends AppCompatActivity {
         setupHistorySpinner();
         setupActivitiesSpinner();
 
-        new LoadFromDatabase(this).execute();
+        loadFromDatabase();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.statistics_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.select_activities) {
+            Future<List<LabelElement>> labelElementsFuture =
+                    Database.databaseExecutor.submit(() -> database.activityDao().getAllActivityNames());
+
+            Future<boolean[]> checkedItemsFuture =
+                    Database.databaseExecutor.submit(() -> database.activityDao().showInStatisticsAll());
+
+            try {
+                List<LabelElement> labelElements = labelElementsFuture.get();
+                boolean[] checkedItems = checkedItemsFuture.get();
+
+                String[] activities = new String[labelElements.size()];
+
+                for (int i = 0; i < labelElements.size(); i++) {
+                    activities[i] = labelElements.get(i).getName();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                Set<Integer> values = new HashSet<>();
+
+                builder.setTitle("Select activities")
+                        .setMultiChoiceItems(activities, checkedItems,
+                                (DialogInterface.OnMultiChoiceClickListener) (dialog, which, isChecked) -> checkedItems[which] = isChecked)
+
+                        .setPositiveButton("OK", (dialog, id) -> {
+                            for (int i = 0; i < checkedItems.length; i++) {
+                                if (checkedItems[i]) {
+                                    values.add(labelElements.get(i).getID());
+                                }
+                            }
+                            Database.databaseExecutor.execute(() -> database.activityDao().updateShowInStatistics(values));
+                            loadFromDatabase();
+                        })
+                        .setNegativeButton("Cancel", (dialog, id) -> {
+
+                        });
+                builder.show();
+                return true;
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     private void setupPieChartLook() {
@@ -247,11 +313,10 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void setHistoryChartNoDataText() {
-        LineChart lineChart = findViewById(R.id.history_chart);
-        Paint paint = lineChart.getPaint(Chart.PAINT_INFO);
+        Paint paint = historyChartView.getPaint(Chart.PAINT_INFO);
         paint.setColor(Color.WHITE);
-        lineChart.setNoDataText(getString(R.string.loading_chart));
-        lineChart.invalidate();
+        historyChartView.setNoDataText(getString(R.string.loading_chart));
+        historyChartView.invalidate();
     }
 
     private void setupHistorySpinner() {
@@ -442,98 +507,79 @@ public class StatisticsActivity extends AppCompatActivity {
         }
     }
 
-    private static class LoadFromDatabase extends AsyncTask<Void, Void, Void> {
-        private final WeakReference<StatisticsActivity> activityWeakReference;
-        HistoryChartItem historyChartItemToday;
-        List<HistoryChartItem> historyChartItemsWeek;
-        List<HistoryChartItem> historyChartItemsMonth;
-        List<HistoryChartItem> historyChartItemsTotal;
+    private void loadFromDatabase() {
+        HistoryChartItem historyChartItemToday = null;
+        List<HistoryChartItem> historyChartItemsWeek = new ArrayList<>();
+        List<HistoryChartItem> historyChartItemsMonth = new ArrayList<>();
+        List<HistoryChartItem> historyChartItemsTotal = new ArrayList<>();
 
-        LoadFromDatabase(StatisticsActivity context) {
-            this.activityWeakReference = new WeakReference<>(context);
-        }
+        try {
+            int[] idsOfActivitiesToShow = Database.databaseExecutor.submit(() -> database.activityDao().getIdsToShow()).get();
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            StatisticsActivity statisticsActivity = activityWeakReference.get();
-
-            if (statisticsActivity == null || statisticsActivity.isFinishing()) {
-                return null;
-            }
-
-            historyChartItemToday = statisticsActivity.database.pomodoroDao().getAllGroupByDate(LocalDate.now().toString());
+            historyChartItemToday =
+                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByDate(LocalDate.now().toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsWeek =
-                    statisticsActivity.database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(Constants.MAX_ITEMS_TO_SHOW_ON_ACTIVITY_CHART).toString(),
-                            LocalDate.now().minusDays(1).toString());
+                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(6).toString(), LocalDate.now().minusDays(1).toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsMonth =
-                    statisticsActivity.database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(29).toString(),
-                            LocalDate.now().minusDays(7).toString());
+                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(29).toString(),
+                            LocalDate.now().minusDays(7).toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsTotal =
-                    statisticsActivity.database.pomodoroDao().getAllDateLessGroupByDate(LocalDate.now().minusDays(29).toString());
+                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllDateLessGroupByDate(LocalDate.now().minusDays(29).toString())).get();
 
-            data = statisticsActivity.database.pomodoroDao().getAllGroupByDate();
-
-            return null;
+            data = Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByDate(idsOfActivitiesToShow)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            StatisticsActivity statisticsActivity = activityWeakReference.get();
+        int timeToday = 0;
 
-            if (statisticsActivity == null || statisticsActivity.isFinishing()) {
-                return;
-            }
+        if (historyChartItemToday != null) {
+            timeToday =
+                    historyChartItemToday.getCompletedWorkTime() + historyChartItemToday.getIncompleteWorkTime();
+        }
 
-            int timeToday = 0;
+        int timeWeek = timeToday;
 
-            if (historyChartItemToday != null) {
-                timeToday =
-                        historyChartItemToday.getCompletedWorkTime() + historyChartItemToday.getIncompleteWorkTime();
-            }
+        for (HistoryChartItem historyChartItem : historyChartItemsWeek) {
+            timeWeek += historyChartItem.getCompletedWorkTime();
+            timeWeek += historyChartItem.getIncompleteWorkTime();
+        }
 
-            int timeWeek = timeToday;
+        int timeMonth = timeWeek;
 
-            for (HistoryChartItem historyChartItem : historyChartItemsWeek) {
-                timeWeek += historyChartItem.getCompletedWorkTime();
-                timeWeek += historyChartItem.getIncompleteWorkTime();
-            }
+        for (HistoryChartItem historyChartItem : historyChartItemsMonth) {
+            timeMonth += historyChartItem.getCompletedWorkTime();
+            timeMonth += historyChartItem.getIncompleteWorkTime();
+        }
 
-            int timeMonth = timeWeek;
+        int timeTotal = timeMonth;
 
-            for (HistoryChartItem historyChartItem : historyChartItemsMonth) {
-                timeMonth += historyChartItem.getCompletedWorkTime();
-                timeMonth += historyChartItem.getIncompleteWorkTime();
-            }
+        for (HistoryChartItem historyChartItem : historyChartItemsTotal) {
+            timeTotal += historyChartItem.getCompletedWorkTime();
+            timeTotal += historyChartItem.getIncompleteWorkTime();
+        }
 
-            int timeTotal = timeMonth;
+        numberTodayTextView.setText(Utility.formatPieChartTime(timeToday));
+        numberWeekTextView.setText(Utility.formatPieChartTime(timeWeek));
+        numberMonthTextView.setText(Utility.formatPieChartTime(timeMonth));
+        numberTotalTextView.setText(Utility.formatPieChartTime(timeTotal));
 
-            for (HistoryChartItem historyChartItem : historyChartItemsTotal) {
-                timeTotal += historyChartItem.getCompletedWorkTime();
-                timeTotal += historyChartItem.getIncompleteWorkTime();
-            }
+        monthData = new MonthData(data);
+        monthData.generate();
 
-            statisticsActivity.numberTodayTextView.setText(Utility.formatPieChartTime(timeToday));
-            statisticsActivity.numberWeekTextView.setText(Utility.formatPieChartTime(timeWeek));
-            statisticsActivity.numberMonthTextView.setText(Utility.formatPieChartTime(timeMonth));
-            statisticsActivity.numberTotalTextView.setText(Utility.formatPieChartTime(timeTotal));
+        dayData = new DayData(data);
+        dayData.generate();
 
-            monthData = new MonthData(data);
-            monthData.generate();
+        historyChart = new HistoryChart(this, historyChartView);
+        historyChart.setupChart();
 
-            dayData = new DayData(data);
-            dayData.generate();
-
-            historyChart = new HistoryChart(statisticsActivity);
-            historyChart.setupChart();
-
-            if (historySpinnerCurrentSelectedIndex == 1) {
-                historyChart.displayData(monthData);
-            } else {
-                historyChart.displayData(dayData);
-            }
+        if (historySpinnerCurrentSelectedIndex == 1) {
+            historyChart.displayData(monthData);
+        } else {
+            historyChart.displayData(dayData);
         }
     }
 }

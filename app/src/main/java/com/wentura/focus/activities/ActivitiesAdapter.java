@@ -33,8 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.wentura.focus.Constants;
 import com.wentura.focus.MainActivity;
-import com.wentura.focus.TimerActionReceiver;
 import com.wentura.focus.R;
+import com.wentura.focus.TimerActionReceiver;
 import com.wentura.focus.database.Activity;
 
 import java.util.List;

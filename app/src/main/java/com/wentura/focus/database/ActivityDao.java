@@ -21,12 +21,27 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.wentura.focus.statistics.activitychart.LabelElement;
+
 import java.util.List;
+import java.util.Set;
 
 @Dao
 public interface ActivityDao {
     @Insert
     void insertActivity(Activity activity);
+
+    @Query("SELECT ID FROM Activity WHERE showInStatistics = 1")
+    int[] getIdsToShow();
+
+    @Query("UPDATE Activity SET showInStatistics = CASE WHEN ID IN(:activityIds) THEN 1 ELSE 0 END")
+    void updateShowInStatistics(Set<Integer> activityIds);
+
+    @Query("SELECT showInStatistics FROM Activity")
+    boolean[] showInStatisticsAll();
+
+    @Query("SELECT ID, Name FROM Activity")
+    List<LabelElement> getAllActivityNames();
 
     @Query("SELECT * FROM Activity")
     List<Activity> getAll();

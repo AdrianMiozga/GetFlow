@@ -82,7 +82,6 @@
     <string name="others_text">Others (%.0f%%) consists of</string>
     <string name="others_activity_name">Others</string>
     <string name="day">Day</string>
-    <string name="last_day">Last Day</string>
     <string name="last_week">Last Week</string>
     <string name="last_month">Last Month</string>
     <string name="activity_pie_chart_no_data">No data for this period</string>
@@ -95,7 +94,7 @@
     </string-array>
 
     <string-array name="activities_spinner">
-        <item name="days">@string/last_day</item>
+        <item name="days">@string/today</item>
         <item name="weeks">@string/last_week</item>
         <item name="months">@string/last_month</item>
         <item name="total">@string/total</item>

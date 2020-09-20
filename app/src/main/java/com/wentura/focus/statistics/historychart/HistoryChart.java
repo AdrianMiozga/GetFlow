@@ -17,26 +17,27 @@
 
 package com.wentura.focus.statistics.historychart;
 
+import android.content.Context;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.wentura.focus.R;
-import com.wentura.focus.statistics.StatisticsActivity;
 
 import static com.wentura.focus.statistics.historychart.SpinnerOption.DAYS;
 import static com.wentura.focus.statistics.historychart.SpinnerOption.MONTHS;
 
 public class HistoryChart {
     private final LineChart chart;
-    private final StatisticsActivity statisticsActivity;
+    private final Context context;
     private final XAxis xAxis;
     private final YAxis yAxis;
 
-    public HistoryChart(StatisticsActivity statisticsActivity) {
-        this.statisticsActivity = statisticsActivity;
-        chart = statisticsActivity.findViewById(R.id.history_chart);
+    public HistoryChart(Context context, LineChart lineChart) {
+        this.chart = lineChart;
+        this.context = context;
 
         xAxis = chart.getXAxis();
         yAxis = chart.getAxisLeft();
@@ -53,7 +54,7 @@ public class HistoryChart {
         xAxis.setDrawAxisLine(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setLabelCount(11);
-        xAxis.setTextColor(statisticsActivity.getResources().getColor(R.color.white));
+        xAxis.setTextColor(context.getResources().getColor(R.color.white));
         xAxis.setSpaceMax(0.1f);
     }
 
@@ -61,8 +62,8 @@ public class HistoryChart {
         yAxis.setDrawAxisLine(false);
         yAxis.setValueFormatter(new CustomYAxisFormatter());
         yAxis.setLabelCount(7, true);
-        yAxis.setGridColor(statisticsActivity.getResources().getColor(R.color.grey));
-        yAxis.setTextColor(statisticsActivity.getResources().getColor(R.color.white));
+        yAxis.setGridColor(context.getResources().getColor(R.color.grey));
+        yAxis.setTextColor(context.getResources().getColor(R.color.white));
     }
 
     private void setupChartLook() {
@@ -90,8 +91,8 @@ public class HistoryChart {
 
     private LineDataSet setupDataSet(ChartData chartData) {
         LineDataSet dataSet = new LineDataSet(chartData.getEntries(), null);
-        dataSet.setColors(statisticsActivity.getResources().getColor(R.color.colorPrimary));
-        dataSet.setCircleColor(statisticsActivity.getResources().getColor(R.color.colorPrimary));
+        dataSet.setColors(context.getResources().getColor(R.color.colorPrimary));
+        dataSet.setCircleColor(context.getResources().getColor(R.color.colorPrimary));
         dataSet.setLineWidth(2f);
         dataSet.setCircleRadius(3.5f);
         dataSet.setDrawValues(false);
