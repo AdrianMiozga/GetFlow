@@ -65,7 +65,7 @@ public final class Constants {
     /** Frequency of vibration when the timer is waiting for action - after it ends. */
     static final long VIBRATION_REMINDER_FREQUENCY = 30_000;
 
-    public static final int MAX_ACTIVITY_NAME_LENGTH = 30;
+    public static final int MAX_ACTIVITY_NAME_LENGTH = 50;
 
     /** Modifies the length of animation when toggling between GONE and VISIBLE on certain View in app settings. */
     public static final int DEFAULT_ANIMATION_LENGTH = 250;
