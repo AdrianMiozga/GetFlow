@@ -124,6 +124,8 @@ public class EndNotificationService extends Service {
             preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, false);
         }
 
+        preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, 0);
+
         if (isBreakState) {
             Utility.updateDatabaseBreaks(getApplicationContext(), preferences.getInt(Constants.LAST_SESSION_DURATION, 0), activityId);
         } else {

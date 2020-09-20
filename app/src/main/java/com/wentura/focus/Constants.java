@@ -48,6 +48,9 @@ public final class Constants {
     // Last session duration is needed when the user changes, for example,
     // work duration setting when the work timer is already running.
     // Using the work duration setting would update the wrong time in statistics.
+    /**
+     * It's a work duration value taken from activity settings when starting a timer.
+     */
     static final String LAST_SESSION_DURATION = "last_session_duration";
 
     /** It's zero when the timer is stopped. */

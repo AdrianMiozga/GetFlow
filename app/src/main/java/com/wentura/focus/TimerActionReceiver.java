@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -92,6 +93,7 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                 editPreferences.putInt(Constants.TIME_LEFT, 0);
                 editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, false);
                 editPreferences.putInt(Constants.WORK_SESSION_COUNTER, 0);
+                editPreferences.putInt(Constants.LAST_SESSION_DURATION, 0);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.UPDATE_UI);
@@ -149,6 +151,7 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_START_BUTTON_VISIBLE, false);
                 editPreferences.putBoolean(Constants.IS_TIMER_RUNNING, true);
                 editPreferences.putBoolean(Constants.CENTER_BUTTONS, false);
+                editPreferences.putInt(Constants.LAST_SESSION_DURATION, 0);
                 editPreferences.apply();
 
                 Intent updateUI = new Intent(Constants.UPDATE_UI);

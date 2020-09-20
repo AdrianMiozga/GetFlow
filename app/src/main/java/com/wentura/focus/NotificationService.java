@@ -80,7 +80,9 @@ public class NotificationService extends Service {
             }
         }
 
-        preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, timeLeft);
+        if (preferences.getInt(Constants.LAST_SESSION_DURATION, 0) == 0) {
+            preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, timeLeft);
+        }
 
         if (action != null && action.equals(Constants.NOTIFICATION_SERVICE_PAUSE)) {
             cancelCountDownTimer();
