@@ -38,6 +38,12 @@ public final class DayData extends ChartData {
         return new ArrayList<>(days);
     }
 
+    /**
+     * Prepares day data by making sure that there is always at least 12 entries.
+     * Also, fills any gaps between dates.
+     *
+     * @param currentDate current date
+     */
     public void prepareDays(LocalDate currentDate) {
         days = getData();
 
