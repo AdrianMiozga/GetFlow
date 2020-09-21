@@ -48,6 +48,7 @@ import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.wentura.focus.Constants;
 import com.wentura.focus.R;
 import com.wentura.focus.Utility;
@@ -59,10 +60,10 @@ public class ActivitySettings extends AppCompatActivity {
     private TextView workDurationSummary;
     private TextView breakDurationSummary;
     private TextView longBreakDurationSummary;
-    private Switch wifiSwitch;
-    private Switch dndSwitch;
-    private Switch enableLongBreaksSwitch;
-    private Switch enableDNDOnBreaksSwitch;
+    private SwitchMaterial wifiSwitch;
+    private SwitchMaterial dndSwitch;
+    private SwitchMaterial enableLongBreaksSwitch;
+    private SwitchMaterial enableDNDOnBreaksSwitch;
     private LinearLayout longBreakDurationGroup;
 
     @Override
