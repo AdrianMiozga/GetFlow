@@ -26,6 +26,12 @@
     <SwitchPreferenceCompat
         app:defaultValue="false"
         app:iconSpaceReserved="false"
+        app:key="full_screen_mode"
+        app:title="@string/full_screen_mode_title" />
+
+    <SwitchPreferenceCompat
+        app:defaultValue="false"
+        app:iconSpaceReserved="false"
         app:key="automatically_start_activities"
         app:summary="@string/automatically_start_activities_summary"
         app:title="@string/automatically_start_new_activities" />

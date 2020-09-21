@@ -87,6 +87,7 @@
     <string name="activity_pie_chart_no_data">No data for this period</string>
     <string name="scroll_pie_chart_automatically_summary">Scrolls activity chart in statistics to show Others section when changing time period.</string>
     <string name="scroll_pie_chart_automatically_title">Scroll chart automatically</string>
+    <string name="full_screen_mode_title">Full screen mode</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>

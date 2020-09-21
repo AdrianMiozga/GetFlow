@@ -41,6 +41,7 @@ public final class Constants {
     static final String TUTORIAL_STEP = "tutorial_step";
     public static final String AUTOMATICALLY_START_NEW_ACTIVITIES = "automatically_start_activities";
     public static final String SCROLL_PIE_CHART_AUTOMATICALLY = "scroll_pie_chart_automatically";
+    public static final String FULL_SCREEN_MODE = "full_screen_mode";
 
     /** Stopping timer or changing activity resets it. */
     public static final String WORK_SESSION_COUNTER = "work_session_counter";

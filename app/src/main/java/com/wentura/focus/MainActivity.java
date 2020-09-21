@@ -30,6 +30,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,6 +59,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int AUTO_HIDE_FULL_SCREEN_AFTER = 3000;
     private Button skipButton;
     private ImageView workIcon;
     private ImageView breakIcon;
@@ -66,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     private Database database;
     private boolean isScaleAnimationDone = false;
     private boolean isTimerTextViewActionUpCalled = false;
+    private Handler fullScreenHandler = new Handler();
+    private Runnable enterFullScreen = () -> Utility.hideSystemUI(getWindow());
 
     private final BroadcastReceiver statusReceiver = new BroadcastReceiver() {
         @Override
@@ -123,6 +127,46 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPreferences.getBoolean(Constants.FULL_SCREEN_MODE, false)) {
+            if (hasFocus) {
+                Utility.hideSystemUI(getWindow());
+            }
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+
+        if (event.getAction() != MotionEvent.ACTION_DOWN) {
+            return false;
+        }
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPreferences.getBoolean(Constants.FULL_SCREEN_MODE, false)) {
+            View decorView = getWindow().getDecorView();
+            boolean isFullScreenOff = (decorView.getSystemUiVisibility() & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0;
+
+            if (isFullScreenOff) {
+                Utility.showSystemUI(getWindow());
+
+                fullScreenHandler.removeCallbacks(enterFullScreen);
+                fullScreenHandler.postDelayed(enterFullScreen, AUTO_HIDE_FULL_SCREEN_AFTER);
+            } else {
+                Utility.hideSystemUI(getWindow());
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -157,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         timerTextView = findViewById(R.id.countdown_text_view);
         activityTextView = findViewById(R.id.current_activity);
         workIcon = findViewById(R.id.work_icon);
@@ -173,7 +216,14 @@ public class MainActivity extends AppCompatActivity {
             actionbar.setTitle("");
         }
 
-        activityTextView.setOnClickListener(view -> startActivity(new Intent(this, Activities.class)));
+        activityTextView.setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+                // On older APIs, without disabling full screen before entering Activities the animation
+                // would be bugged out.
+                Utility.showSystemUI(getWindow());
+            }
+            startActivity(new Intent(this, Activities.class));
+        });
 
         timerTextView.setOnClickListener(view -> {
             SharedPreferences sharedPreferences =
@@ -295,6 +345,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        fullScreenHandler.removeCallbacks(enterFullScreen);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(statusReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
     }
