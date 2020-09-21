@@ -34,31 +34,27 @@ public class CreateMonthsArrayTest {
 
     @Test
     public void createMonthsArrayTest() {
-        data.add(new HistoryChartItem("2020-03-10", 2800, 10000, 0));
+        data.add(new HistoryChartItem("2020-03-10", 2800, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(1));
-        assertThat(monthData.getGeneratedData().get(0).getCompletedWorkTime(), is(2800));
-        assertThat(monthData.getGeneratedData().get(0).getIncompleteWorkTime(), is(10000));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(2800));
 
-        data.add(0, new HistoryChartItem("2020-03-02", 3000, 15000, 0));
+        data.add(0, new HistoryChartItem("2020-03-02", 3000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(1));
-        assertThat(monthData.getGeneratedData().get(0).getCompletedWorkTime(), is(5800));
-        assertThat(monthData.getGeneratedData().get(0).getIncompleteWorkTime(), is(25000));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(5800));
 
-        data.add(0, new HistoryChartItem("2019-02-02", 5000, 8000, 0));
+        data.add(0, new HistoryChartItem("2019-02-02", 5000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(2));
-        assertThat(monthData.getGeneratedData().get(1).getCompletedWorkTime(), is(5800));
-        assertThat(monthData.getGeneratedData().get(1).getIncompleteWorkTime(), is(25000));
-        assertThat(monthData.getGeneratedData().get(0).getCompletedWorkTime(), is(5000));
-        assertThat(monthData.getGeneratedData().get(0).getIncompleteWorkTime(), is(8000));
+        assertThat(monthData.getGeneratedData().get(1).getTime(), is(5800));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(5000));
     }
 
     @Test
@@ -70,8 +66,7 @@ public class CreateMonthsArrayTest {
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(1));
-        assertThat(monthData.getGeneratedData().get(0).getCompletedWorkTime(), is(0));
-        assertThat(monthData.getGeneratedData().get(0).getIncompleteWorkTime(), is(0));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(0));
     }
 
     @Test

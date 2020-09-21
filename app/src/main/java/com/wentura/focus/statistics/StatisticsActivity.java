@@ -537,29 +537,25 @@ public class StatisticsActivity extends AppCompatActivity {
         int timeToday = 0;
 
         if (historyChartItemToday != null) {
-            timeToday =
-                    historyChartItemToday.getCompletedWorkTime() + historyChartItemToday.getIncompleteWorkTime();
+            timeToday = historyChartItemToday.getTime();
         }
 
         int timeWeek = timeToday;
 
         for (HistoryChartItem historyChartItem : historyChartItemsWeek) {
-            timeWeek += historyChartItem.getCompletedWorkTime();
-            timeWeek += historyChartItem.getIncompleteWorkTime();
+            timeWeek += historyChartItem.getTime();
         }
 
         int timeMonth = timeWeek;
 
         for (HistoryChartItem historyChartItem : historyChartItemsMonth) {
-            timeMonth += historyChartItem.getCompletedWorkTime();
-            timeMonth += historyChartItem.getIncompleteWorkTime();
+            timeMonth += historyChartItem.getTime();
         }
 
         int timeTotal = timeMonth;
 
         for (HistoryChartItem historyChartItem : historyChartItemsTotal) {
-            timeTotal += historyChartItem.getCompletedWorkTime();
-            timeTotal += historyChartItem.getIncompleteWorkTime();
+            timeTotal += historyChartItem.getTime();
         }
 
         numberTodayTextView.setText(Utility.formatPieChartTime(timeToday));

@@ -88,24 +88,20 @@ public final class MonthData extends ChartData {
     }
 
     public void createMonthsArray() {
-        int totalCompletedTime = 0;
-        int totalIncompleteTime = 0;
+        int totalTime = 0;
         List<HistoryChartItem> days = getData();
 
         for (int i = 0; i < days.size() - 1; i++) {
             LocalDate todayDate = days.get(i).getDate();
             LocalDate nextDate = days.get(i + 1).getDate();
 
-            totalCompletedTime += days.get(i).getCompletedWorkTime();
-            totalIncompleteTime += days.get(i).getIncompleteWorkTime();
+            totalTime += days.get(i).getTime();
 
             if (todayDate.getMonthValue() != nextDate.getMonthValue() ||
                     todayDate.getYear() != nextDate.getYear()) {
-                months.add(HistoryChartItem.of(todayDate, totalCompletedTime,
-                        totalIncompleteTime, 0));
+                months.add(HistoryChartItem.of(todayDate, totalTime, 0));
 
-                totalCompletedTime = 0;
-                totalIncompleteTime = 0;
+                totalTime = 0;
             }
 
             if (i == days.size() - 2) {
@@ -113,11 +109,9 @@ public final class MonthData extends ChartData {
                         todayDate.getYear() == nextDate.getYear() &&
                         i == days.size() - 2) {
 
-                    totalCompletedTime += days.get(i + 1).getCompletedWorkTime();
-                    totalIncompleteTime += days.get(i + 1).getIncompleteWorkTime();
+                    totalTime += days.get(i + 1).getTime();
 
-                    months.add(HistoryChartItem.of(nextDate, totalCompletedTime,
-                            totalIncompleteTime, 0));
+                    months.add(HistoryChartItem.of(nextDate, totalTime, 0));
                 }
 
                 if (todayDate.getMonthValue() != nextDate.getMonthValue() ||
@@ -129,8 +123,7 @@ public final class MonthData extends ChartData {
         }
 
         if (days.size() == 1) {
-            months.add(HistoryChartItem.of(days.get(0).getDate(), days.get(0).getCompletedWorkTime(),
-                    days.get(0).getIncompleteWorkTime(), 0));
+            months.add(HistoryChartItem.of(days.get(0).getDate(), days.get(0).getTime(), 0));
         }
     }
 }

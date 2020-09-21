@@ -66,29 +66,25 @@ public interface PomodoroDao {
     int getId(String date, int activityId);
 
     @Query("SELECT Date AS date, " +
-            "SUM(CompletedWorkTime) AS completedWorkTime, " +
-            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
             "FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate AND ActivityId IN(:activityId) GROUP BY Date ORDER BY Date")
     List<HistoryChartItem> getAllDatesBetweenGroupByDate(String startDate, String endDate, int[] activityId);
 
     @Query("SELECT Date AS date, " +
-            "SUM(CompletedWorkTime) AS completedWorkTime, " +
-            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
             "FROM Pomodoro WHERE Date = :date AND ActivityId IN(:activityId) GROUP BY Date")
     HistoryChartItem getAllGroupByDate(String date, int[] activityId);
 
     @Query("SELECT Date AS date, " +
-            "SUM(CompletedWorkTime) AS completedWorkTime, " +
-            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
             "FROM Pomodoro WHERE ActivityId IN(:activityId) GROUP BY Date ORDER BY Date")
     List<HistoryChartItem> getAllGroupByDate(int[] activityId);
 
     @Query("SELECT Date AS date, " +
-            "SUM(CompletedWorkTime) AS completedWorkTime, " +
-            "SUM(IncompleteWorkTime) AS incompleteWorkTime, " +
+            "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
             "FROM Pomodoro WHERE Date < :date GROUP BY Date ORDER BY Date")
     List<HistoryChartItem> getAllDateLessGroupByDate(String date);

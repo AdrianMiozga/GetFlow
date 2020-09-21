@@ -20,45 +20,43 @@ package com.wentura.focus.statistics.historychart;
 import androidx.annotation.NonNull;
 import androidx.room.Ignore;
 
+import com.wentura.focus.database.Pomodoro;
+
 import java.time.LocalDate;
 
 public final class HistoryChartItem implements Comparable<HistoryChartItem> {
     private final String date;
-    private final int completedWorkTime;
-    private final int incompleteWorkTime;
+
+    /** Sum of CompletedWorkTime and IncompleteWorkTime from {@link Pomodoro}. */
+    private final int time;
+
     private final int activityId;
 
-    public HistoryChartItem(String date, int completedWorkTime,
-                            int incompleteWorkTime, int activityId) {
+    public HistoryChartItem(String date, int time, int activityId) {
         this.date = date;
-        this.completedWorkTime = completedWorkTime;
-        this.incompleteWorkTime = incompleteWorkTime;
+        this.time = time;
         this.activityId = activityId;
     }
 
     @Ignore
     public HistoryChartItem(String Date) {
-        this(Date, 0, 0, 0);
+        this(Date, 0, 0);
     }
 
-    public static HistoryChartItem of(LocalDate LocalDate, int CompletedWorkTime, int IncompleteWorkTime, int activityId) {
-        return new HistoryChartItem(LocalDate.toString(), CompletedWorkTime, IncompleteWorkTime, activityId);
+    public static HistoryChartItem of(LocalDate LocalDate, int totalTime, int activityId) {
+        return new HistoryChartItem(LocalDate.toString(), totalTime, activityId);
     }
 
     public static HistoryChartItem of(LocalDate LocalDate) {
-        return new HistoryChartItem(LocalDate.toString(), 0, 0, 0);
+        return new HistoryChartItem(LocalDate.toString(), 0, 0);
     }
 
     public LocalDate getDate() {
         return LocalDate.parse(date);
     }
 
-    public int getCompletedWorkTime() {
-        return completedWorkTime;
-    }
-
-    public int getIncompleteWorkTime() {
-        return incompleteWorkTime;
+    public int getTime() {
+        return time;
     }
 
     public int getActivityId() {
@@ -73,10 +71,9 @@ public final class HistoryChartItem implements Comparable<HistoryChartItem> {
     @Override
     public String toString() {
         return "HistoryChartItem{" +
-                "Date='" + date + '\'' +
-                ", CompletedWorkTime=" + completedWorkTime +
-                ", IncompleteWorkTime=" + incompleteWorkTime +
-                ", ActivityId=" + activityId +
+                "date='" + date + '\'' +
+                ", time=" + time +
+                ", activityId=" + activityId +
                 '}';
     }
 }

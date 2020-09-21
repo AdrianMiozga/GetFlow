@@ -44,26 +44,24 @@ public class PrepareMonthsTest {
         assertThat(monthData.getGeneratedData().size(), is(12));
 
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
-            assertThat(monthData.getGeneratedData().get(i).getIncompleteWorkTime(), is(0));
-            assertThat(monthData.getGeneratedData().get(i).getCompletedWorkTime(), is(0));
+            assertThat(monthData.getGeneratedData().get(i).getTime(), is(0));
         }
         countMonths();
 
-        data.add(0, new HistoryChartItem(currentDate, 20000, 5000, 0));
+        data.add(0, new HistoryChartItem(currentDate, 20000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
         monthData.prepareMonths(currentDate);
 
         assertThat(monthData.getGeneratedData().size(), is(12));
-        assertThat(monthData.getGeneratedData().get(11).getCompletedWorkTime(), is(20000));
-        assertThat(monthData.getGeneratedData().get(11).getIncompleteWorkTime(), is(5000));
+        assertThat(monthData.getGeneratedData().get(11).getTime(), is(20000));
         countMonths();
     }
 
     @Test
     public void prepareMonthsTest2() {
         data.clear();
-        data.add(new HistoryChartItem("2020-01-08", 8300, 2008, 0));
+        data.add(new HistoryChartItem("2020-01-08", 8300, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
         monthData.prepareMonths(currentDate);
@@ -72,11 +70,9 @@ public class PrepareMonthsTest {
 
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
             if (i == 9) {
-                assertThat(monthData.getGeneratedData().get(9).getCompletedWorkTime(), is(8300));
-                assertThat(monthData.getGeneratedData().get(9).getIncompleteWorkTime(), is(2008));
+                assertThat(monthData.getGeneratedData().get(9).getTime(), is(8300));
             } else {
-                assertThat(monthData.getGeneratedData().get(i).getCompletedWorkTime(), is(0));
-                assertThat(monthData.getGeneratedData().get(i).getIncompleteWorkTime(), is(0));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(0));
             }
         }
         countMonths();
@@ -89,16 +85,14 @@ public class PrepareMonthsTest {
         assertThat(monthData.getGeneratedData().size(), is(12));
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
             if (i == 9) {
-                assertThat(monthData.getGeneratedData().get(i).getCompletedWorkTime(), is(8300));
-                assertThat(monthData.getGeneratedData().get(i).getIncompleteWorkTime(), is(2008));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(8300));
             } else {
-                assertThat(monthData.getGeneratedData().get(i).getCompletedWorkTime(), is(0));
-                assertThat(monthData.getGeneratedData().get(i).getIncompleteWorkTime(), is(0));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(0));
             }
         }
         countMonths();
 
-        data.add(0, new HistoryChartItem("2019-01-08", 1200, 5000, 0));
+        data.add(0, new HistoryChartItem("2019-01-08", 1200, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
         monthData.prepareMonths(currentDate);
@@ -107,15 +101,12 @@ public class PrepareMonthsTest {
 
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
             if (i == 0) {
-                assertThat(monthData.getGeneratedData().get(i).getCompletedWorkTime(), is(1200));
-                assertThat(monthData.getGeneratedData().get(i).getIncompleteWorkTime(), is(5000));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(1200));
             } else if (i == 12) {
-                assertThat(monthData.getGeneratedData().get(i).getCompletedWorkTime(), is(8300));
-                assertThat(monthData.getGeneratedData().get(i).getIncompleteWorkTime(), is(2008));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(8300));
             } else {
                 assertThat("At i = " + i,
-                        monthData.getGeneratedData().get(i).getCompletedWorkTime(), is(0));
-                assertThat("At i = " + i, monthData.getGeneratedData().get(i).getIncompleteWorkTime(), is(0));
+                        monthData.getGeneratedData().get(i).getTime(), is(0));
             }
         }
 

@@ -42,7 +42,7 @@ public abstract class ChartData {
         maxValue = 0;
 
         for (int i = 0; i < historyChartItems.size(); i++) {
-            long totalTime = historyChartItems.get(i).getCompletedWorkTime() + historyChartItems.get(i).getIncompleteWorkTime();
+            long totalTime = historyChartItems.get(i).getTime();
 
             entries.add(new Entry(i, totalTime));
 

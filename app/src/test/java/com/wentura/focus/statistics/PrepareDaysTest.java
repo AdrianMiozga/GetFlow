@@ -60,7 +60,7 @@ public class PrepareDaysTest {
     @Before
     public void setUp() {
         data = new ArrayList<>();
-        data.add(new HistoryChartItem(date, 0, 0, 0));
+        data.add(new HistoryChartItem(date, 0, 0));
         dayData = new DayData(data);
     }
 
@@ -72,7 +72,7 @@ public class PrepareDaysTest {
 
     @Test
     public void prepareDaysWithCurrentDateTest() {
-        data.add(new HistoryChartItem(currentDate, 0, 0, 0));
+        data.add(new HistoryChartItem(currentDate, 0, 0));
         assumeThat(data.get(0).getDate(), is(not(data.get(1).getDate())));
 
         dayData.prepareDays(LocalDate.parse(currentDate));
