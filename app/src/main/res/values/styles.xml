@@ -32,6 +32,12 @@
         <!--        Sometimes after rotating the screen without explicitly specifying the menu item text -->
         <!--        color, it would turn to black, whereas normally it was white.-->
         <item name="android:itemTextAppearance">@style/AppTheme.CustomMenu</item>
+
+        <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
+    </style>
+
+    <style name="MenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/dark_grey</item>
     </style>
 
     <style name="AppTheme.CustomMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">

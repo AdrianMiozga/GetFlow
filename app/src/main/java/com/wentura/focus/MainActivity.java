@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
             showHelpingSnackbars();
         });
 
-        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.grey_snackbar));
+        snackbar.getView().setBackgroundColor(getResources().getColor(R.color.dark_grey));
         snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
         snackbar.show();
     }
