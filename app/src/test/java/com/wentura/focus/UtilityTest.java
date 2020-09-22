@@ -25,34 +25,44 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class UtilityTest {
     @Test
     public void formatStatisticsTime_ThreeHours_ReturnsFormatted() {
-        assertThat(Utility.formatPieChartTime(10_800_000L), equalTo("3h"));
+        assertThat(Utility.formatStatisticsTime(10_800_000L), equalTo("3h"));
     }
 
     @Test
     public void formatStatisticsTime_ThreeHoursTwoMinutes_ReturnsFormatted() {
         assertThat("Should be 3h 2m as I'm always rounding up minutes in this method",
-                Utility.formatPieChartTime(10_890_000L), equalTo("3h 2m"));
+                Utility.formatStatisticsTime(10_890_000L), equalTo("3h 2m"));
     }
 
     @Test
     public void formatStatisticsTime_FifteenSeconds_ReturnsFormatted() {
-        assertThat("Anything <= 60s should display as 1m",
-                Utility.formatPieChartTime(15_000L), equalTo("1m"));
+        assertThat(Utility.formatStatisticsTime(15_000L), equalTo("15s"));
     }
 
     @Test
     public void formatStatisticsTime_TenHours_ReturnsFormatted() {
-        assertThat(Utility.formatPieChartTime(36_000_000L), equalTo("10h"));
+        assertThat(Utility.formatStatisticsTime(36_000_000L), equalTo("10h"));
     }
 
     @Test
     public void formatStatisticsTime_OverTenHours_ReturnsFormatted() {
         assertThat("Anything over ten hours should display only hours",
-                Utility.formatPieChartTime(37_000_000L), equalTo("10h"));
+                Utility.formatStatisticsTime(37_000_000L), equalTo("10h"));
     }
 
     @Test
     public void formatStatisticsTime_NearlyTwoHours_ReturnsFormatted() {
-        assertThat(Utility.formatPieChartTime(7_141_000L), equalTo("2h"));
+        assertThat(Utility.formatStatisticsTime(7_141_000L), equalTo("2h"));
+    }
+
+    @Test
+    public void formatStatisticsTime_OneMinute_ReturnsFormatted() {
+        assertThat(Utility.formatStatisticsTime(60_000L), equalTo("1m"));
+    }
+
+    @Test
+    public void formatStatisticsTime_Zero_ReturnsFormatted() {
+        assertThat("0h looks better than 0s in the statistics context",
+                Utility.formatStatisticsTime(0L), equalTo("0h"));
     }
 }

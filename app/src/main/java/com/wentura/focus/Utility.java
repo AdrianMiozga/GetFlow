@@ -116,7 +116,7 @@ public final class Utility {
     }
 
     @SuppressLint("DefaultLocale")
-    public static String formatPieChartTime(long milliseconds) {
+    public static String formatStatisticsTime(long milliseconds) {
         long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
 
         long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
@@ -124,6 +124,14 @@ public final class Utility {
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds));
+
+        if (milliseconds == 0) {
+            return "0h";
+        }
+
+        if (minutes == 0 && hours == 0) {
+            return String.format("%ds", seconds);
+        }
 
         if (seconds > 0) {
             minutes++;

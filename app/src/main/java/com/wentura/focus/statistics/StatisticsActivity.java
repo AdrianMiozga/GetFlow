@@ -437,13 +437,13 @@ public class StatisticsActivity extends AppCompatActivity {
 
         for (PieChartItem pieChartItem : preparedPieChartItems) {
             entries.add(new PieEntry(pieChartItem.getTotalTime(), pieChartItem.getActivityName(),
-                    Utility.formatPieChartTime(pieChartItem.getTotalTime())));
+                    Utility.formatStatisticsTime(pieChartItem.getTotalTime())));
         }
 
         pieData = createActivityPieData(entries);
 
         // Center Text
-        pieChart.setCenterText(Utility.formatPieChartTime((long) pieData.getYValueSum()));
+        pieChart.setCenterText(Utility.formatStatisticsTime((long) pieData.getYValueSum()));
 
         // Hole
         pieChart.setHoleRadius(50f);
@@ -473,7 +473,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         for (PieChartItem pieChartItem : others) {
             legendItems.add(new LegendItem(pieChartItem.getActivityName(), pieChartItem.getPercent(),
-                    Utility.formatPieChartTime(pieChartItem.getTotalTime())));
+                    Utility.formatStatisticsTime(pieChartItem.getTotalTime())));
         }
 
         shouldScrollDown = previousLegendSize <= legendItems.size();
@@ -571,10 +571,10 @@ public class StatisticsActivity extends AppCompatActivity {
             timeTotal += historyChartItem.getTime();
         }
 
-        numberTodayTextView.setText(Utility.formatPieChartTime(timeToday));
-        numberWeekTextView.setText(Utility.formatPieChartTime(timeWeek));
-        numberMonthTextView.setText(Utility.formatPieChartTime(timeMonth));
-        numberTotalTextView.setText(Utility.formatPieChartTime(timeTotal));
+        numberTodayTextView.setText(Utility.formatStatisticsTime(timeToday));
+        numberWeekTextView.setText(Utility.formatStatisticsTime(timeWeek));
+        numberMonthTextView.setText(Utility.formatStatisticsTime(timeMonth));
+        numberTotalTextView.setText(Utility.formatStatisticsTime(timeTotal));
 
         monthData = new MonthData(data);
         monthData.generate();
