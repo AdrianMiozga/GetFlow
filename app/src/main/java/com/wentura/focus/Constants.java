@@ -66,6 +66,9 @@ public final class Constants {
     public static final int DEFAULT_BREAK_TIME = 5;
     public static final int DEFAULT_LONG_BREAK_TIME = 20;
 
+    /** Minimum time to save session to database. */
+    public static final int MINIMUM_SESSION_TIME = 30_000;
+
     /** Frequency of vibration when the timer is waiting for action - after it ends. */
     static final long VIBRATION_REMINDER_FREQUENCY = 30_000;
 

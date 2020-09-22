@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -73,7 +72,7 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                 int lastSessionDuration = preferences.getInt(Constants.LAST_SESSION_DURATION, 0);
                 int timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
-                if (timeLeft != 0) {
+                if (timeLeft != 0 && lastSessionDuration - timeLeft > Constants.MINIMUM_SESSION_TIME) {
                     if (isBreakState) {
                         Utility.updateDatabaseBreaks(context, lastSessionDuration - timeLeft, activityId);
                     } else {
