@@ -103,8 +103,8 @@ public interface PomodoroDao {
     @Query("SELECT Date AS date, " +
             "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
-            "FROM Pomodoro WHERE Date < :date GROUP BY Date ORDER BY Date")
-    List<HistoryChartItem> getAllDateLessGroupByDate(String date);
+            "FROM Pomodoro WHERE Date < :date AND ActivityId IN(:activityId) GROUP BY Date ORDER BY Date")
+    List<HistoryChartItem> getAllDateLessGroupByDate(String date, int[] activityId);
 
     @Query("UPDATE Pomodoro SET CompletedWorks = :completedWorks WHERE ID = :id")
     void updateCompletedWorks(int completedWorks, int id);

@@ -19,7 +19,6 @@ package com.wentura.focus.statistics;
 
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -167,7 +166,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 builder.setTitle("Select activities")
                         .setMultiChoiceItems(activities, checkedItems,
-                                (DialogInterface.OnMultiChoiceClickListener) (dialog, which, isChecked) -> checkedItems[which] = isChecked)
+                                (dialog, which, isChecked) -> checkedItems[which] = isChecked)
 
                         .setPositiveButton("OK", (dialog, id) -> {
                             for (int i = 0; i < checkedItems.length; i++) {
@@ -522,17 +521,23 @@ public class StatisticsActivity extends AppCompatActivity {
             int[] idsOfActivitiesToShow = Database.databaseExecutor.submit(() -> database.activityDao().getIdsToShow()).get();
 
             historyChartItemToday =
-                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByDate(LocalDate.now().toString(), idsOfActivitiesToShow)).get();
+                    Database.databaseExecutor.submit(() ->
+                            database.pomodoroDao().getAllGroupByDate(LocalDate.now().toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsWeek =
-                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(6).toString(), LocalDate.now().minusDays(1).toString(), idsOfActivitiesToShow)).get();
+                    Database.databaseExecutor.submit(() ->
+                            database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(6).toString(),
+                                    LocalDate.now().minusDays(1).toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsMonth =
-                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(29).toString(),
+                    Database.databaseExecutor.submit(() ->
+                            database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(29).toString(),
                             LocalDate.now().minusDays(7).toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsTotal =
-                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllDateLessGroupByDate(LocalDate.now().minusDays(29).toString())).get();
+                    Database.databaseExecutor.submit(() ->
+                            database.pomodoroDao().getAllDateLessGroupByDate(LocalDate.now().minusDays(29).toString(),
+                                    idsOfActivitiesToShow)).get();
 
             data = Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByDate(idsOfActivitiesToShow)).get();
 
