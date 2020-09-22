@@ -58,6 +58,20 @@ final class CustomXAxisFormatter extends ValueFormatter {
                 result = String.valueOf(date.getDayOfMonth());
                 break;
             }
+            case WEEKS: {
+                if (value == axis.mEntries[0]) {
+                    result = DateTimeFormatter.ofPattern("MMM").format(date) + "\n" + date.getYear();
+                    break;
+                }
+
+                if (date.getDayOfMonth() >= 1 && date.getDayOfMonth() <= 7) {
+                    result = DateTimeFormatter.ofPattern("MMM").format(date);
+                    break;
+                }
+
+                result = String.valueOf(date.getDayOfMonth());
+                break;
+            }
             case MONTHS: {
                 result = DateTimeFormatter.ofPattern("MMM").format(date);
 

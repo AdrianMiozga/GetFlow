@@ -87,6 +87,7 @@ public final class MonthData extends ChartData {
         }
     }
 
+    // TODO: 22.09.2020 Replace this method by using GROUP BY in SQLite query
     public void createMonthsArray() {
         int totalTime = 0;
         List<HistoryChartItem> days = getData();

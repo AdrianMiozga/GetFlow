@@ -62,6 +62,7 @@ import com.wentura.focus.statistics.historychart.DayData;
 import com.wentura.focus.statistics.historychart.HistoryChart;
 import com.wentura.focus.statistics.historychart.HistoryChartItem;
 import com.wentura.focus.statistics.historychart.MonthData;
+import com.wentura.focus.statistics.historychart.WeekData;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class StatisticsActivity extends AppCompatActivity {
     private static PieChart pieChart;
     private static ChartData monthData;
     private static ChartData dayData;
+    private static ChartData weekData;
     private boolean isActivitySpinnerSelectionFromTouch;
     private boolean shouldScrollDown;
     private HistoryChart historyChart;
@@ -343,10 +345,12 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 sharedPreferences.edit().putInt(Constants.HISTORY_SPINNER_SETTING, position).apply();
 
-                if (position == 1) {
-                    historyChart.displayData(monthData);
-                } else {
+                if (position == 0) {
                     historyChart.displayData(dayData);
+                } else if (position == 1) {
+                    historyChart.displayData(weekData);
+                } else {
+                    historyChart.displayData(monthData);
                 }
             }
 
@@ -512,6 +516,7 @@ public class StatisticsActivity extends AppCompatActivity {
         List<HistoryChartItem> historyChartItemsWeek = new ArrayList<>();
         List<HistoryChartItem> historyChartItemsMonth = new ArrayList<>();
         List<HistoryChartItem> historyChartItemsTotal = new ArrayList<>();
+        List<HistoryChartItem> historyChartItemsWeekData = new ArrayList<>();
 
         try {
             int[] idsOfActivitiesToShow = Database.databaseExecutor.submit(() -> database.activityDao().getIdsToShow()).get();
@@ -530,6 +535,9 @@ public class StatisticsActivity extends AppCompatActivity {
                     Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllDateLessGroupByDate(LocalDate.now().minusDays(29).toString())).get();
 
             data = Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByDate(idsOfActivitiesToShow)).get();
+
+            historyChartItemsWeekData =
+                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByWeek(idsOfActivitiesToShow)).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -569,13 +577,18 @@ public class StatisticsActivity extends AppCompatActivity {
         dayData = new DayData(data);
         dayData.generate();
 
+        weekData = new WeekData(historyChartItemsWeekData);
+        weekData.generate();
+
         historyChart = new HistoryChart(this, historyChartView);
         historyChart.setupChart();
 
-        if (historySpinnerCurrentSelectedIndex == 1) {
-            historyChart.displayData(monthData);
-        } else {
+        if (historySpinnerCurrentSelectedIndex == 0) {
             historyChart.displayData(dayData);
+        } else if (historySpinnerCurrentSelectedIndex == 1) {
+            historyChart.displayData(weekData);
+        } else {
+            historyChart.displayData(monthData);
         }
     }
 }

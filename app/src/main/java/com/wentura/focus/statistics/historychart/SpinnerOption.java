@@ -19,5 +19,6 @@ package com.wentura.focus.statistics.historychart;
 
 enum SpinnerOption {
     DAYS,
+    WEEKS,
     MONTHS
 }

@@ -88,9 +88,11 @@
     <string name="scroll_pie_chart_automatically_summary">Scrolls activity chart in statistics to show Others section when changing time period.</string>
     <string name="scroll_pie_chart_automatically_title">Scroll chart automatically</string>
     <string name="full_screen_mode_title">Full screen mode</string>
+    <string name="weeks">Weeks</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>
+        <item name="weeks">@string/weeks</item>
         <item name="months">@string/months</item>
     </string-array>
 

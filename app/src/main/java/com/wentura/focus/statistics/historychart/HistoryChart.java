@@ -28,6 +28,7 @@ import com.wentura.focus.R;
 
 import static com.wentura.focus.statistics.historychart.SpinnerOption.DAYS;
 import static com.wentura.focus.statistics.historychart.SpinnerOption.MONTHS;
+import static com.wentura.focus.statistics.historychart.SpinnerOption.WEEKS;
 
 public class HistoryChart {
     private final LineChart chart;
@@ -122,6 +123,8 @@ public class HistoryChart {
         // TODO: 05.09.2020 Improve
         if (chartData instanceof DayData) {
             xAxis.setValueFormatter(new CustomXAxisFormatter(chartData.getGeneratedData(), DAYS));
+        } else if (chartData instanceof WeekData) {
+            xAxis.setValueFormatter(new CustomXAxisFormatter(chartData.getGeneratedData(), WEEKS));
         } else {
             xAxis.setValueFormatter(new CustomXAxisFormatter(chartData.getGeneratedData(), MONTHS));
         }

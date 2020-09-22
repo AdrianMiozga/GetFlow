@@ -65,6 +65,23 @@ public interface PomodoroDao {
     @Query("SELECT ID FROM Pomodoro WHERE Date = :date AND ActivityId = :activityId")
     int getId(String date, int activityId);
 
+    /**
+     * Get pomodoro session grouped by week. Dates are always the first day of week (Monday).
+     *
+     * @param activityId ids of activities to get pomodoros from
+     * @return pomodoro sessions grouped by week
+     */
+    // I have to first subtract 6 days as 'weekday 1' pushes all dates forward to next Monday instead to previous one.
+    // This would cause dates like 2020-09-20 (Sunday) and 2020-09-21 (Monday) go to one date - 2020-09-21.
+    @Query("SELECT date(MIN(Date), '-6 days', 'weekday 1') AS date, " +
+            "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
+            "ActivityId AS activityId " +
+            "FROM Pomodoro " +
+            "WHERE ActivityId IN(:activityId) " +
+            "GROUP BY strftime('%W', Date) || strftime('%Y') " +
+            "ORDER BY Date")
+    List<HistoryChartItem> getAllGroupByWeek(int[] activityId);
+
     @Query("SELECT Date AS date, " +
             "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
