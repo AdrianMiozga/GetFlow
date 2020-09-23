@@ -109,6 +109,37 @@
             tools:text="20m" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/sessions_till_long_break_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/long_break_duration_linear_layout">
+
+        <TextView
+            android:id="@+id/sessions_till_long_break_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sessions_before_a_long_break_title"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/break_duration" />
+
+        <TextView
+            android:id="@+id/sessions_till_long_break_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="4" />
+    </LinearLayout>
+
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/enable_long_breaks_switch"
         android:layout_width="match_parent"
@@ -119,7 +150,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/long_break_duration_linear_layout" />
+        app:layout_constraintTop_toBottomOf="@id/sessions_till_long_break_linear_layout" />
 
     <RelativeLayout
         android:id="@+id/do_not_disturb_linear_layout"

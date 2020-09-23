@@ -36,7 +36,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,11 +59,13 @@ public class ActivitySettings extends AppCompatActivity {
     private TextView workDurationSummary;
     private TextView breakDurationSummary;
     private TextView longBreakDurationSummary;
+    private TextView sessionsBeforeLongBreakSummary;
     private SwitchMaterial wifiSwitch;
     private SwitchMaterial dndSwitch;
     private SwitchMaterial enableLongBreaksSwitch;
     private SwitchMaterial enableDNDOnBreaksSwitch;
     private LinearLayout longBreakDurationGroup;
+    private LinearLayout sessionsBeforeLongBreakGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class ActivitySettings extends AppCompatActivity {
         dndSwitch = findViewById(R.id.do_not_disturb_switch);
         enableLongBreaksSwitch = findViewById(R.id.enable_long_breaks_switch);
         enableDNDOnBreaksSwitch = findViewById(R.id.enable_do_not_disturb_on_breaks_switch);
+        sessionsBeforeLongBreakGroup = findViewById(R.id.sessions_till_long_break_linear_layout);
 
         ConstraintLayout constraintLayout = findViewById(R.id.some_constraint_layout);
 
@@ -91,6 +93,7 @@ public class ActivitySettings extends AppCompatActivity {
         workDurationSummary = findViewById(R.id.work_duration_summary);
         breakDurationSummary = findViewById(R.id.break_duration_summary);
         longBreakDurationSummary = findViewById(R.id.long_break_duration_summary);
+        sessionsBeforeLongBreakSummary = findViewById(R.id.sessions_till_long_break_summary);
 
         setupUi();
 
@@ -102,6 +105,8 @@ public class ActivitySettings extends AppCompatActivity {
                 WindowType.BREAK_DURATION));
         longBreakDurationGroup.setOnClickListener(view -> setupDialog(getString(R.string.long_break_duration_title),
                 WindowType.LONG_BREAK_DURATION));
+        sessionsBeforeLongBreakGroup.setOnClickListener(view -> setupDialog(getResources().getString(R.string.sessions_before_a_long_break_title),
+                WindowType.SESSIONS_BEFORE_LONG_BREAK));
 
         enableLongBreaksSwitch.setOnClickListener(view ->
                 Database.databaseExecutor.execute(() -> {
@@ -114,6 +119,9 @@ public class ActivitySettings extends AppCompatActivity {
                         TransitionManager.beginDelayedTransition(constraintLayout, transition);
 
                         longBreakDurationGroup.setVisibility(enableLongBreaksSwitch.isChecked() ?
+                                View.VISIBLE : View.GONE);
+
+                        sessionsBeforeLongBreakGroup.setVisibility(enableLongBreaksSwitch.isChecked() ?
                                 View.VISIBLE : View.GONE);
                     });
                 }));
@@ -270,7 +278,7 @@ public class ActivitySettings extends AppCompatActivity {
                                 if (currentActivityId == activityId) {
                                     Database.databaseExecutor.execute(() ->
                                             sharedPreferences.edit().putInt(Constants.CURRENT_ACTIVITY_ID,
-                                            database.activityDao().getFirstActivityID()).apply());
+                                                    database.activityDao().getFirstActivityID()).apply());
                                 }
 
                                 Intent intent = new Intent(this, Activities.class);
@@ -313,6 +321,11 @@ public class ActivitySettings extends AppCompatActivity {
         });
 
         Database.databaseExecutor.execute(() -> {
+            int sessionsBeforeLongBreak = database.activityDao().getSessionsBeforeLongBreak(activityId);
+            runOnUiThread(() -> sessionsBeforeLongBreakSummary.setText(String.valueOf(sessionsBeforeLongBreak)));
+        });
+
+        Database.databaseExecutor.execute(() -> {
             boolean areLongBreaksEnabled = database.activityDao().areLongBreaksEnabled(activityId);
 
             runOnUiThread(() -> {
@@ -321,6 +334,7 @@ public class ActivitySettings extends AppCompatActivity {
 
                 if (areLongBreaksEnabled) {
                     longBreakDurationGroup.setVisibility(View.VISIBLE);
+                    sessionsBeforeLongBreakGroup.setVisibility(View.VISIBLE);
                 }
             });
         });
@@ -366,22 +380,25 @@ public class ActivitySettings extends AppCompatActivity {
         editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
 
         Database.databaseExecutor.execute(() -> {
-            int duration;
+            int valueFromDatabase;
 
             switch (windowType) {
                 case WORK_DURATION:
-                    duration = database.activityDao().getWorkDuration(activityId);
+                    valueFromDatabase = database.activityDao().getWorkDuration(activityId);
                     break;
                 case BREAK_DURATION:
-                    duration = database.activityDao().getBreakDuration(activityId);
+                    valueFromDatabase = database.activityDao().getBreakDuration(activityId);
+                    break;
+                case SESSIONS_BEFORE_LONG_BREAK:
+                    valueFromDatabase = database.activityDao().getSessionsBeforeLongBreak(activityId);
                     break;
                 default:
-                    duration = database.activityDao().getLongBreakDuration(activityId);
+                    valueFromDatabase = database.activityDao().getLongBreakDuration(activityId);
                     break;
             }
 
             runOnUiThread(() -> {
-                editText.setText(String.valueOf(duration));
+                editText.setText(String.valueOf(valueFromDatabase));
                 editText.selectAll();
                 editText.requestFocus();
             });
@@ -390,20 +407,24 @@ public class ActivitySettings extends AppCompatActivity {
         setupRestrictions(editText);
 
         builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> Database.databaseExecutor.execute(() -> {
-            int duration = Integer.parseInt(editText.getText().toString());
+            int userInput = Integer.parseInt(editText.getText().toString());
 
             switch (windowType) {
                 case WORK_DURATION:
-                    database.activityDao().updateWorkDuration(activityId, duration);
-                    runOnUiThread(() -> workDurationSummary.setText(getString(R.string.time, duration)));
+                    database.activityDao().updateWorkDuration(activityId, userInput);
+                    runOnUiThread(() -> workDurationSummary.setText(getString(R.string.time, userInput)));
                     break;
                 case BREAK_DURATION:
-                    database.activityDao().updateBreakDuration(activityId, duration);
-                    runOnUiThread(() -> breakDurationSummary.setText(getString(R.string.time, duration)));
+                    database.activityDao().updateBreakDuration(activityId, userInput);
+                    runOnUiThread(() -> breakDurationSummary.setText(getString(R.string.time, userInput)));
+                    break;
+                case SESSIONS_BEFORE_LONG_BREAK:
+                    database.activityDao().updateSessionsBeforeLongBreak(activityId, userInput);
+                    runOnUiThread(() -> sessionsBeforeLongBreakSummary.setText(String.valueOf(userInput)));
                     break;
                 default:
-                    database.activityDao().updateLongBreakDuration(activityId, duration);
-                    runOnUiThread(() -> longBreakDurationSummary.setText(getString(R.string.time, duration)));
+                    database.activityDao().updateLongBreakDuration(activityId, userInput);
+                    runOnUiThread(() -> longBreakDurationSummary.setText(getString(R.string.time, userInput)));
                     break;
             }
         }));
@@ -465,6 +486,7 @@ public class ActivitySettings extends AppCompatActivity {
     enum WindowType {
         WORK_DURATION,
         BREAK_DURATION,
-        LONG_BREAK_DURATION
+        LONG_BREAK_DURATION,
+        SESSIONS_BEFORE_LONG_BREAK
     }
 }

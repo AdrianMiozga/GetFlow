@@ -98,7 +98,6 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
 
             if (timeLeft == 0) {
                 editor.putInt(Constants.CURRENT_ACTIVITY_ID, activity.getId());
-                editor.putInt(Constants.WORK_SESSION_COUNTER, 0);
                 editor.apply();
 
                 Intent intent = new Intent(context, MainActivity.class);

@@ -41,6 +41,7 @@ import androidx.preference.PreferenceManager;
 import com.wentura.focus.database.Database;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class EndNotificationService extends Service {
 
@@ -122,6 +123,8 @@ public class EndNotificationService extends Service {
             preferenceEditor.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
             preferenceEditor.putBoolean(Constants.IS_BREAK_STATE, true);
             preferenceEditor.putBoolean(Constants.CENTER_BUTTONS, false);
+
+            preferenceEditor.putString(Constants.TIMESTAMP_OF_LAST_WORK_SESSION, LocalDateTime.now().toString());
         }
 
         preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, 0);

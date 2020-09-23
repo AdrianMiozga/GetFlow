@@ -43,7 +43,10 @@ public final class Constants {
     public static final String SCROLL_PIE_CHART_AUTOMATICALLY = "scroll_pie_chart_automatically";
     public static final String FULL_SCREEN_MODE = "full_screen_mode";
 
-    /** Stopping timer or changing activity resets it. */
+    /**
+     *  After long break is consumed or {@link #HOURS_BEFORE_WORK_SESSION_COUNT_RESETS} passes
+     *  it goes back to one.
+     */
     public static final String WORK_SESSION_COUNTER = "work_session_counter";
 
     // Last session duration is needed when the user changes, for example,
@@ -61,10 +64,17 @@ public final class Constants {
     public static final String IS_BREAK_STATE = "is_break_state";
     static final String CENTER_BUTTONS = "center_buttons";
 
+    /** Either complete or incomplete. */
+    public static final String TIMESTAMP_OF_LAST_WORK_SESSION = "timestamp_of_last_work_session";
+
     // Defaults
     public static final int DEFAULT_WORK_TIME = 25;
     public static final int DEFAULT_BREAK_TIME = 5;
+    public static final int DEFAULT_SESSIONS_BEFORE_LONG_BREAK = 4;
     public static final int DEFAULT_LONG_BREAK_TIME = 20;
+
+    /** Over this time the user has to build work sessions again for long break. */
+    public static final int HOURS_BEFORE_WORK_SESSION_COUNT_RESETS = 1;
 
     /** Minimum time to save session to database. */
     public static final int MINIMUM_SESSION_TIME = 30_000;
@@ -110,6 +120,7 @@ public final class Constants {
     public static final String WORK_DURATION_INTENT = "work_duration_intent";
     public static final String BREAK_DURATION_INTENT = "break_duration_intent";
     public static final String ARE_LONG_BREAKS_ENABLED_INTENT = "are_long_breaks_enabled_intent";
+    public static final String SESSIONS_BEFORE_LONG_BREAK_INTENT = "sessions_before_long_break_intent";
     public static final String LONG_BREAK_DURATION_INTENT = "long_break_duration_intent";
     public static final String CURRENT_ACTIVITY_ID_INTENT = "current_activity_id_intent";
 

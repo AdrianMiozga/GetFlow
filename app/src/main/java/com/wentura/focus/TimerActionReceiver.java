@@ -29,6 +29,8 @@ import androidx.preference.PreferenceManager;
 
 import com.wentura.focus.database.Database;
 
+import java.time.LocalDateTime;
+
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 
@@ -73,6 +75,8 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                 int timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
                 if (timeLeft != 0 && lastSessionDuration - timeLeft > Constants.MINIMUM_SESSION_TIME) {
+                    editPreferences.putString(Constants.TIMESTAMP_OF_LAST_WORK_SESSION, LocalDateTime.now().toString());
+
                     if (isBreakState) {
                         Utility.updateDatabaseBreaks(context, lastSessionDuration - timeLeft, activityId);
                     } else {
@@ -91,7 +95,6 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                 editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, false);
                 editPreferences.putInt(Constants.TIME_LEFT, 0);
                 editPreferences.putBoolean(Constants.IS_TIMER_BLINKING, false);
-                editPreferences.putInt(Constants.WORK_SESSION_COUNTER, 0);
                 editPreferences.putInt(Constants.LAST_SESSION_DURATION, 0);
                 editPreferences.apply();
 
@@ -125,8 +128,12 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                     editPreferences.putBoolean(Constants.IS_BREAK_STATE, true);
                     editPreferences.putBoolean(Constants.IS_WORK_ICON_VISIBLE, false);
                     editPreferences.putBoolean(Constants.IS_BREAK_ICON_VISIBLE, true);
-                    editPreferences.putInt(Constants.WORK_SESSION_COUNTER,
-                            preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);
+
+                    if (lastSessionDuration - timeLeft > Constants.MINIMUM_SESSION_TIME) {
+                        editPreferences.putInt(Constants.WORK_SESSION_COUNTER,
+                                preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);
+                        editPreferences.putString(Constants.TIMESTAMP_OF_LAST_WORK_SESSION, LocalDateTime.now().toString());
+                    }
 
                     Database database = Database.getInstance(context);
                     Database.databaseExecutor.execute(() -> {
@@ -209,6 +216,7 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                     int workDuration = database.activityDao().getWorkDuration(activityId);
                     int breakDuration = database.activityDao().getBreakDuration(activityId);
                     int longBreakDuration = database.activityDao().getLongBreakDuration(activityId);
+                    int sessionsBeforeLongBreak = database.activityDao().getSessionsBeforeLongBreak(activityId);
                     boolean areLongBreaksEnabled = database.activityDao().areLongBreaksEnabled(activityId);
 
                     Intent serviceIntent = new Intent(context, NotificationService.class);
@@ -216,8 +224,8 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                     serviceIntent.putExtra(Constants.BREAK_DURATION_INTENT, breakDuration);
                     serviceIntent.putExtra(Constants.LONG_BREAK_DURATION_INTENT, longBreakDuration);
                     serviceIntent.putExtra(Constants.ARE_LONG_BREAKS_ENABLED_INTENT, areLongBreaksEnabled);
-                    serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE,
-                            Constants.NOTIFICATION_SERVICE_PAUSE);
+                    serviceIntent.putExtra(Constants.SESSIONS_BEFORE_LONG_BREAK_INTENT, sessionsBeforeLongBreak);
+                    serviceIntent.putExtra(Constants.NOTIFICATION_SERVICE, Constants.NOTIFICATION_SERVICE_PAUSE);
                     context.startService(serviceIntent);
                 });
 
@@ -249,12 +257,14 @@ public final class TimerActionReceiver extends BroadcastReceiver {
             int workDuration = database.activityDao().getWorkDuration(activityId);
             int breakDuration = database.activityDao().getBreakDuration(activityId);
             int longBreakDuration = database.activityDao().getLongBreakDuration(activityId);
+            int sessionsBeforeLongBreak = database.activityDao().getSessionsBeforeLongBreak(activityId);
             boolean areLongBreaksEnabled = database.activityDao().areLongBreaksEnabled(activityId);
 
             Intent startService = new Intent(context, NotificationService.class);
             startService.putExtra(Constants.WORK_DURATION_INTENT, workDuration);
             startService.putExtra(Constants.BREAK_DURATION_INTENT, breakDuration);
             startService.putExtra(Constants.LONG_BREAK_DURATION_INTENT, longBreakDuration);
+            startService.putExtra(Constants.SESSIONS_BEFORE_LONG_BREAK_INTENT, sessionsBeforeLongBreak);
             startService.putExtra(Constants.ARE_LONG_BREAKS_ENABLED_INTENT, areLongBreaksEnabled);
             context.startService(startService);
         });

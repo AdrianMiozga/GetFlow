@@ -73,6 +73,9 @@ public interface ActivityDao {
     @Query("UPDATE Activity SET LongBreakDuration = :duration WHERE id = :id")
     void updateLongBreakDuration(int id, int duration);
 
+    @Query("UPDATE Activity SET SessionsBeforeLongBreak = :sessions WHERE id = :id")
+    void updateSessionsBeforeLongBreak(int id, int sessions);
+
     @Query("SELECT WorkDuration FROM Activity WHERE id = :id")
     int getWorkDuration(int id);
 
@@ -81,6 +84,9 @@ public interface ActivityDao {
 
     @Query("SELECT LongBreakDuration FROM Activity WHERE id = :id")
     int getLongBreakDuration(int id);
+
+    @Query("SELECT SessionsBeforeLongBreak FROM Activity WHERE id = :id")
+    int getSessionsBeforeLongBreak(int id);
 
     @Query("UPDATE Activity SET LongBreaks = :areEnabled WHERE id = :id")
     void setLongBreaksEnabled(int id, boolean areEnabled);

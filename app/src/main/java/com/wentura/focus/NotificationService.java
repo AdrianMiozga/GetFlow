@@ -35,6 +35,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
+import java.time.LocalDateTime;
+
 public class NotificationService extends Service {
     private boolean isBreakState;
     private int timeLeft;
@@ -55,9 +57,11 @@ public class NotificationService extends Service {
         final TimerNotification timerNotification = new TimerNotification();
         boolean isTimerRunning = preferences.getBoolean(Constants.IS_TIMER_RUNNING, false);
         boolean areLongBreaksEnabled = false;
+        int sessionsBeforeLongBreak = Constants.DEFAULT_SESSIONS_BEFORE_LONG_BREAK;
 
         if (intent != null) {
             areLongBreaksEnabled = intent.getBooleanExtra(Constants.ARE_LONG_BREAKS_ENABLED_INTENT, false);
+            sessionsBeforeLongBreak = intent.getIntExtra(Constants.SESSIONS_BEFORE_LONG_BREAK_INTENT, Constants.DEFAULT_SESSIONS_BEFORE_LONG_BREAK);
         }
 
         int workSessionCounter = preferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
@@ -68,10 +72,22 @@ public class NotificationService extends Service {
 
         timeLeft = preferences.getInt(Constants.TIME_LEFT, 0);
 
+        LocalDateTime lastWorkSession =
+                LocalDateTime.parse(preferences.getString(Constants.TIMESTAMP_OF_LAST_WORK_SESSION,
+                        LocalDateTime.now().toString()));
+
         if (timeLeft == 0 && intent != null) {
+            // If last work session was over specified time, reset the work counter so that for long break to occur, you
+            // have to again complete all sessions.
+            if (LocalDateTime.now().isAfter(lastWorkSession.plusHours(Constants.HOURS_BEFORE_WORK_SESSION_COUNT_RESETS))) {
+                workSessionCounter = 0;
+                preferenceEditor.putInt(Constants.WORK_SESSION_COUNTER, 0);
+            }
+
             if (isBreakState) {
-                if (workSessionCounter != 0 && workSessionCounter % 4 == 0 && areLongBreaksEnabled) {
+                if (workSessionCounter >= sessionsBeforeLongBreak && areLongBreaksEnabled) {
                     timeLeft = intent.getIntExtra(Constants.LONG_BREAK_DURATION_INTENT, 0) * 60_000;
+                    preferenceEditor.putInt(Constants.WORK_SESSION_COUNTER, 0);
                 } else {
                     timeLeft = intent.getIntExtra(Constants.BREAK_DURATION_INTENT, 0) * 60_000;
                 }

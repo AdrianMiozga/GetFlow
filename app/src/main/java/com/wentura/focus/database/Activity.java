@@ -45,6 +45,9 @@ public final class Activity {
     @ColumnInfo(name = "LongBreakDuration")
     private final int longBreakDuration;
 
+    @ColumnInfo(name = "SessionsBeforeLongBreak")
+    private final int sessionsBeforeLongBreak;
+
     @ColumnInfo(name = "DND")
     private final boolean DND;
 
@@ -58,12 +61,13 @@ public final class Activity {
     private final boolean showInStatistics;
 
     public Activity(String name, int workDuration, int breakDuration, boolean longBreaks, int longBreakDuration,
-                    boolean DND, boolean keepDNDOnBreaks, boolean WiFi, boolean showInStatistics) {
+                    int sessionsBeforeLongBreak, boolean DND, boolean keepDNDOnBreaks, boolean WiFi, boolean showInStatistics) {
         this.name = name;
         this.workDuration = workDuration;
         this.breakDuration = breakDuration;
         this.longBreaks = longBreaks;
         this.longBreakDuration = longBreakDuration;
+        this.sessionsBeforeLongBreak = sessionsBeforeLongBreak;
         this.DND = DND;
         this.keepDNDOnBreaks = keepDNDOnBreaks;
         this.WiFi = WiFi;
@@ -72,8 +76,8 @@ public final class Activity {
 
     @Ignore
     public Activity(String name) {
-        this(name, Constants.DEFAULT_WORK_TIME, Constants.DEFAULT_BREAK_TIME, true, Constants.DEFAULT_LONG_BREAK_TIME
-                , false, false, false, true);
+        this(name, Constants.DEFAULT_WORK_TIME, Constants.DEFAULT_BREAK_TIME, true, Constants.DEFAULT_LONG_BREAK_TIME,
+                Constants.DEFAULT_SESSIONS_BEFORE_LONG_BREAK, false, false, false, true);
     }
 
     public void setId(int id) {
@@ -102,6 +106,10 @@ public final class Activity {
 
     public int getLongBreakDuration() {
         return longBreakDuration;
+    }
+
+    public int getSessionsBeforeLongBreak() {
+        return sessionsBeforeLongBreak;
     }
 
     public boolean isDND() {
