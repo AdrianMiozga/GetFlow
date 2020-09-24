@@ -523,13 +523,16 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationChannel timerCompletedChannel = new NotificationChannel(Constants.CHANNEL_TIMER_COMPLETED,
                 Constants.CHANNEL_TIMER_COMPLETED, NotificationManager.IMPORTANCE_HIGH);
+
         NotificationChannel timerChannel = new NotificationChannel(Constants.CHANNEL_TIMER,
                 Constants.CHANNEL_TIMER, NotificationManager.IMPORTANCE_LOW);
 
         timerCompletedChannel.setShowBadge(false);
         timerCompletedChannel.enableLights(true);
-        timerCompletedChannel.setSound(null, null);
+        timerCompletedChannel.setBypassDnd(true);
+
         timerChannel.setShowBadge(false);
+
         notificationManager.createNotificationChannel(timerCompletedChannel);
         notificationManager.createNotificationChannel(timerChannel);
     }

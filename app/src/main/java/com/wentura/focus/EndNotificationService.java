@@ -22,10 +22,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -40,7 +37,6 @@ import androidx.preference.PreferenceManager;
 
 import com.wentura.focus.database.Database;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class EndNotificationService extends Service {
@@ -75,33 +71,6 @@ public class EndNotificationService extends Service {
                         AudioManager.RINGER_MODE_NORMAL, activityId);
             }
         });
-
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setDataSource(getApplicationContext(),
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-
-            if (Build.VERSION.SDK_INT >= 21) {
-                mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build());
-            } else {
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-            }
-
-            mediaPlayer.setOnCompletionListener(player -> {
-                player.reset();
-                player.release();
-            });
-
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-            mediaPlayer.reset();
-            mediaPlayer.release();
-        }
 
         preferenceEditor.putBoolean(Constants.IS_TIMER_RUNNING, false);
         preferenceEditor.putInt(Constants.TIME_LEFT, 0);
@@ -142,17 +111,6 @@ public class EndNotificationService extends Service {
         Intent displayMainActivity = new Intent(getApplicationContext(), MainActivity.class);
         displayMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(displayMainActivity);
-
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-        if (vibrator != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createWaveform(vibrationPattern,
-                        VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                vibrator.vibrate(500);
-            }
-        }
 
         showEndNotification();
         vibrate();
