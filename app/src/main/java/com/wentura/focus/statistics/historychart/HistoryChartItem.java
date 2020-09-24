@@ -25,6 +25,7 @@ import com.wentura.focus.database.Pomodoro;
 import java.time.LocalDate;
 
 public final class HistoryChartItem implements Comparable<HistoryChartItem> {
+
     private final String date;
 
     /** Sum of CompletedWorkTime and IncompleteWorkTime from {@link Pomodoro}. */

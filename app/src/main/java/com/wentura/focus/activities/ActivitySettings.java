@@ -54,6 +54,7 @@ import com.wentura.focus.Utility;
 import com.wentura.focus.database.Database;
 
 public class ActivitySettings extends AppCompatActivity {
+
     private Database database;
     private int activityId;
     private TextView workDurationSummary;

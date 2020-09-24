@@ -18,6 +18,7 @@
 package com.wentura.focus.statistics.activitychart;
 
 public final class LegendItem {
+
     private final String name;
     private final String time;
     private final double percent;

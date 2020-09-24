@@ -18,6 +18,7 @@
 package com.wentura.focus.statistics.activitychart;
 
 public class LabelElement {
+
     private final int ID;
     private final String Name;
 

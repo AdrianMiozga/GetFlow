@@ -28,6 +28,7 @@ import java.util.Locale;
 import static java.time.DayOfWeek.MONDAY;
 
 public final class WeekData extends ChartData {
+
     private List<HistoryChartItem> weeks;
 
     public WeekData(List<HistoryChartItem> data) {

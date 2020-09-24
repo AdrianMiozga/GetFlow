@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DayData extends ChartData {
+
     private List<HistoryChartItem> days;
 
     public DayData(List<HistoryChartItem> data) {

@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ApplicationLockActivity extends AppCompatActivity {
+
     private SwitchCompat masterLockApplicationSwitch;
 
     @Override

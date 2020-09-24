@@ -18,6 +18,7 @@
 package com.wentura.focus;
 
 public final class Constants {
+
     // Suppress default constructor for noninstantiability
     private Constants() {
         throw new AssertionError();
@@ -44,8 +45,8 @@ public final class Constants {
     public static final String FULL_SCREEN_MODE = "full_screen_mode";
 
     /**
-     *  After long break is consumed or {@link #HOURS_BEFORE_WORK_SESSION_COUNT_RESETS} passes
-     *  it goes back to one.
+     * After long break is consumed or {@link #HOURS_BEFORE_WORK_SESSION_COUNT_RESETS} passes
+     * it goes back to one.
      */
     public static final String WORK_SESSION_COUNTER = "work_session_counter";
 

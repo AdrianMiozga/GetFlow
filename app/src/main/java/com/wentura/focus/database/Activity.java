@@ -26,6 +26,7 @@ import com.wentura.focus.Constants;
 
 @Entity
 public final class Activity {
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "ID")
     private int id;

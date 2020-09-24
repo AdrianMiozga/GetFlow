@@ -28,6 +28,7 @@ import java.util.List;
 
 @Dao
 public interface PomodoroDao {
+
     @Insert
     void insertPomodoro(Pomodoro pomodoro);
 

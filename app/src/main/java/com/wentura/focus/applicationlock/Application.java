@@ -20,6 +20,7 @@ package com.wentura.focus.applicationlock;
 import android.graphics.drawable.Drawable;
 
 final class Application implements Comparable<Application> {
+
     private final String packageName;
     private final String applicationName;
     private final Drawable applicationIcon;

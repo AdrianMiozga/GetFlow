@@ -59,6 +59,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final int AUTO_HIDE_FULL_SCREEN_AFTER = 3000;
     private Button skipButton;
     private ImageView workIcon;

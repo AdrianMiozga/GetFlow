@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import com.wentura.focus.database.Pomodoro;
 
 public final class PieChartItem {
+
     /** Sum of CompletedWorkTime and IncompleteWorkTime from {@link Pomodoro}. */
     private final int TotalTime;
     private double Percent;

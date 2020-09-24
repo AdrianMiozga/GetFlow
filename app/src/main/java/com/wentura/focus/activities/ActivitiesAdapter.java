@@ -40,10 +40,12 @@ import com.wentura.focus.database.Activity;
 import java.util.List;
 
 public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.ViewHolder> {
+
     private final List<Activity> activities;
     private final SharedPreferences preferences;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
         final TextView activityName;
         final ImageButton settingsButton;
 

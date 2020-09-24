@@ -28,6 +28,7 @@ import android.util.Log;
 import java.lang.reflect.Constructor;
 
 final class StaticLayoutWithMaxLines {
+
     private static final String TAG = StaticLayoutWithMaxLines.class.getSimpleName();
 
     private static boolean sInitialized;
@@ -45,7 +46,7 @@ final class StaticLayoutWithMaxLines {
             final Class<?> textDirClass = TextDirectionHeuristic.class;
             sTextDirection = TextDirectionHeuristics.FIRSTSTRONG_LTR;
 
-            final Class<?>[] signature = new Class[] {
+            final Class<?>[] signature = new Class[]{
                     CharSequence.class,
                     int.class,
                     int.class,

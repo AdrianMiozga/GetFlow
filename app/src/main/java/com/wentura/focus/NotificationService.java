@@ -38,6 +38,7 @@ import androidx.preference.PreferenceManager;
 import java.time.LocalDateTime;
 
 public class NotificationService extends Service {
+
     private boolean isBreakState;
     private int timeLeft;
     private CountDownTimer countDownTimer;

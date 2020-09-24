@@ -40,6 +40,7 @@ import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 public final class Utility {
+
     // Suppress default constructor for noninstantiability
     private Utility() {
         throw new AssertionError();

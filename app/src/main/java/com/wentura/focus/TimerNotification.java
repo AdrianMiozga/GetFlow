@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 final class TimerNotification {
+
     private Context context;
     private boolean isTimerRunning;
 

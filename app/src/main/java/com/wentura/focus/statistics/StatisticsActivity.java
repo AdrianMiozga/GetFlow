@@ -74,6 +74,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class StatisticsActivity extends AppCompatActivity {
+
     private static int historySpinnerCurrentSelectedIndex;
     private static int activitiesSpinnerCurrentSelectedIndex;
     private static List<HistoryChartItem> data = new ArrayList<>();
@@ -532,7 +533,7 @@ public class StatisticsActivity extends AppCompatActivity {
             historyChartItemsMonth =
                     Database.databaseExecutor.submit(() ->
                             database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(29).toString(),
-                            LocalDate.now().minusDays(7).toString(), idsOfActivitiesToShow)).get();
+                                    LocalDate.now().minusDays(7).toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsTotal =
                     Database.databaseExecutor.submit(() ->

@@ -43,6 +43,7 @@ import com.wentura.focus.database.Activity;
 import com.wentura.focus.database.Database;
 
 public class Activities extends AppCompatActivity {
+
     private static Database database;
     private static ActivitiesAdapter adapter;
 

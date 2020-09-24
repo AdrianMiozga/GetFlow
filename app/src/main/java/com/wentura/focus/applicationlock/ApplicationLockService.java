@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ApplicationLockService extends AccessibilityService {
+
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         SharedPreferences sharedPreferences =

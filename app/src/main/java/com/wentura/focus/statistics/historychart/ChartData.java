@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ChartData {
+
     private final List<Entry> entries;
     private final List<HistoryChartItem> data;
     private long maxValue = 0;

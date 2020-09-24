@@ -38,10 +38,12 @@ import java.util.List;
 import java.util.Set;
 
 final class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ViewHolder> {
+
     private final List<Application> applicationList;
     private final SharedPreferences sharedPreferences;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         final TextView applicationName;
         final ImageView applicationIcon;
         final SwitchCompat lockApplicationSwitch;

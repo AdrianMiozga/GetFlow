@@ -31,6 +31,7 @@ import static com.wentura.focus.statistics.historychart.SpinnerOption.MONTHS;
 import static com.wentura.focus.statistics.historychart.SpinnerOption.WEEKS;
 
 public class HistoryChart {
+
     private final LineChart chart;
     private final Context context;
     private final XAxis xAxis;

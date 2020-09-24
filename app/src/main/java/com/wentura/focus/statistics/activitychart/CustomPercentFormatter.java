@@ -23,6 +23,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.text.DecimalFormat;
 
 public final class CustomPercentFormatter extends ValueFormatter {
+
     private final DecimalFormat decimalFormat;
 
     public CustomPercentFormatter() {

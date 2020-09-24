@@ -25,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 final class CustomXAxisFormatter extends ValueFormatter {
+
     private final List<HistoryChartItem> historyChartItems;
     private final SpinnerOption spinnerOption;
 

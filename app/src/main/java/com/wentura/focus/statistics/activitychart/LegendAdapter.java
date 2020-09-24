@@ -34,10 +34,12 @@ import java.util.List;
 import java.util.Optional;
 
 public final class LegendAdapter extends RecyclerView.Adapter<LegendAdapter.ViewHolder> {
+
     private final List<LegendItem> legendNames;
     private String longestTimeString;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
         final TextView legendName;
         final TextView percent;
         final TextView time;

@@ -28,6 +28,7 @@ import java.util.Set;
 
 @Dao
 public interface ActivityDao {
+
     @Insert
     void insertActivity(Activity activity);
 

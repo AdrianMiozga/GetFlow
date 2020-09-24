@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 final public class ActivityPieChartRenderer extends PieChartRenderer {
+
     private static final float CIRCLE_RADIUS = 3f;
     private static final float ACTIVITY_SPACING = Utils.convertDpToPixel(50f);
     private final TextPaint entryLabelsPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);

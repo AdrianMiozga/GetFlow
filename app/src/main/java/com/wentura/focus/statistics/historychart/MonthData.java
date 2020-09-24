@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MonthData extends ChartData {
+
     private final List<HistoryChartItem> months = new ArrayList<>();
 
     public MonthData(List<HistoryChartItem> data) {

@@ -18,6 +18,7 @@
 package com.wentura.focus.statistics.activitychart;
 
 final class PieChartHelperElement {
+
     private final int id;
     private float y;
 
