@@ -18,8 +18,8 @@
 
 <resources>
     <color name="colorPrimary">#448aff</color>
-    <color name="colorPrimaryDark">#005ecb</color>
-    <color name="colorAccent">#83b9ff</color>
+    <color name="colorPrimaryVariant">#005ecb</color>
+    <color name="colorSecondary">#83b9ff</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="grey">#333333</color>

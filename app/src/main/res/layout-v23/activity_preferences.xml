@@ -150,7 +150,8 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sessions_till_long_break_linear_layout" />
+        app:layout_constraintTop_toBottomOf="@id/sessions_till_long_break_linear_layout"
+        app:useMaterialThemeColors="false" />
 
     <RelativeLayout
         android:id="@+id/do_not_disturb_linear_layout"
@@ -188,7 +189,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            app:useMaterialThemeColors="false" />
     </RelativeLayout>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -199,6 +201,7 @@
         android:padding="16dp"
         android:text="@string/do_not_disturb_break_summary"
         android:visibility="gone"
+        app:useMaterialThemeColors="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/do_not_disturb_linear_layout" />
@@ -239,6 +242,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            app:useMaterialThemeColors="false" />
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
