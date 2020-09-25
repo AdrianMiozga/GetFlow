@@ -34,7 +34,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,6 +45,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.wentura.focus.Constants;
 import com.wentura.focus.R;
 import com.wentura.focus.Utility;
@@ -161,7 +161,7 @@ public class StatisticsActivity extends AppCompatActivity {
                     activities[i] = labelElements.get(i).getName();
                 }
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
 
                 Set<Integer> values = new HashSet<>();
 

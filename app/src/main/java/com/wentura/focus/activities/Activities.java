@@ -35,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.wentura.focus.Constants;
 import com.wentura.focus.R;
@@ -58,7 +59,7 @@ public class Activities extends AppCompatActivity {
         FloatingActionButton addActivity = findViewById(R.id.add_activity_button);
 
         addActivity.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
             builder.setTitle(R.string.activity_name);
 
             EditText editText = new EditText(this);

@@ -47,6 +47,7 @@ import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.wentura.focus.Constants;
 import com.wentura.focus.R;
@@ -157,7 +158,7 @@ public class ActivitySettings extends AppCompatActivity {
                     return;
                 }
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
                 builder.setMessage(R.string.dialog_access_policy_not_granted)
                         .setPositiveButton(R.string.dialog_go_to_settings, (dialog, id) -> startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)))
                         .setCancelable(false)
@@ -188,7 +189,7 @@ public class ActivitySettings extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.edit_name_button:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
                 builder.setTitle(R.string.new_activity_name);
 
                 EditText editText = new EditText(this);
@@ -248,7 +249,7 @@ public class ActivitySettings extends AppCompatActivity {
 
                     if (numberOfActivities <= 1) {
                         runOnUiThread(() -> {
-                            AlertDialog.Builder cantDeleteDialog = new AlertDialog.Builder(this);
+                            MaterialAlertDialogBuilder cantDeleteDialog = new MaterialAlertDialogBuilder(this);
                             cantDeleteDialog.setTitle(getString(R.string.delete_activity));
                             cantDeleteDialog.setMessage(R.string.cantDeleteDialog);
                             cantDeleteDialog.setNegativeButton(getString(R.string.OK), (dialog1, which) -> dialog1.cancel());
@@ -258,7 +259,7 @@ public class ActivitySettings extends AppCompatActivity {
                         boolean isDataWritten = database.pomodoroDao().isDataWrittenWithActivity(activityId);
 
                         runOnUiThread(() -> {
-                            AlertDialog.Builder deleteDialog = new AlertDialog.Builder(this);
+                            MaterialAlertDialogBuilder deleteDialog = new MaterialAlertDialogBuilder(this);
                             deleteDialog.setTitle(R.string.delete_activity);
 
                             if (isDataWritten) {
@@ -372,7 +373,7 @@ public class ActivitySettings extends AppCompatActivity {
     }
 
     private void setupDialog(String dialogTitle, WindowType windowType) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle(dialogTitle);
 
         EditText editText = new EditText(this);

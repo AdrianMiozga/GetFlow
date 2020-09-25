@@ -17,7 +17,6 @@
 
 package com.wentura.focus.activities;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.wentura.focus.Constants;
 import com.wentura.focus.MainActivity;
 import com.wentura.focus.R;
@@ -113,7 +113,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                     context.sendBroadcast(intent);
                 }
             } else {
-                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(context);
                 dialog.setTitle(R.string.Confirmation);
                 dialog.setMessage(R.string.activity_already_running_dialog_message);
 
