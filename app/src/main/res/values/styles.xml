@@ -30,13 +30,19 @@
 
         <item name="actionBarStyle">@style/AppTheme.ActionBar</item>
         <item name="actionOverflowButtonStyle">@style/AppTheme.OverFlow</item>
-        <item name="actionBarTheme">@style/AppTheme.ActionBarTheme</item>
+        <item name="actionBarTheme">@style/AppTheme.NavigationArrow</item>
 
         <!--        Sometimes after rotating the screen without explicitly specifying the menu item text -->
         <!--        color, it would turn to black, whereas normally it was white.-->
         <item name="android:itemTextAppearance">@style/AppTheme.CustomMenu</item>
 
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
+
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+    </style>
+
+    <style name="PopupMenu" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="overlapAnchor">true</item>
     </style>
 
     <style name="MenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
@@ -61,7 +67,7 @@
         <item name="background">@color/black</item>
     </style>
 
-    <style name="AppTheme.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">@color/colorPrimary</item>
+    <style name="AppTheme.NavigationArrow" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+<!--        <item name="colorControlNormal">@color/colorPrimary</item>-->
     </style>
 </resources>

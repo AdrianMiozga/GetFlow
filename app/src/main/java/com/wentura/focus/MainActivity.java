@@ -36,15 +36,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isTimerTextViewActionUpCalled = false;
     private Handler fullScreenHandler = new Handler();
     private Runnable enterFullScreen = () -> Utility.hideSystemUI(getWindow());
+    private ImageButton menuButton;
 
     private final BroadcastReceiver statusReceiver = new BroadcastReceiver() {
         @Override
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.BUTTON_SKIP:
                 case Constants.BUTTON_START: {
                     SharedPreferences sharedPreferences =
-                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                     boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
             // Very rarely, this broadcast delivers a little late. If the user presses the stop
             // button, and this happens, it will update the timer text view after the stop timer method.
@@ -147,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
         if (event.getAction() != MotionEvent.ACTION_DOWN) {
             return false;
         }
+
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -185,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (sharedPreferences.getInt(Constants.TIME_LEFT, 0) == 0) {
             finish();
@@ -207,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
         workIcon = findViewById(R.id.work_icon);
         breakIcon = findViewById(R.id.break_icon);
         skipButton = findViewById(R.id.skip_button);
+        menuButton = findViewById(R.id.menu);
 
         setupNotificationChannels();
 
@@ -214,7 +221,8 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
-            actionbar.setTitle("");
+//            actionbar.setTitle("");
+            actionbar.hide();
         }
 
         activityTextView.setOnClickListener(view -> {
@@ -228,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
         timerTextView.setOnClickListener(view -> {
             SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
             if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false)) {
                 pauseTimer();
@@ -281,6 +289,34 @@ public class MainActivity extends AppCompatActivity {
         });
 
         skipButton.setOnClickListener(view -> skipTimer());
+
+
+        menuButton.setOnClickListener(view -> {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.FULL_SCREEN_MODE, false)) {
+                // Showing pop up menu doesn't show status bar
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
+
+            PopupMenu popup = new PopupMenu(MainActivity.this, menuButton);
+
+            popup.getMenuInflater().inflate(R.menu.menu, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(item -> {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+                switch (item.getItemId()) {
+                    case R.id.settings:
+                        startSettingsActivity();
+                        return true;
+                    case R.id.statistics:
+                        startStatisticsActivity();
+                        return true;
+                }
+                return false;
+            });
+
+            popup.show();
+        });
 
         showHelpingSnackbars();
     }
@@ -383,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
         int workSessionCounter = sharedPreferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
@@ -458,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
         revertTimerAnimation();
         timerTextView.clearAnimation();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
 
         Database.databaseExecutor.execute(() -> {
             int duration =
@@ -479,7 +515,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getCurrentActivityId() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
     }
 

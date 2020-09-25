@@ -109,4 +109,16 @@
         app:layout_constraintTop_toBottomOf="@+id/countdown_text_view"
         tools:text="Activity" />
 
+    <ImageButton
+        android:id="@+id/menu"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:padding="16dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/menu_icon"
+        android:backgroundTint="@color/black"
+        android:contentDescription="More" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
