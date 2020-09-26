@@ -232,15 +232,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         activityTextView.setOnClickListener(view -> {
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
-                // On older APIs, without disabling full screen before entering Activities the animation
-                // would be bugged out.
-                Utility.showSystemUI(getWindow());
-            }
-
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
             if (preferences.getBoolean(Constants.FULL_SCREEN_MODE, false)) {
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+                    // On older APIs, without disabling full screen before entering Activities the animation
+                    // would be bugged out.
+                    Utility.showSystemUI(getWindow());
+                }
+
                 fullScreenHandler.removeCallbacks(enterFullScreen);
                 Utility.hideSystemUI(getWindow());
             }
