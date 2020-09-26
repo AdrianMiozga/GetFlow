@@ -25,6 +25,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -82,12 +83,12 @@ public class StatisticsActivity extends AppCompatActivity {
     private static ChartData monthData;
     private static ChartData dayData;
     private static ChartData weekData;
-    private boolean isActivitySpinnerSelectionFromTouch;
     private boolean shouldScrollDown;
     private HistoryChart historyChart;
     private Database database;
     private PieData pieData;
     private List<LegendItem> legendItems;
+    boolean isActivitySpinnerSelectionFromTouch = false;
 
     // Views
     private LineChart historyChartView;
@@ -253,12 +254,6 @@ public class StatisticsActivity extends AppCompatActivity {
         return pieData;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        isActivitySpinnerSelectionFromTouch = false;
-    }
-
     /**
      * Put activities below {@link Constants#CLUMP_ACTIVITIES_BELOW_THIS_PERCENT} into one activity for chart
      * readability. Also, set percentages on {@link PieChartItem}. Activities are sorted from highest to lowest
@@ -361,6 +356,62 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
+    public class ActivitySpinnerInteractionListener implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            isActivitySpinnerSelectionFromTouch = true;
+            view.performClick();
+            return false;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            final SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(StatisticsActivity.this);
+
+            activitiesSpinnerCurrentSelectedIndex = position;
+
+            sharedPreferences.edit().putInt(Constants.ACTIVITIES_SPINNER_SETTING, position).apply();
+
+            Database.databaseExecutor.execute(() -> {
+                List<PieChartItem> pieChartItems;
+
+                switch (position) {
+                    case 0:
+                        pieChartItems = database.pomodoroDao().getPieChartItems(LocalDate.now().toString());
+                        break;
+                    case 1:
+                        pieChartItems =
+                                database.pomodoroDao().getPieChartItems(LocalDate.now().minusDays(6).toString(), LocalDate.now().toString());
+                        break;
+                    case 2:
+                        pieChartItems =
+                                database.pomodoroDao().getPieChartItems(LocalDate.now().minusMonths(1).toString(), LocalDate.now().toString());
+                        break;
+
+                    default:
+                        pieChartItems = database.pomodoroDao().getAllPieChartItems();
+                        break;
+                }
+
+                runOnUiThread(() -> {
+                    loadPieChart(pieChartItems);
+
+                    if (isActivitySpinnerSelectionFromTouch) {
+                        scrollToBottom();
+                        isActivitySpinnerSelectionFromTouch = false;
+                    }
+                });
+            });
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    }
+
     private void setupActivitiesSpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.activities_spinner, android.R.layout.simple_spinner_item);
@@ -374,49 +425,14 @@ public class StatisticsActivity extends AppCompatActivity {
 
         activitiesSpinner.setAdapter(adapter);
         activitiesSpinner.setSelection(activitiesSpinnerCurrentSelectedIndex);
-        activitiesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                activitiesSpinnerCurrentSelectedIndex = position;
 
-                sharedPreferences.edit().putInt(Constants.ACTIVITIES_SPINNER_SETTING, position).apply();
-
-                Database.databaseExecutor.execute(() -> {
-                    List<PieChartItem> pieChartItems;
-
-                    switch (position) {
-                        case 0:
-                            pieChartItems = database.pomodoroDao().getPieChartItems(LocalDate.now().toString());
-                            break;
-                        case 1:
-                            pieChartItems =
-                                    database.pomodoroDao().getPieChartItems(LocalDate.now().minusDays(6).toString(), LocalDate.now().toString());
-                            break;
-                        case 2:
-                            pieChartItems =
-                                    database.pomodoroDao().getPieChartItems(LocalDate.now().minusMonths(1).toString(), LocalDate.now().toString());
-                            break;
-
-                        default:
-                            pieChartItems = database.pomodoroDao().getAllPieChartItems();
-                            break;
-                    }
-
-                    runOnUiThread(() -> refreshPieChart(pieChartItems));
-                });
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+        activitiesSpinner.setOnItemSelectedListener(new ActivitySpinnerInteractionListener());
+        activitiesSpinner.setOnTouchListener(new ActivitySpinnerInteractionListener());
     }
 
-    private void refreshPieChart(List<PieChartItem> activities) {
-        loadPieChart(activities);
-
+    private void scrollToBottom() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         if (sharedPreferences.getBoolean(Constants.SCROLL_PIE_CHART_AUTOMATICALLY, true)) {
             if (isActivitySpinnerSelectionFromTouch) {
                 TextView activityTextView = findViewById(R.id.activities_text_view);
@@ -428,7 +444,6 @@ public class StatisticsActivity extends AppCompatActivity {
                 }
             }
         }
-        isActivitySpinnerSelectionFromTouch = true;
     }
 
     private void loadPieChart(List<PieChartItem> activities) {
