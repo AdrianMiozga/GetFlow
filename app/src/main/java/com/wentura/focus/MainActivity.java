@@ -177,6 +177,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if (sharedPreferences.getBoolean(Constants.FULL_SCREEN_MODE, false)) {
+            Utility.hideSystemUI(getWindow());
+        }
+
         setupUI();
 
         Utility.toggleKeepScreenOn(this);
@@ -230,6 +236,14 @@ public class MainActivity extends AppCompatActivity {
                 // would be bugged out.
                 Utility.showSystemUI(getWindow());
             }
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+            if (preferences.getBoolean(Constants.FULL_SCREEN_MODE, false)) {
+                fullScreenHandler.removeCallbacks(enterFullScreen);
+                Utility.hideSystemUI(getWindow());
+            }
+
             startActivity(new Intent(this, Activities.class));
         });
 
