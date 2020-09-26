@@ -68,6 +68,6 @@
     </style>
 
     <style name="AppTheme.NavigationArrow" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-<!--        <item name="colorControlNormal">@color/colorPrimary</item>-->
+        <item name="colorControlNormal">@color/colorPrimary</item>
     </style>
 </resources>
