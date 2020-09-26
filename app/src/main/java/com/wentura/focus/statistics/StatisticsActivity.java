@@ -300,7 +300,7 @@ public class StatisticsActivity extends AppCompatActivity {
         }
 
         if (othersTime > 0) {
-            if (result.size() > 2) {
+            if (result.size() > 1) {
                 result.add(result.size() / 2, new PieChartItem((int) othersTime, othersTime / totalTime * 100, ""));
             } else {
                 result.add(new PieChartItem((int) othersTime, othersTime / totalTime * 100, ""));
