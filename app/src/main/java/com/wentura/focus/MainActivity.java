@@ -64,7 +64,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int AUTO_HIDE_FULL_SCREEN_AFTER = 3000;
-    private Button skipButton;
+//    private Button skipButton;
     private ImageView workIcon;
     private ImageView breakIcon;
     private TextView timerTextView;
@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.BUTTON_SKIP:
                 case Constants.BUTTON_START: {
                     SharedPreferences sharedPreferences =
-                            android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                     boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
 
-                    skipButton.setVisibility(View.VISIBLE);
+//                    skipButton.setVisibility(View.VISIBLE);
 
                     if (isBreakState) {
                         workIcon.setVisibility(View.INVISIBLE);
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     stopTimerUI();
                     break;
                 case Constants.BUTTON_PAUSE:
-                    skipButton.setVisibility(View.VISIBLE);
+//                    skipButton.setVisibility(View.VISIBLE);
                     startBlinkingAnimation();
                     break;
             }
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             SharedPreferences sharedPreferences =
-                    android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
             // Very rarely, this broadcast delivers a little late. If the user presses the stop
             // button, and this happens, it will update the timer text view after the stop timer method.
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         SharedPreferences sharedPreferences =
-                android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (sharedPreferences.getInt(Constants.TIME_LEFT, 0) == 0) {
             finish();
@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         activityTextView = findViewById(R.id.current_activity);
         workIcon = findViewById(R.id.work_icon);
         breakIcon = findViewById(R.id.break_icon);
-        skipButton = findViewById(R.id.skip_button);
+//        skipButton = findViewById(R.id.skip_button);
         menuButton = findViewById(R.id.menu);
 
         setupNotificationChannels();
@@ -221,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
-//            actionbar.setTitle("");
             actionbar.hide();
         }
 
@@ -234,29 +233,25 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, Activities.class));
         });
 
-        timerTextView.setOnClickListener(view -> {
-            SharedPreferences sharedPreferences =
-                    android.preference.PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        timerTextView.setOnTouchListener(new OnTouchListener(this) {
 
-            if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false)) {
-                pauseTimer();
-            } else {
-                startTimer();
-            }
-        });
-
-        timerTextView.setOnTouchListener((view, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+            @Override
+            public void onUp() {
                 isTimerTextViewActionUpCalled = true;
+
                 if (isScaleAnimationDone) {
                     revertTimerAnimation();
                     isScaleAnimationDone = false;
                 }
-            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            }
+
+            @Override
+            public void onDown() {
                 isTimerTextViewActionUpCalled = false;
                 AnimatorSet animatorSet = startTimerAnimation();
 
                 animatorSet.addListener(new Animator.AnimatorListener() {
+
                     @Override
                     public void onAnimationStart(Animator animation) {
                     }
@@ -264,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         isScaleAnimationDone = true;
+
                         if (isTimerTextViewActionUpCalled) {
                             revertTimerAnimation();
                             isTimerTextViewActionUpCalled = false;
@@ -279,17 +275,39 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-            return false;
+
+            @Override
+            public void onTap() {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false)) {
+                    pauseTimer();
+                } else {
+                    startTimer();
+                }
+            }
+
+            @Override
+            public void onMyLongPress() {
+                stopTimer();
+                isScaleAnimationDone = true;
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false) ||
+                        sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false)) {
+
+                    skipTimer();
+                }
+            }
         });
 
-        timerTextView.setOnLongClickListener(view -> {
-            stopTimer();
-            isScaleAnimationDone = true;
-            return true;
-        });
-
-        skipButton.setOnClickListener(view -> skipTimer());
-
+//        skipButton.setOnClickListener(view -> skipTimer());
 
         menuButton.setOnClickListener(view -> {
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.FULL_SCREEN_MODE, false)) {
@@ -419,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
-        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean isBreakState = sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false);
         int workSessionCounter = sharedPreferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
@@ -442,6 +460,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (timeLeft == 0) {
                 if (isBreakState) {
+                    // TODO: 26.09.2020 Update this to reflect long break revamp
                     if (workSessionCounter != 0 && workSessionCounter % 4 == 0 && areLongBreaksEnabled) {
                         duration = database.activityDao().getLongBreakDuration(activityId);
                     } else {
@@ -457,9 +476,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (sharedPreferences.getBoolean(Constants.IS_SKIP_BUTTON_VISIBLE, false)) {
-            skipButton.setVisibility(View.VISIBLE);
+//            skipButton.setVisibility(View.VISIBLE);
         } else {
-            skipButton.setVisibility(View.INVISIBLE);
+//            skipButton.setVisibility(View.INVISIBLE);
         }
 
         if (sharedPreferences.getBoolean(Constants.IS_WORK_ICON_VISIBLE, true)) {
@@ -487,14 +506,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void stopTimerUI() {
-        skipButton.setVisibility(View.INVISIBLE);
+//        skipButton.setVisibility(View.INVISIBLE);
         workIcon.setVisibility(View.VISIBLE);
         breakIcon.setVisibility(View.INVISIBLE);
 
         revertTimerAnimation();
         timerTextView.clearAnimation();
 
-        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         Database.databaseExecutor.execute(() -> {
             int duration =
@@ -515,7 +534,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getCurrentActivityId() {
-        SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
     }
 

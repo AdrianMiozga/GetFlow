@@ -24,30 +24,22 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/countdown_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:scaleX="1"
-        android:scaleY="1"
-        android:textColor="@color/colorPrimary"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+    <ImageButton
+        android:id="@+id/menu"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:backgroundTint="@color/black"
+        android:contentDescription="More"
+        android:padding="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/menu_icon"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.373"
-        tools:text="25:00" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/work_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
         android:background="@drawable/work_icon"
         android:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/work_icon"
@@ -60,10 +52,8 @@
         android:id="@+id/break_icon"
         android:layout_width="20dp"
         android:layout_height="18dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="28dp"
         android:background="@drawable/break_icon"
+        android:layout_marginBottom="4dp"
         android:backgroundTint="@color/colorPrimary"
         android:contentDescription="@string/break_icon"
         android:visibility="invisible"
@@ -71,6 +61,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/countdown_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingVertical="28dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.373"
+        tools:text="25:00" />
+
+    <Button
+        android:id="@+id/current_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:drawableEnd="@drawable/change_icon"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:maxWidth="300dp"
+        android:paddingHorizontal="8dp"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        app:drawableTint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countdown_text_view"
+        tools:text="Activity" />
 
     <Button
         android:id="@+id/skip_button"
@@ -82,6 +108,7 @@
         android:text="@string/skip"
         android:textColor="@color/colorPrimary"
         android:textSize="18sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -89,36 +116,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/countdown_text_view"
         app:layout_constraintVertical_bias="0.461" />
-
-    <Button
-        android:id="@+id/current_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="32dp"
-        android:background="@android:color/transparent"
-        android:clickable="true"
-        android:drawableEnd="@drawable/change_icon"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:paddingHorizontal="8dp"
-        android:textAllCaps="false"
-        android:textColor="@color/colorPrimary"
-        app:drawableTint="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countdown_text_view"
-        tools:text="Activity" />
-
-    <ImageButton
-        android:id="@+id/menu"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:padding="16dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:src="@drawable/menu_icon"
-        android:backgroundTint="@color/black"
-        android:contentDescription="More" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
