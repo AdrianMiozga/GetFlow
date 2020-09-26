@@ -166,11 +166,11 @@ public class StatisticsActivity extends AppCompatActivity {
 
                 Set<Integer> values = new HashSet<>();
 
-                builder.setTitle("Select activities")
+                builder.setTitle(R.string.select_activities_dialog_title)
                         .setMultiChoiceItems(activities, checkedItems,
                                 (dialog, which, isChecked) -> checkedItems[which] = isChecked)
 
-                        .setPositiveButton("OK", (dialog, id) -> {
+                        .setPositiveButton(R.string.select_activities_positive_button, (dialog, id) -> {
                             for (int i = 0; i < checkedItems.length; i++) {
                                 if (checkedItems[i]) {
                                     values.add(labelElements.get(i).getID());
@@ -179,7 +179,7 @@ public class StatisticsActivity extends AppCompatActivity {
                             Database.databaseExecutor.execute(() -> database.activityDao().updateShowInStatistics(values));
                             loadFromDatabase();
                         })
-                        .setNegativeButton("Cancel", (dialog, id) -> {
+                        .setNegativeButton(R.string.select_activities_negative_button, (dialog, id) -> {
 
                         });
                 builder.show();
@@ -330,6 +330,7 @@ public class StatisticsActivity extends AppCompatActivity {
         historySpinner.setAdapter(adapter);
         historySpinner.setSelection(historySpinnerCurrentSelectedIndex);
         historySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (historySpinnerCurrentSelectedIndex == position) {

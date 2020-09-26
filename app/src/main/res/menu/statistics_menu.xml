@@ -22,7 +22,7 @@
     <item
         android:id="@+id/select_activities"
         android:icon="@drawable/change_icon"
-        android:title="Select activities"
+        android:title="@string/select_activities_dialog_title"
         app:showAsAction="ifRoom" />
 
 </menu>

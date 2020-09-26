@@ -90,6 +90,9 @@
     <string name="full_screen_mode_title">Full screen mode</string>
     <string name="weeks">Weeks</string>
     <string name="sessions_before_a_long_break_title">Sessions before a long break</string>
+    <string name="select_activities_dialog_title">Select activities</string>
+    <string name="select_activities_positive_button">OK</string>
+    <string name="select_activities_negative_button">Cancel</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>
