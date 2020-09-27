@@ -58,7 +58,7 @@ public final class Constants {
      */
     static final String LAST_SESSION_DURATION = "last_session_duration";
 
-    /** It's zero when the timer is stopped. */
+    /** It's zero when the timer is stopped or between work/break, break/work timers. */
     public static final String TIME_LEFT = "time_left";
 
     public static final String IS_TIMER_RUNNING = "is_timer_running";

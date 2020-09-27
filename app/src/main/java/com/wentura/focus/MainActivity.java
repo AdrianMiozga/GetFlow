@@ -314,9 +314,8 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-                if (sharedPreferences.getBoolean(Constants.IS_TIMER_RUNNING, false) ||
+                if (sharedPreferences.getInt(Constants.TIME_LEFT, 0) != 0 ||
                         sharedPreferences.getBoolean(Constants.IS_BREAK_STATE, false)) {
-
                     skipTimer();
                 }
             }
