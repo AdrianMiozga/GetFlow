@@ -65,7 +65,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int AUTO_HIDE_FULL_SCREEN_AFTER = 3000;
-//    private Button skipButton;
+    //    private Button skipButton;
     private ImageView workIcon;
     private ImageView breakIcon;
     private TextView timerTextView;
@@ -360,8 +360,10 @@ public class MainActivity extends AppCompatActivity {
 
         final int currentStep = sharedPreferences.getInt(Constants.TUTORIAL_STEP, 0);
 
-        List<String> messages = Arrays.asList(getString(R.string.first_tutorial_message),
-                getString(R.string.second_tutorial_message));
+        List<String> messages = Arrays.asList(
+                getString(R.string.press_on_timer_snackbar_message),
+                getString(R.string.swipe_timer_snackbar_message),
+                getString(R.string.long_press_on_timer_snackbar_message));
 
         if (currentStep >= messages.size()) {
             return;

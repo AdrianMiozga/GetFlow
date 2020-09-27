@@ -48,8 +48,8 @@
     <string name="keep_screen_on">Utrzymuj włączony ekran</string>
     <string name="days">Dni</string>
     <string name="months">Miesiące</string>
-    <string name="first_tutorial_message">Naciśnij na licznik, aby zacząć lub spauzować sesję</string>
-    <string name="second_tutorial_message">Przytrzymaj licznik, aby anulować sesję</string>
+    <string name="press_on_timer_snackbar_message">Naciśnij na licznik, aby zacząć lub spauzować sesję</string>
+    <string name="long_press_on_timer_snackbar_message">Przytrzymaj licznik, aby anulować sesję</string>
     <string name="enable_long_breaks_title">Włącz długie przerwy</string>
     <string name="long_break_duration_title">Czas trwania długiej przerwy</string>
     <string name="disable_wifi_title">Wyłącz Wi-Fi</string>

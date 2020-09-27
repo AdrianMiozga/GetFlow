@@ -48,8 +48,9 @@
     <string name="days">Days</string>
     <string name="time">%dm</string>
     <string name="months">Months</string>
-    <string name="first_tutorial_message">Press on the timer to start or pause</string>
-    <string name="second_tutorial_message">Long press the timer to stop</string>
+    <string name="press_on_timer_snackbar_message">Press on the timer to start or pause</string>
+    <string name="long_press_on_timer_snackbar_message">Long press the timer to stop</string>
+    <string name="swipe_timer_snackbar_message">Swipe the timer from right to left to skip it</string>
     <string name="enable_long_breaks_title">Enable long breaks</string>
     <string name="long_break_duration_title">Long break duration</string>
     <string name="disable_wifi_title">Disable Wi-Fi</string>
