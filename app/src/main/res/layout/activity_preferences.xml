@@ -15,234 +15,239 @@
   ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/some_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/work_duration_linear_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/some_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/work_duration"
+        <LinearLayout
+            android:id="@+id/work_duration_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/work_duration_title"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/work_duration_summary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="25m" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/break_duration_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/work_duration_linear_layout">
-
-        <TextView
-            android:id="@+id/break_duration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/break_duration_title"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/work_duration_linear_layout" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/break_duration_summary"
+            <TextView
+                android:id="@+id/work_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/work_duration_title"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/work_duration_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="25m" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/break_duration_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="5m" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/long_break_duration_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:background="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/break_duration_linear_layout">
-
-        <TextView
-            android:id="@+id/long_break_duration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/long_break_duration_title"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/break_duration" />
+            app:layout_constraintTop_toBottomOf="@id/work_duration_linear_layout">
 
-        <TextView
-            android:id="@+id/long_break_duration_summary"
+            <TextView
+                android:id="@+id/break_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/break_duration_title"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/work_duration_linear_layout" />
+
+            <TextView
+                android:id="@+id/break_duration_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="5m" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/long_break_duration_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="20m" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/sessions_till_long_break_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/long_break_duration_linear_layout">
-
-        <TextView
-            android:id="@+id/sessions_till_long_break_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/sessions_before_a_long_break_title"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:animateLayoutChanges="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/break_duration" />
+            app:layout_constraintTop_toBottomOf="@id/break_duration_linear_layout">
 
-        <TextView
-            android:id="@+id/sessions_till_long_break_summary"
+            <TextView
+                android:id="@+id/long_break_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/long_break_duration_title"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/break_duration" />
+
+            <TextView
+                android:id="@+id/long_break_duration_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="20m" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sessions_till_long_break_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="4" />
-    </LinearLayout>
+            android:animateLayoutChanges="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/long_break_duration_linear_layout">
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/enable_long_breaks_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="16dp"
-        android:text="@string/enable_long_breaks_title"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sessions_till_long_break_linear_layout"
-        app:useMaterialThemeColors="false" />
+            <TextView
+                android:id="@+id/sessions_till_long_break_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sessions_before_a_long_break_title"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/break_duration" />
 
-    <RelativeLayout
-        android:id="@+id/do_not_disturb_linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enable_long_breaks_switch">
-
-        <TextView
-            android:id="@+id/do_not_disturb"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/do_not_disturb_switch"
-            android:defaultValue="false"
-            android:text="@string/do_not_disturb_title"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/do_not_disturb_summary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/do_not_disturb"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/do_not_disturb_switch"
-            android:text="@string/do_not_disturb_summary" />
+            <TextView
+                android:id="@+id/sessions_till_long_break_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="4" />
+        </LinearLayout>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/do_not_disturb_switch"
-            android:layout_width="wrap_content"
+            android:id="@+id/enable_long_breaks_switch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            android:text="@string/enable_long_breaks_title"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sessions_till_long_break_linear_layout"
             app:useMaterialThemeColors="false" />
-    </RelativeLayout>
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/enable_do_not_disturb_on_breaks_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="16dp"
-        android:text="@string/do_not_disturb_break_summary"
-        android:visibility="gone"
-        app:useMaterialThemeColors="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/do_not_disturb_linear_layout" />
-
-    <RelativeLayout
-        android:id="@+id/wifi_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enable_do_not_disturb_on_breaks_switch">
-
-        <TextView
-            android:id="@+id/disable_wifi"
+        <RelativeLayout
+            android:id="@+id/do_not_disturb_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/wifi_switch"
-            android:defaultValue="false"
-            android:text="@string/disable_wifi_title"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enable_long_breaks_switch">
 
-        <TextView
-            android:id="@+id/disable_wifi_summary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/disable_wifi"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/wifi_switch"
-            android:text="@string/disable_wifi_summary" />
+            <TextView
+                android:id="@+id/do_not_disturb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/do_not_disturb_switch"
+                android:defaultValue="false"
+                android:text="@string/do_not_disturb_title"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/do_not_disturb_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/do_not_disturb"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/do_not_disturb_switch"
+                android:text="@string/do_not_disturb_summary" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/do_not_disturb_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:useMaterialThemeColors="false" />
+        </RelativeLayout>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/wifi_switch"
-            android:layout_width="wrap_content"
+            android:id="@+id/enable_do_not_disturb_on_breaks_switch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="16dp"
+            android:text="@string/do_not_disturb_break_summary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/do_not_disturb_linear_layout"
             app:useMaterialThemeColors="false" />
-    </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:id="@+id/wifi_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/enable_do_not_disturb_on_breaks_switch">
+
+            <TextView
+                android:id="@+id/disable_wifi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/wifi_switch"
+                android:defaultValue="false"
+                android:text="@string/disable_wifi_title"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/disable_wifi_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/disable_wifi"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/wifi_switch"
+                android:text="@string/disable_wifi_summary" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/wifi_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:useMaterialThemeColors="false" />
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
