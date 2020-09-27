@@ -65,7 +65,7 @@ public class ActivitySettings extends AppCompatActivity {
     private SwitchMaterial wifiSwitch;
     private SwitchMaterial dndSwitch;
     private SwitchMaterial enableLongBreaksSwitch;
-    private SwitchMaterial enableDNDOnBreaksSwitch;
+//    private SwitchMaterial enableDNDOnBreaksSwitch;
     private LinearLayout longBreakDurationGroup;
     private LinearLayout sessionsBeforeLongBreakGroup;
 
@@ -82,7 +82,7 @@ public class ActivitySettings extends AppCompatActivity {
         wifiSwitch = findViewById(R.id.wifi_switch);
         dndSwitch = findViewById(R.id.do_not_disturb_switch);
         enableLongBreaksSwitch = findViewById(R.id.enable_long_breaks_switch);
-        enableDNDOnBreaksSwitch = findViewById(R.id.enable_do_not_disturb_on_breaks_switch);
+//        enableDNDOnBreaksSwitch = findViewById(R.id.enable_do_not_disturb_on_breaks_switch);
         sessionsBeforeLongBreakGroup = findViewById(R.id.sessions_till_long_break_linear_layout);
 
         ConstraintLayout constraintLayout = findViewById(R.id.some_constraint_layout);
@@ -138,8 +138,8 @@ public class ActivitySettings extends AppCompatActivity {
 
                     TransitionManager.beginDelayedTransition(constraintLayout, transition);
 
-                    enableDNDOnBreaksSwitch.setVisibility(dndSwitch.isChecked() ?
-                            View.VISIBLE : View.GONE);
+//                    enableDNDOnBreaksSwitch.setVisibility(dndSwitch.isChecked() ?
+//                            View.VISIBLE : View.GONE);
                 });
             });
 
@@ -166,9 +166,9 @@ public class ActivitySettings extends AppCompatActivity {
             }
         });
 
-        enableDNDOnBreaksSwitch.setOnClickListener(view ->
-                Database.databaseExecutor.execute(() ->
-                        database.activityDao().setKeepDNDOnBreaks(activityId, enableDNDOnBreaksSwitch.isChecked())));
+//        enableDNDOnBreaksSwitch.setOnClickListener(view ->
+//                Database.databaseExecutor.execute(() ->
+//                        database.activityDao().setKeepDNDOnBreaks(activityId, enableDNDOnBreaksSwitch.isChecked())));
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             wifiGroup.setOnClickListener(view -> wifiSwitch.performClick());
@@ -352,10 +352,10 @@ public class ActivitySettings extends AppCompatActivity {
             });
         });
 
-        Database.databaseExecutor.execute(() -> {
-            boolean isDNDKeptOnBreaks = database.activityDao().isDNDKeptOnBreaks(activityId);
-            runOnUiThread(() -> enableDNDOnBreaksSwitch.setChecked(isDNDKeptOnBreaks));
-        });
+//        Database.databaseExecutor.execute(() -> {
+//            boolean isDNDKeptOnBreaks = database.activityDao().isDNDKeptOnBreaks(activityId);
+//            runOnUiThread(() -> enableDNDOnBreaksSwitch.setChecked(isDNDKeptOnBreaks));
+//        });
 
         Database.databaseExecutor.execute(() -> {
             boolean isDNDEnabled = database.activityDao().isDNDEnabled(activityId);
@@ -366,9 +366,9 @@ public class ActivitySettings extends AppCompatActivity {
                 }
                 dndSwitch.jumpDrawablesToCurrentState();
 
-                if (isDNDEnabled) {
-                    enableDNDOnBreaksSwitch.setVisibility(View.VISIBLE);
-                }
+//                if (isDNDEnabled) {
+//                    enableDNDOnBreaksSwitch.setVisibility(View.VISIBLE);
+//                }
             });
         });
 

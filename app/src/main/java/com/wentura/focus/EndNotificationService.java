@@ -17,6 +17,7 @@
 
 package com.wentura.focus;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -130,6 +131,7 @@ public class EndNotificationService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setOngoing(true)
+                .setDefaults(Notification.DEFAULT_SOUND)
                 .setLights(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
                         500, 2000);
 
