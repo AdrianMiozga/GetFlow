@@ -44,7 +44,7 @@ public class PrepareMonthsTest {
         assertThat(monthData.getGeneratedData().size(), is(12));
 
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
-            assertThat(monthData.getGeneratedData().get(i).getTime(), is(0));
+            assertThat(monthData.getGeneratedData().get(i).getTime(), is(0L));
         }
         countMonths();
 
@@ -54,7 +54,7 @@ public class PrepareMonthsTest {
         monthData.prepareMonths(currentDate);
 
         assertThat(monthData.getGeneratedData().size(), is(12));
-        assertThat(monthData.getGeneratedData().get(11).getTime(), is(20000));
+        assertThat(monthData.getGeneratedData().get(11).getTime(), is(20000L));
         countMonths();
     }
 
@@ -70,9 +70,9 @@ public class PrepareMonthsTest {
 
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
             if (i == 9) {
-                assertThat(monthData.getGeneratedData().get(9).getTime(), is(8300));
+                assertThat(monthData.getGeneratedData().get(9).getTime(), is(8300L));
             } else {
-                assertThat(monthData.getGeneratedData().get(i).getTime(), is(0));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(0L));
             }
         }
         countMonths();
@@ -85,9 +85,9 @@ public class PrepareMonthsTest {
         assertThat(monthData.getGeneratedData().size(), is(12));
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
             if (i == 9) {
-                assertThat(monthData.getGeneratedData().get(i).getTime(), is(8300));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(8300L));
             } else {
-                assertThat(monthData.getGeneratedData().get(i).getTime(), is(0));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(0L));
             }
         }
         countMonths();
@@ -101,12 +101,12 @@ public class PrepareMonthsTest {
 
         for (int i = 0; i < monthData.getGeneratedData().size(); i++) {
             if (i == 0) {
-                assertThat(monthData.getGeneratedData().get(i).getTime(), is(1200));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(1200L));
             } else if (i == 12) {
-                assertThat(monthData.getGeneratedData().get(i).getTime(), is(8300));
+                assertThat(monthData.getGeneratedData().get(i).getTime(), is(8300L));
             } else {
                 assertThat("At i = " + i,
-                        monthData.getGeneratedData().get(i).getTime(), is(0));
+                        monthData.getGeneratedData().get(i).getTime(), is(0L));
             }
         }
 

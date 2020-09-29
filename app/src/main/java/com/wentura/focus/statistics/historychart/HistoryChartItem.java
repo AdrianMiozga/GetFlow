@@ -29,11 +29,11 @@ public final class HistoryChartItem implements Comparable<HistoryChartItem> {
     private final String date;
 
     /** Sum of CompletedWorkTime and IncompleteWorkTime from {@link Pomodoro}. */
-    private final int time;
+    private final long time;
 
     private final int activityId;
 
-    public HistoryChartItem(String date, int time, int activityId) {
+    public HistoryChartItem(String date, long time, int activityId) {
         this.date = date;
         this.time = time;
         this.activityId = activityId;
@@ -44,7 +44,7 @@ public final class HistoryChartItem implements Comparable<HistoryChartItem> {
         this(Date, 0, 0);
     }
 
-    public static HistoryChartItem of(LocalDate LocalDate, int totalTime, int activityId) {
+    public static HistoryChartItem of(LocalDate LocalDate, long totalTime, int activityId) {
         return new HistoryChartItem(LocalDate.toString(), totalTime, activityId);
     }
 
@@ -56,7 +56,7 @@ public final class HistoryChartItem implements Comparable<HistoryChartItem> {
         return LocalDate.parse(date);
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 

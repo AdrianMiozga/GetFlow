@@ -39,22 +39,22 @@ public class CreateMonthsArrayTest {
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(1));
-        assertThat(monthData.getGeneratedData().get(0).getTime(), is(2800));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(2800L));
 
         data.add(0, new HistoryChartItem("2020-03-02", 3000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(1));
-        assertThat(monthData.getGeneratedData().get(0).getTime(), is(5800));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(5800L));
 
         data.add(0, new HistoryChartItem("2019-02-02", 5000, 0));
         monthData = new MonthData(data);
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(2));
-        assertThat(monthData.getGeneratedData().get(1).getTime(), is(5800));
-        assertThat(monthData.getGeneratedData().get(0).getTime(), is(5000));
+        assertThat(monthData.getGeneratedData().get(1).getTime(), is(5800L));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(5000L));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class CreateMonthsArrayTest {
         monthData.createMonthsArray();
 
         assertThat(monthData.getGeneratedData().size(), is(1));
-        assertThat(monthData.getGeneratedData().get(0).getTime(), is(0));
+        assertThat(monthData.getGeneratedData().get(0).getTime(), is(0L));
     }
 
     @Test

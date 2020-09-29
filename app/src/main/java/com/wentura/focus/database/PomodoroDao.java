@@ -74,12 +74,15 @@ public interface PomodoroDao {
      */
     // I have to first subtract 6 days as 'weekday 1' pushes all dates forward to next Monday instead to previous one.
     // This would cause dates like 2020-09-20 (Sunday) and 2020-09-21 (Monday) go to one date - 2020-09-21.
+    //
+    // The GROUP BY also uses the same mechanism because if I used the actual date from database, 2020-01-01 would be
+    // the first week of 2020. But Monday of that week is in 2019 so instead it should be the last week of 2019.
     @Query("SELECT date(MIN(Date), '-6 days', 'weekday 1') AS date, " +
             "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
             "FROM Pomodoro " +
             "WHERE ActivityId IN(:activityId) " +
-            "GROUP BY strftime('%W', Date) || strftime('%Y') " +
+            "GROUP BY strftime('%W-%Y', date(Date, '-6 days', 'weekday 1')) " +
             "ORDER BY Date")
     List<HistoryChartItem> getAllGroupByWeek(int[] activityId);
 
