@@ -63,7 +63,8 @@ public final class MonthData extends ChartData {
                 continue;
             }
 
-            if (i + 1 == months.size() - 1 && nextMonth.getMonthValue() != LocalDate.parse(currentDate).getMonthValue()) {
+            if (i + 1 == months.size() - 1 &&
+                    nextMonth.getMonthValue() != LocalDate.parse(currentDate).getMonthValue()) {
                 thisMonth = thisMonth.plusMonths(1);
                 months.add(HistoryChartItem.of(thisMonth));
             }

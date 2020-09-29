@@ -62,7 +62,9 @@ public class NotificationService extends Service {
 
         if (intent != null) {
             areLongBreaksEnabled = intent.getBooleanExtra(Constants.ARE_LONG_BREAKS_ENABLED_INTENT, false);
-            sessionsBeforeLongBreak = intent.getIntExtra(Constants.SESSIONS_BEFORE_LONG_BREAK_INTENT, Constants.DEFAULT_SESSIONS_BEFORE_LONG_BREAK);
+            sessionsBeforeLongBreak =
+                    intent.getIntExtra(Constants.SESSIONS_BEFORE_LONG_BREAK_INTENT,
+                            Constants.DEFAULT_SESSIONS_BEFORE_LONG_BREAK);
         }
 
         int workSessionCounter = preferences.getInt(Constants.WORK_SESSION_COUNTER, 0);
@@ -80,7 +82,8 @@ public class NotificationService extends Service {
         if (timeLeft == 0 && intent != null) {
             // If last work session was over specified time, reset the work counter so that for long break to occur, you
             // have to again complete all sessions.
-            if (LocalDateTime.now().isAfter(lastWorkSession.plusHours(Constants.HOURS_BEFORE_WORK_SESSION_COUNT_RESETS))) {
+            if (LocalDateTime.now()
+                    .isAfter(lastWorkSession.plusHours(Constants.HOURS_BEFORE_WORK_SESSION_COUNT_RESETS))) {
                 workSessionCounter = 0;
                 preferenceEditor.putInt(Constants.WORK_SESSION_COUNTER, 0);
             }

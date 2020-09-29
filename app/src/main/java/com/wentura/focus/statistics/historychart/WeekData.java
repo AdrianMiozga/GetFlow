@@ -79,7 +79,8 @@ public final class WeekData extends ChartData {
                 continue;
             }
 
-            if (i + 1 == weeks.size() - 1 && weeks.get(i + 1).getDate().get(weekOfYear) != firstDayOfCurrentWeek.get(weekOfYear)) {
+            if (i + 1 == weeks.size() - 1 &&
+                    weeks.get(i + 1).getDate().get(weekOfYear) != firstDayOfCurrentWeek.get(weekOfYear)) {
                 weeks.add(HistoryChartItem.of(thisWeek.plusWeeks(1)));
             }
         }

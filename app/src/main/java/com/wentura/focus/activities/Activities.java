@@ -81,7 +81,8 @@ public class Activities extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    if (editable.toString().isEmpty() || editable.toString().length() > Constants.MAX_ACTIVITY_NAME_LENGTH) {
+                    if (editable.toString().isEmpty() ||
+                            editable.toString().length() > Constants.MAX_ACTIVITY_NAME_LENGTH) {
                         editText.getRootView().findViewById(android.R.id.button1).setEnabled(false);
                     } else {
                         editText.getRootView().findViewById(android.R.id.button1).setEnabled(true);
@@ -104,7 +105,8 @@ public class Activities extends AppCompatActivity {
 
                         if (isNameOccupied) {
                             runOnUiThread(() ->
-                                    Toast.makeText(this, R.string.activity_with_that_name_exists, Toast.LENGTH_LONG).show());
+                                    Toast.makeText(this, R.string.activity_with_that_name_exists, Toast.LENGTH_LONG)
+                                            .show());
                         } else {
                             dialog.dismiss();
 
@@ -150,7 +152,9 @@ public class Activities extends AppCompatActivity {
     private LinearLayout getLinearLayoutWithMargins(EditText input) {
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins((int) Utility.convertDpToPixel(20, this), 0,
                 (int) Utility.convertDpToPixel(20, this), 0);
 

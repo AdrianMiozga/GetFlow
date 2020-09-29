@@ -61,8 +61,9 @@ public final class Activity {
     @ColumnInfo(name = "showInStatistics")
     private final boolean showInStatistics;
 
-    public Activity(String name, int workDuration, int breakDuration, boolean longBreaks, int longBreakDuration,
-                    int sessionsBeforeLongBreak, boolean DND, boolean keepDNDOnBreaks, boolean WiFi, boolean showInStatistics) {
+    public Activity(String name, int workDuration, int breakDuration, boolean longBreaks,
+                    int longBreakDuration, int sessionsBeforeLongBreak, boolean DND, boolean keepDNDOnBreaks,
+                    boolean WiFi, boolean showInStatistics) {
         this.name = name;
         this.workDuration = workDuration;
         this.breakDuration = breakDuration;

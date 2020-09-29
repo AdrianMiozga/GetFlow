@@ -99,7 +99,9 @@ final public class ActivityPieChartRenderer extends PieChartRenderer {
         final float holeRadiusPercent = mChart.getHoleRadius() / 100f;
         float labelRadiusOffset = (radius - (radius * holeRadiusPercent)) / 2f;
 
-        if (mChart.isDrawHoleEnabled() && !mChart.isDrawSlicesUnderHoleEnabled() && mChart.isDrawRoundedSlicesEnabled()) {
+        if (mChart.isDrawHoleEnabled() &&
+                !mChart.isDrawSlicesUnderHoleEnabled() &&
+                mChart.isDrawRoundedSlicesEnabled()) {
             // Add curved circle slice and spacing to rotation angle, so that it sits nicely inside
             rotationAngle += roundedRadius * 360 / (Math.PI * 2 * radius);
         }
@@ -347,7 +349,8 @@ final public class ActivityPieChartRenderer extends PieChartRenderer {
                 float labelPty;
 
                 if (transformedAngle % 360 >= 90 && transformedAngle % 360 <= 270) {
-                    if (mChart.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (mChart.getContext().getResources().getConfiguration().orientation ==
+                            Configuration.ORIENTATION_LANDSCAPE) {
                         pt2x = pt1x - Utils.convertDpToPixel(180f);
 
                         if (pt2x < mChart.getLeft()) {
@@ -371,7 +374,8 @@ final public class ActivityPieChartRenderer extends PieChartRenderer {
                     circlePaint.setColor(dataSet.getValueTextColor(all.get(j).getId()));
                     canvas.drawCircle(pt2x, pt2y, Utils.convertDpToPixel(CIRCLE_RADIUS), circlePaint);
                 } else {
-                    if (mChart.getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (mChart.getContext().getResources().getConfiguration().orientation ==
+                            Configuration.ORIENTATION_LANDSCAPE) {
                         pt2x = pt1x + Utils.convertDpToPixel(180f);
 
                         if (pt2x > mChart.getRight() - Utils.convertDpToPixel(10f)) {
@@ -389,8 +393,8 @@ final public class ActivityPieChartRenderer extends PieChartRenderer {
                     labelPtx = pt2x - offset;
                     labelPty = pt2y;
 
-                    drawEntryLabel(canvas, entryLabel, labelPtx, labelPty, dataSet.getValueTextColor(all.get(j).getId()),
-                            (int) (pt2x - pt1x - offset));
+                    drawEntryLabel(canvas, entryLabel, labelPtx, labelPty,
+                            dataSet.getValueTextColor(all.get(j).getId()), (int) (pt2x - pt1x - offset));
 
                     circlePaint.setColor(dataSet.getValueTextColor(all.get(j).getId()));
                     canvas.drawCircle(pt2x - Utils.convertDpToPixel(2f), pt2y, Utils.convertDpToPixel(CIRCLE_RADIUS),

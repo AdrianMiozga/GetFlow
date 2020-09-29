@@ -176,7 +176,8 @@ public class StatisticsActivity extends AppCompatActivity {
                                     values.add(labelElements.get(i).getID());
                                 }
                             }
-                            Database.databaseExecutor.execute(() -> database.activityDao().updateShowInStatistics(values));
+                            Database.databaseExecutor.execute(() ->
+                                    database.activityDao().updateShowInStatistics(values));
                             loadFromDatabase();
                         })
                         .setNegativeButton(R.string.select_activities_negative_button, (dialog, id) -> {
@@ -285,13 +286,15 @@ public class StatisticsActivity extends AppCompatActivity {
         int fullActivitiesAdded = 0;
         for (PieChartItem pieChartItem : activities) {
             if (activities.size() <= Constants.MAX_ITEMS_TO_SHOW_ON_ACTIVITY_CHART) {
-                if (pieChartItem.getPercent() > Constants.CLUMP_ACTIVITIES_BELOW_THIS_PERCENT && ++fullActivitiesAdded <= Constants.MAX_ITEMS_TO_SHOW_ON_ACTIVITY_CHART) {
+                if (pieChartItem.getPercent() > Constants.CLUMP_ACTIVITIES_BELOW_THIS_PERCENT &&
+                        ++fullActivitiesAdded <= Constants.MAX_ITEMS_TO_SHOW_ON_ACTIVITY_CHART) {
                     result.add(pieChartItem);
                 } else {
                     othersTime += pieChartItem.getTotalTime();
                 }
             } else {
-                if (pieChartItem.getPercent() > Constants.CLUMP_ACTIVITIES_BELOW_THIS_PERCENT && ++fullActivitiesAdded < Constants.MAX_ITEMS_TO_SHOW_ON_ACTIVITY_CHART) {
+                if (pieChartItem.getPercent() > Constants.CLUMP_ACTIVITIES_BELOW_THIS_PERCENT &&
+                        ++fullActivitiesAdded < Constants.MAX_ITEMS_TO_SHOW_ON_ACTIVITY_CHART) {
                     result.add(pieChartItem);
                 } else {
                     othersTime += pieChartItem.getTotalTime();
@@ -357,7 +360,8 @@ public class StatisticsActivity extends AppCompatActivity {
         });
     }
 
-    public class ActivitySpinnerInteractionListener implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
+    public class ActivitySpinnerInteractionListener
+            implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
 
         @Override
         public boolean onTouch(View view, MotionEvent event) {
@@ -384,13 +388,14 @@ public class StatisticsActivity extends AppCompatActivity {
                         break;
                     case 1:
                         pieChartItems =
-                                database.pomodoroDao().getPieChartItems(LocalDate.now().minusDays(6).toString(), LocalDate.now().toString());
+                                database.pomodoroDao().getPieChartItems(LocalDate.now().minusDays(6).toString(),
+                                        LocalDate.now().toString());
                         break;
                     case 2:
                         pieChartItems =
-                                database.pomodoroDao().getPieChartItems(LocalDate.now().minusMonths(1).toString(), LocalDate.now().toString());
+                                database.pomodoroDao().getPieChartItems(LocalDate.now().minusMonths(1).toString(),
+                                        LocalDate.now().toString());
                         break;
-
                     default:
                         pieChartItems = database.pomodoroDao().getAllPieChartItems();
                         break;
@@ -439,7 +444,8 @@ public class StatisticsActivity extends AppCompatActivity {
                 TextView activityTextView = findViewById(R.id.activities_text_view);
 
                 if (shouldScrollDown) {
-                    ObjectAnimator scrollToBottom = ObjectAnimator.ofInt(scrollView, "scrollY", activityTextView.getTop());
+                    ObjectAnimator scrollToBottom =
+                            ObjectAnimator.ofInt(scrollView, "scrollY", activityTextView.getTop());
                     scrollToBottom.setDuration(500);
                     scrollToBottom.start();
                 }
@@ -535,31 +541,36 @@ public class StatisticsActivity extends AppCompatActivity {
         List<HistoryChartItem> historyChartItemsWeekData = new ArrayList<>();
 
         try {
-            int[] idsOfActivitiesToShow = Database.databaseExecutor.submit(() -> database.activityDao().getIdsToShow()).get();
+            int[] idsOfActivitiesToShow =
+                    Database.databaseExecutor.submit(() -> database.activityDao().getIdsToShow()).get();
+
+            LocalDate now = LocalDate.now();
 
             historyChartItemToday =
                     Database.databaseExecutor.submit(() ->
-                            database.pomodoroDao().getAllGroupByDate(LocalDate.now().toString(), idsOfActivitiesToShow)).get();
+                            database.pomodoroDao().getAllGroupByDate(now.toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsWeek =
                     Database.databaseExecutor.submit(() ->
-                            database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(6).toString(),
-                                    LocalDate.now().minusDays(1).toString(), idsOfActivitiesToShow)).get();
+                            database.pomodoroDao().getAllDatesBetweenGroupByDate(now.minusDays(6).toString(),
+                                    now.minusDays(1).toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsMonth =
                     Database.databaseExecutor.submit(() ->
-                            database.pomodoroDao().getAllDatesBetweenGroupByDate(LocalDate.now().minusDays(29).toString(),
-                                    LocalDate.now().minusDays(7).toString(), idsOfActivitiesToShow)).get();
+                            database.pomodoroDao().getAllDatesBetweenGroupByDate(now.minusDays(29).toString(),
+                                    now.minusDays(7).toString(), idsOfActivitiesToShow)).get();
 
             historyChartItemsTotal =
                     Database.databaseExecutor.submit(() ->
-                            database.pomodoroDao().getAllDateLessGroupByDate(LocalDate.now().minusDays(29).toString(),
+                            database.pomodoroDao().getAllDateLessGroupByDate(now.minusDays(29).toString(),
                                     idsOfActivitiesToShow)).get();
 
-            data = Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByDate(idsOfActivitiesToShow)).get();
+            data = Database.databaseExecutor.submit(() ->
+                    database.pomodoroDao().getAllGroupByDate(idsOfActivitiesToShow)).get();
 
             historyChartItemsWeekData =
-                    Database.databaseExecutor.submit(() -> database.pomodoroDao().getAllGroupByWeek(idsOfActivitiesToShow)).get();
+                    Database.databaseExecutor.submit(() ->
+                            database.pomodoroDao().getAllGroupByWeek(idsOfActivitiesToShow)).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }

@@ -132,7 +132,8 @@ public final class TimerActionReceiver extends BroadcastReceiver {
                     if (lastSessionDuration - timeLeft > Constants.MINIMUM_SESSION_TIME) {
                         editPreferences.putInt(Constants.WORK_SESSION_COUNTER,
                                 preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);
-                        editPreferences.putString(Constants.TIMESTAMP_OF_LAST_WORK_SESSION, LocalDateTime.now().toString());
+                        editPreferences.putString(Constants.TIMESTAMP_OF_LAST_WORK_SESSION,
+                                LocalDateTime.now().toString());
                     }
 
                     Database database = Database.getInstance(context);

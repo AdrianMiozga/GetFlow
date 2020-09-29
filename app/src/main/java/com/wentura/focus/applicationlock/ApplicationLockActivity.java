@@ -71,9 +71,11 @@ public class ApplicationLockActivity extends AppCompatActivity {
                     AlertDialog.Builder builder =
                             new AlertDialog.Builder(ApplicationLockActivity.this);
                     builder.setMessage(R.string.accessibility_not_enabled_dialog)
-                            .setPositiveButton(R.string.dialog_go_to_settings, (dialog, id) -> startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+                            .setPositiveButton(R.string.dialog_go_to_settings, (dialog, id) ->
+                                    startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
                             .setCancelable(false)
-                            .setNegativeButton(R.string.cancel, (dialog, id) -> masterLockApplicationSwitch.performClick()).show();
+                            .setNegativeButton(R.string.cancel, (dialog, id) ->
+                                    masterLockApplicationSwitch.performClick()).show();
                 }
 
                 editPreferences.putBoolean(Constants.MASTER_LOCK_APPLICATION_SETTING, true);
@@ -112,9 +114,10 @@ public class ApplicationLockActivity extends AppCompatActivity {
             }
         });
 
-        if (masterLockApplicationSwitch.isChecked() != sharedPreferences.getBoolean(Constants.MASTER_LOCK_APPLICATION_SETTING,
-                false) && isAccessibilityServiceEnabled(getApplicationContext(),
-                ApplicationLockService.class)) {
+        if (masterLockApplicationSwitch.isChecked() !=
+                sharedPreferences.getBoolean(Constants.MASTER_LOCK_APPLICATION_SETTING, false) &&
+                isAccessibilityServiceEnabled(getApplicationContext(),
+                        ApplicationLockService.class)) {
             masterLockApplicationSwitch.performClick();
         }
     }
@@ -132,7 +135,9 @@ public class ApplicationLockActivity extends AppCompatActivity {
     public static boolean isAccessibilityServiceEnabled(Context context, Class<?> accessibilityService) {
         ComponentName expectedComponentName = new ComponentName(context, accessibilityService);
 
-        String enabledServicesSetting = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        String enabledServicesSetting =
+                Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+
         if (enabledServicesSetting == null) {
             return false;
         }
@@ -166,7 +171,9 @@ public class ApplicationLockActivity extends AppCompatActivity {
         for (ResolveInfo resolveInfo : resolveInfoList) {
             applicationInfo = resolveInfo.activityInfo.applicationInfo;
 
-            if (applicationInfo == null || !applicationInfo.enabled || applicationInfo.packageName.equals(thisAppPackageName)) {
+            if (applicationInfo == null ||
+                    !applicationInfo.enabled ||
+                    applicationInfo.packageName.equals(thisAppPackageName)) {
                 continue;
             }
 

@@ -36,14 +36,17 @@ public interface PomodoroDao {
             "SUM(Pomodoro.CompletedWorkTime) + SUM(Pomodoro.IncompleteWorkTime) AS TotalTime, " +
             "0 AS Percent, " +
             "Activity.Name AS ActivityName " +
-            "FROM Pomodoro INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID GROUP BY ActivityId")
+            "FROM Pomodoro " +
+            "INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID " +
+            "GROUP BY ActivityId")
     List<PieChartItem> getAllPieChartItems();
 
     @Query("SELECT " +
             "SUM(Pomodoro.CompletedWorkTime) + SUM(Pomodoro.IncompleteWorkTime) AS TotalTime, " +
             "0 AS Percent, " +
             "Activity.Name AS ActivityName " +
-            "FROM Pomodoro INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID " +
+            "FROM Pomodoro " +
+            "INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID " +
             "WHERE Pomodoro.Date BETWEEN :startDate AND :endDate " +
             "GROUP BY ActivityId")
     List<PieChartItem> getPieChartItems(String startDate, String endDate);
@@ -52,7 +55,8 @@ public interface PomodoroDao {
             "SUM(Pomodoro.CompletedWorkTime) + SUM(Pomodoro.IncompleteWorkTime) AS TotalTime, " +
             "0 AS Percent, " +
             "Activity.Name AS ActivityName " +
-            "FROM Pomodoro INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID " +
+            "FROM Pomodoro " +
+            "INNER JOIN Activity ON Pomodoro.ActivityId = Activity.ID " +
             "WHERE Pomodoro.Date = :date " +
             "GROUP BY ActivityId")
     List<PieChartItem> getPieChartItems(String date);
@@ -89,25 +93,36 @@ public interface PomodoroDao {
     @Query("SELECT Date AS date, " +
             "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
-            "FROM Pomodoro WHERE Date BETWEEN :startDate AND :endDate AND ActivityId IN(:activityId) GROUP BY Date ORDER BY Date")
+            "FROM Pomodoro " +
+            "WHERE Date BETWEEN :startDate AND :endDate AND ActivityId IN(:activityId) " +
+            "GROUP BY Date " +
+            "ORDER BY Date")
     List<HistoryChartItem> getAllDatesBetweenGroupByDate(String startDate, String endDate, int[] activityId);
 
     @Query("SELECT Date AS date, " +
             "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
-            "FROM Pomodoro WHERE Date = :date AND ActivityId IN(:activityId) GROUP BY Date")
+            "FROM Pomodoro " +
+            "WHERE Date = :date AND ActivityId IN(:activityId) " +
+            "GROUP BY Date")
     HistoryChartItem getAllGroupByDate(String date, int[] activityId);
 
     @Query("SELECT Date AS date, " +
             "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
-            "FROM Pomodoro WHERE ActivityId IN(:activityId) GROUP BY Date ORDER BY Date")
+            "FROM Pomodoro " +
+            "WHERE ActivityId IN(:activityId) " +
+            "GROUP BY Date " +
+            "ORDER BY Date")
     List<HistoryChartItem> getAllGroupByDate(int[] activityId);
 
     @Query("SELECT Date AS date, " +
             "SUM(CompletedWorkTime) + SUM(IncompleteWorkTime) AS time, " +
             "ActivityId AS activityId " +
-            "FROM Pomodoro WHERE Date < :date AND ActivityId IN(:activityId) GROUP BY Date ORDER BY Date")
+            "FROM Pomodoro " +
+            "WHERE Date < :date AND ActivityId IN(:activityId) " +
+            "GROUP BY Date " +
+            "ORDER BY Date")
     List<HistoryChartItem> getAllDateLessGroupByDate(String date, int[] activityId);
 
     @Query("UPDATE Pomodoro SET CompletedWorks = :completedWorks WHERE ID = :id")

@@ -31,9 +31,13 @@ public abstract class OnTouchListener implements View.OnTouchListener {
     }
 
     public abstract void onSwipeLeft();
+
     public abstract void onUp();
+
     public abstract void onDown();
+
     public abstract void onMyLongPress();
+
     public abstract void onTap();
 
     public boolean onTouch(View v, MotionEvent event) {

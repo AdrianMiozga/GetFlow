@@ -65,7 +65,7 @@ public class ActivitySettings extends AppCompatActivity {
     private SwitchMaterial wifiSwitch;
     private SwitchMaterial dndSwitch;
     private SwitchMaterial enableLongBreaksSwitch;
-//    private SwitchMaterial enableDNDOnBreaksSwitch;
+    //    private SwitchMaterial enableDNDOnBreaksSwitch;
     private LinearLayout longBreakDurationGroup;
     private LinearLayout sessionsBeforeLongBreakGroup;
 
@@ -102,13 +102,18 @@ public class ActivitySettings extends AppCompatActivity {
         RelativeLayout dndGroup = findViewById(R.id.do_not_disturb_linear_layout);
         dndGroup.setOnClickListener(view -> dndSwitch.performClick());
 
-        workDurationGroup.setOnClickListener(view -> setupDialog(getString(R.string.work_duration_title), WindowType.WORK_DURATION));
-        breakDurationGroup.setOnClickListener(view -> setupDialog(getString(R.string.break_duration_title),
-                WindowType.BREAK_DURATION));
-        longBreakDurationGroup.setOnClickListener(view -> setupDialog(getString(R.string.long_break_duration_title),
-                WindowType.LONG_BREAK_DURATION));
-        sessionsBeforeLongBreakGroup.setOnClickListener(view -> setupDialog(getResources().getString(R.string.sessions_before_a_long_break_title),
-                WindowType.SESSIONS_BEFORE_LONG_BREAK));
+        workDurationGroup.setOnClickListener(view ->
+                setupDialog(getString(R.string.work_duration_title), WindowType.WORK_DURATION));
+
+        breakDurationGroup.setOnClickListener(view ->
+                setupDialog(getString(R.string.break_duration_title), WindowType.BREAK_DURATION));
+
+        longBreakDurationGroup.setOnClickListener(view ->
+                setupDialog(getString(R.string.long_break_duration_title), WindowType.LONG_BREAK_DURATION));
+
+        sessionsBeforeLongBreakGroup.setOnClickListener(view ->
+                setupDialog(getResources().getString(R.string.sessions_before_a_long_break_title),
+                        WindowType.SESSIONS_BEFORE_LONG_BREAK));
 
         enableLongBreaksSwitch.setOnClickListener(view ->
                 Database.databaseExecutor.execute(() -> {
@@ -144,7 +149,8 @@ public class ActivitySettings extends AppCompatActivity {
             });
 
             if (dndSwitch.isChecked()) {
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                 if (notificationManager == null) {
                     return;
@@ -160,7 +166,8 @@ public class ActivitySettings extends AppCompatActivity {
 
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
                 builder.setMessage(R.string.dialog_access_policy_not_granted)
-                        .setPositiveButton(R.string.dialog_go_to_settings, (dialog, id) -> startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)))
+                        .setPositiveButton(R.string.dialog_go_to_settings, (dialog, id) ->
+                                startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)))
                         .setCancelable(false)
                         .setNegativeButton(R.string.cancel, (dialog, id) -> dndSwitch.performClick()).show();
             }
@@ -228,7 +235,8 @@ public class ActivitySettings extends AppCompatActivity {
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-                        if (editable.toString().isEmpty() || editable.toString().length() > Constants.MAX_ACTIVITY_NAME_LENGTH) {
+                        if (editable.toString().isEmpty() ||
+                                editable.toString().length() > Constants.MAX_ACTIVITY_NAME_LENGTH) {
                             editText.getRootView().findViewById(android.R.id.button1).setEnabled(false);
                         } else {
                             editText.getRootView().findViewById(android.R.id.button1).setEnabled(true);
@@ -239,7 +247,8 @@ public class ActivitySettings extends AppCompatActivity {
                 builder.setView(getLinearLayoutWithMargins(editText));
 
                 builder.setPositiveButton(R.string.OK, (dialog, which) -> {
-                    Database.databaseExecutor.execute(() -> database.activityDao().updateActivityName(activityId, editText.getText().toString()));
+                    Database.databaseExecutor.execute(() ->
+                            database.activityDao().updateActivityName(activityId, editText.getText().toString()));
 
                     setTitle(editText.getText().toString());
                 });
@@ -263,7 +272,8 @@ public class ActivitySettings extends AppCompatActivity {
                             MaterialAlertDialogBuilder cantDeleteDialog = new MaterialAlertDialogBuilder(this);
                             cantDeleteDialog.setTitle(getString(R.string.delete_activity));
                             cantDeleteDialog.setMessage(R.string.cantDeleteDialog);
-                            cantDeleteDialog.setNegativeButton(getString(R.string.OK), (dialog1, which) -> dialog1.cancel());
+                            cantDeleteDialog.setNegativeButton(getString(R.string.OK), (dialog1, which) ->
+                                    dialog1.cancel());
                             cantDeleteDialog.show();
                         });
                     } else {
@@ -285,7 +295,9 @@ public class ActivitySettings extends AppCompatActivity {
                                     database.pomodoroDao().deleteAllDataWithActivityId(activityId);
                                 });
 
-                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                                SharedPreferences sharedPreferences =
+                                        PreferenceManager.getDefaultSharedPreferences(this);
+
                                 int currentActivityId = sharedPreferences.getInt(Constants.CURRENT_ACTIVITY_ID, 1);
 
                                 if (currentActivityId == activityId) {
@@ -299,7 +311,8 @@ public class ActivitySettings extends AppCompatActivity {
                                 startActivity(intent);
                             });
 
-                            deleteDialog.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.cancel());
+                            deleteDialog.setNegativeButton(getString(R.string.cancel), (dialog1, which) ->
+                                    dialog1.cancel());
 
                             deleteDialog.show();
                         });
@@ -485,7 +498,9 @@ public class ActivitySettings extends AppCompatActivity {
     private LinearLayout getLinearLayoutWithMargins(EditText input) {
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins((int) Utility.convertDpToPixel(20, this), 0,
                 (int) Utility.convertDpToPixel(20, this), 0);
 

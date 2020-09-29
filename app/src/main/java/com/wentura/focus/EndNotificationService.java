@@ -100,9 +100,11 @@ public class EndNotificationService extends Service {
         preferenceEditor.putInt(Constants.LAST_SESSION_DURATION, 0);
 
         if (isBreakState) {
-            Utility.updateDatabaseBreaks(getApplicationContext(), preferences.getInt(Constants.LAST_SESSION_DURATION, 0), activityId);
+            Utility.updateDatabaseBreaks(getApplicationContext(),
+                    preferences.getInt(Constants.LAST_SESSION_DURATION, 0), activityId);
         } else {
-            Utility.updateDatabaseCompletedWorks(getApplicationContext(), preferences.getInt(Constants.LAST_SESSION_DURATION, 0), activityId);
+            Utility.updateDatabaseCompletedWorks(getApplicationContext(),
+                    preferences.getInt(Constants.LAST_SESSION_DURATION, 0), activityId);
 
             preferenceEditor.putInt(Constants.WORK_SESSION_COUNTER,
                     preferences.getInt(Constants.WORK_SESSION_COUNTER, 0) + 1);
@@ -125,15 +127,16 @@ public class EndNotificationService extends Service {
     }
 
     private void showEndNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
-                .setSmallIcon(R.drawable.notification_icon)
-                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setOngoing(true)
-                .setDefaults(Notification.DEFAULT_SOUND)
-                .setLights(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
-                        500, 2000);
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(getApplicationContext(), Constants.CHANNEL_TIMER_COMPLETED)
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setCategory(NotificationCompat.CATEGORY_ALARM)
+                        .setOngoing(true)
+                        .setDefaults(Notification.DEFAULT_SOUND)
+                        .setLights(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary),
+                                500, 2000);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             builder.setContentTitle(getString(R.string.app_name));
