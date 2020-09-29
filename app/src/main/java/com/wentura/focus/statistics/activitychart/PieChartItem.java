@@ -24,17 +24,17 @@ import com.wentura.focus.database.Pomodoro;
 public final class PieChartItem {
 
     /** Sum of CompletedWorkTime and IncompleteWorkTime from {@link Pomodoro}. */
-    private final int TotalTime;
+    private final long TotalTime;
     private double Percent;
     private final String ActivityName;
 
-    public PieChartItem(int TotalTime, double Percent, String ActivityName) {
+    public PieChartItem(long TotalTime, double Percent, String ActivityName) {
         this.TotalTime = TotalTime;
         this.Percent = Percent;
         this.ActivityName = ActivityName;
     }
 
-    public int getTotalTime() {
+    public long getTotalTime() {
         return TotalTime;
     }
 

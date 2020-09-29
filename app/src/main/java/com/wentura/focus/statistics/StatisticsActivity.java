@@ -564,25 +564,25 @@ public class StatisticsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        int timeToday = 0;
+        long timeToday = 0;
 
         if (historyChartItemToday != null) {
             timeToday = historyChartItemToday.getTime();
         }
 
-        int timeWeek = timeToday;
+        long timeWeek = timeToday;
 
         for (HistoryChartItem historyChartItem : historyChartItemsWeek) {
             timeWeek += historyChartItem.getTime();
         }
 
-        int timeMonth = timeWeek;
+        long timeMonth = timeWeek;
 
         for (HistoryChartItem historyChartItem : historyChartItemsMonth) {
             timeMonth += historyChartItem.getTime();
         }
 
-        int timeTotal = timeMonth;
+        long timeTotal = timeMonth;
 
         for (HistoryChartItem historyChartItem : historyChartItemsTotal) {
             timeTotal += historyChartItem.getTime();
