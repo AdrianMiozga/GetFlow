@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2020 Adrian Miozga <AdrianMiozga@outlook.com>
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -21,18 +22,21 @@
         app:defaultValue="false"
         app:iconSpaceReserved="false"
         app:key="keep_screen_on"
+        app:singleLineTitle="false"
         app:title="@string/keep_screen_on" />
 
     <SwitchPreferenceCompat
         app:defaultValue="false"
         app:iconSpaceReserved="false"
         app:key="full_screen_mode"
+        app:singleLineTitle="false"
         app:title="@string/full_screen_mode_title" />
 
     <SwitchPreferenceCompat
         app:defaultValue="false"
         app:iconSpaceReserved="false"
         app:key="automatically_start_activities"
+        app:singleLineTitle="false"
         app:summary="@string/automatically_start_activities_summary"
         app:title="@string/automatically_start_new_activities" />
 
@@ -41,6 +45,7 @@
         app:iconSpaceReserved="false"
         app:isPreferenceVisible="false"
         app:key="scroll_pie_chart_automatically"
+        app:singleLineTitle="false"
         app:summary="@string/scroll_pie_chart_automatically_summary"
         app:title="@string/scroll_pie_chart_automatically_title" />
 
