@@ -76,6 +76,11 @@ public final class Constants {
     public static final int DEFAULT_SESSIONS_BEFORE_LONG_BREAK = 4;
     public static final int DEFAULT_LONG_BREAK_TIME = 20;
 
+    // TODO: 30.09.2020 Update link to project directly
+    public static final String sourceCodeURL = "https://github.com/adrianmiozga/";
+
+    public static final String feedbackURL = "mailto:AdrianMiozga@outlook.com?subject=Feedback about %s";
+
     /** Over this time the user has to build work sessions again for long break. */
     public static final int HOURS_BEFORE_WORK_SESSION_COUNT_RESETS = 1;
 

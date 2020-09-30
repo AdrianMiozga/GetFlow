@@ -82,8 +82,8 @@
     <string name="automatically_start_activities_summary">Selecting activity will automatically
         start the timer.</string>
     <string name="activities">Activities</string>
-    <string name="activity_legend_percent_1">%.2f%%</string>
-    <string name="activity_legend_percent_2">%.0f%%</string>
+    <string name="activity_legend_percent_1" translatable="false">%.2f%%</string>
+    <string name="activity_legend_percent_2" translatable="false">%.0f%%</string>
     <string name="others_text">Others (%.0f%%) consists of</string>
     <string name="others_activity_name">Others</string>
     <string name="day">Day</string>
@@ -102,7 +102,24 @@
     <string name="more">More</string>
     <string name="never_show_neutral_button">Never Show</string>
     <string name="ignore_battery_optimization_title">Ignore Battery Optimization</string>
-    <string name="ignore_battery_optimization_message">Please ignore battery optimization for this application. Not doing so might lead end timer notifications to arrive late or cancel them entirely.\n\nPressing confirm will show appropriate dialog.</string>
+    <string name="ignore_battery_optimization_message">It is recommended to ignore battery optimization for this
+        application. Not doing so might lead end timer notifications to arrive late or cancel them entirely.
+        \n\nPressing confirm will show appropriate dialog.</string>
+    <string name="about_menu_item">About</string>
+    <string name="application_icon_content_description">Application Icon</string>
+    <string name="view_source_code_at_github">View source code at GitHub</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="troubleshooting">Troubleshooting</string>
+    <string name="application_getting_killed_message">If you experience problems with application getting killed
+        even with battery optimization disabled, check out DontKillMyApp.com</string>
+    <string name="application_getting_killed_title">Application Getting Killed</string>
+    <string name="open_website">Open Website</string>
+    <string name="about_version_number">Version %s</string>
+    <string name="activity_settings_name">Activity Settings</string>
+    <string name="about_activity_name">About</string>
+    <string name="activities_name">Activities</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="ignore_optimization_dialog">Ignore battery optimization dialog</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>

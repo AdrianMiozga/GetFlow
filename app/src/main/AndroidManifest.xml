@@ -69,7 +69,7 @@
         <activity
             android:name="com.wentura.focus.activities.Activities"
             android:configChanges="orientation"
-            android:label="Activities"
+            android:label="@string/activities_name"
             android:parentActivityName="com.wentura.focus.MainActivity"
             android:theme="@style/Theme.NoPreviewWindow"
             android:windowSoftInputMode="adjustNothing" />
@@ -77,10 +77,17 @@
         <activity
             android:name="com.wentura.focus.activities.ActivitySettings"
             android:configChanges="orientation"
-            android:label="Activity Settings"
+            android:label="@string/activity_settings_name"
             android:parentActivityName="com.wentura.focus.activities.Activities"
             android:theme="@style/Theme.NoPreviewWindow"
             android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.wentura.focus.AboutActivity"
+            android:configChanges="orientation"
+            android:label="@string/about_activity_name"
+            android:parentActivityName="com.wentura.focus.MainActivity"
+            android:theme="@style/Theme.NoPreviewWindow" />
 
         <service android:name="com.wentura.focus.NotificationService" />
         <service android:name="com.wentura.focus.EndNotificationService" />

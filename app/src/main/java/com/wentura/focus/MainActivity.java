@@ -35,9 +35,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -347,6 +344,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.statistics:
                         startStatisticsActivity();
                         return true;
+                    case R.id.about:
+                        startAboutActivity();
+                        return true;
                 }
                 return false;
             });
@@ -468,26 +468,6 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(updateTimerTextView);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                startSettingsActivity();
-                return true;
-            case R.id.statistics:
-                startStatisticsActivity();
-                return true;
-        }
-        return false;
-    }
-
     private void startSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
@@ -495,6 +475,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void startStatisticsActivity() {
         Intent intent = new Intent(this, StatisticsActivity.class);
+        startActivity(intent);
+    }
+
+    private void startAboutActivity() {
+        Intent intent = new Intent(this, AboutActivity.class);
         startActivity(intent);
     }
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2020 Adrian Miozga <AdrianMiozga@outlook.com>
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -61,4 +60,56 @@
         pracy, włącz tę usługę.</string>
     <string name="accessibility_not_enabled_dialog">Aby zezwolić aplikacji Focus na blokadę innych aplikacji podczas
         pracy, włącz usługę ułatwienia dostępu.</string>
+    <string name="time">%dm</string>
+    <string name="swipe_timer_snackbar_message">Przesuń palcem w lewo po liczniku, aby pominąć bieżącą sesję</string>
+    <string name="new_activity_name">Nowa Nazwa Aktywności</string>
+    <string name="OK">OK</string>
+    <string name="activity_name">Nazwa Aktywności</string>
+    <string name="delete_activity">Usuń Aktywność</string>
+    <string name="confirm">Potwierdź</string>
+    <string name="delete_activity_message">Ta akcja jest nieodwracalna.</string>
+    <string name="cantDeleteDialog">Nie możesz usunąć jedynej aktywności.</string>
+    <string name="default_activity_name">Domyślna</string>
+    <string name="activity_with_that_name_exists">Aktywność z tą nazwą już istnieje</string>
+    <string name="Confirmation">Potwierdzenie</string>
+    <string name="activity_already_running_dialog_message">Jesteś w trakcie sesji. Zmiana aktywności ją zatrzyma.</string>
+    <string name="automatically_start_new_activities">Automatycznie rozpocznij aktywności</string>
+    <string name="edit">Edytuj</string>
+    <string name="delete">Usuń</string>
+    <string name="you_have_data_with_this_activity">Wszystkie statystyki powiązane z tą aktywnością zostaną usunięte. Ta akcja jest nieodwracalna.</string>
+    <string name="automatically_start_activities_summary">Wybranie aktywności spowoduje automatyczne jej rozpoczęcie.</string>
+    <string name="activities">Aktywności</string>
+    <string name="others_text">Inne (%.0f%%) składa się z</string>
+    <string name="others_activity_name">Inne</string>
+    <string name="day">Dzień</string>
+    <string name="last_week">Ostatni Tydzień</string>
+    <string name="last_month">Ostatni Miesiąc</string>
+    <string name="activity_pie_chart_no_data">Brak danych na ten okres</string>
+    <string name="full_screen_mode_title">Tryb pełnoekranowy</string>
+    <string name="weeks">Tygodnie</string>
+    <string name="sessions_before_a_long_break_title">Sesje do długiej przerwy</string>
+    <string name="select_activities_dialog_title">Wybierz aktywności</string>
+    <string name="select_activities_positive_button">OK</string>
+    <string name="select_activities_negative_button">Anuluj</string>
+    <string name="more">Więcej</string>
+    <string name="never_show_neutral_button">Nigdy Nie Pokazuj</string>
+    <string name="ignore_battery_optimization_title">Ignoruj optymalizację baterii</string>
+    <string name="about_menu_item">O aplikacji</string>
+    <string name="application_icon_content_description">Ikona aplikacji</string>
+    <string name="view_source_code_at_github">Pokaż kod źródłowy na GitHubie</string>
+    <string name="send_feedback">Wyślij opinię</string>
+    <string name="troubleshooting">Rozwiązywanie problemów</string>
+    <string name="open_website">Otwórz Stronę</string>
+    <string name="about_version_number">Wersja %s</string>
+    <string name="activity_settings_name">Ustawienia Aktywności</string>
+    <string name="about_activity_name">O aplikacji</string>
+    <string name="activities_name">Aktywności</string>
+    <string name="ignore_battery_optimization_message">Zalecane jest, aby wyłączyć optymalizację baterii dla tej
+        aplikacji. Nie zrobienie tego może spowodować opóźnienie w otrzymywaniu powiadomienia o końcu sesji
+        bądź całkowicie je usunie.\n\nWybranie potwierdź, pokaże odpowiednie okno.</string>
+    <string name="application_getting_killed_title">Aplikacja zostaje zatrzymywana</string>
+    <string name="application_getting_killed_message">Jeśli doświadczasz problemów z samoczynnym zatrzymywaniem się
+        aplikacji, przeczytaj informacje na stronie DontKillMyApp.com (strona jest w języku angielskim)</string>
+    <string name="tutorial">Samouczek</string>
+    <string name="ignore_optimization_dialog">Ignoruj optymalizację baterii</string>
 </resources>
