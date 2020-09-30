@@ -43,6 +43,8 @@ public final class Constants {
     public static final String AUTOMATICALLY_START_NEW_ACTIVITIES = "automatically_start_activities";
     public static final String SCROLL_PIE_CHART_AUTOMATICALLY = "scroll_pie_chart_automatically";
     public static final String FULL_SCREEN_MODE = "full_screen_mode";
+    public static final String NEVER_SHOW_IGNORE_BATTERY_OPTIMIZATION_DIALOG =
+            "never_show_ignore_battery_optimization_dialog";
 
     /**
      * After long break is consumed or {@link #HOURS_BEFORE_WORK_SESSION_COUNT_RESETS} passes

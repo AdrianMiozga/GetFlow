@@ -100,6 +100,9 @@
     <string name="select_activities_positive_button">OK</string>
     <string name="select_activities_negative_button">Cancel</string>
     <string name="more">More</string>
+    <string name="never_show_neutral_button">Never Show</string>
+    <string name="ignore_battery_optimization_title">Ignore Battery Optimization</string>
+    <string name="ignore_battery_optimization_message">Please ignore battery optimization for this application. Not doing so might lead end timer notifications to arrive late or cancel them entirely.\n\nPressing confirm will show appropriate dialog.</string>
 
     <string-array name="history_spinner">
         <item name="days">@string/days</item>

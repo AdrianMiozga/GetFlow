@@ -29,9 +29,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,6 +55,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.wentura.focus.activities.Activities;
 import com.wentura.focus.database.Activity;
@@ -351,6 +355,47 @@ public class MainActivity extends AppCompatActivity {
         });
 
         showHelpingSnackbars();
+
+        showIgnoreBatteryOptimizationDialog();
+    }
+
+    private void showIgnoreBatteryOptimizationDialog() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
+        String packageName = getPackageName();
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        boolean isNeverShowIgnoreBatteryOptimizationDialog =
+                preferences.getBoolean(Constants.NEVER_SHOW_IGNORE_BATTERY_OPTIMIZATION_DIALOG, false);
+
+        if (powerManager == null ||
+                powerManager.isIgnoringBatteryOptimizations(packageName) ||
+                isNeverShowIgnoreBatteryOptimizationDialog) {
+            return;
+        }
+
+        @SuppressLint("BatteryLife")
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.ignore_battery_optimization_title)
+                .setMessage(R.string.ignore_battery_optimization_message)
+                .setPositiveButton(R.string.confirm, (dialog, which) -> {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + packageName));
+                    startActivity(intent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setNeutralButton(R.string.never_show_neutral_button, (dialog, which) -> {
+                    SharedPreferences.Editor preferenceEditor = preferences.edit();
+                    preferenceEditor.putBoolean(Constants.NEVER_SHOW_IGNORE_BATTERY_OPTIMIZATION_DIALOG, true);
+                    preferenceEditor.apply();
+                });
+
+        dialogBuilder.show();
     }
 
     private void showHelpingSnackbars() {
