@@ -39,6 +39,7 @@
     <SwitchPreferenceCompat
         app:defaultValue="true"
         app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false"
         app:key="scroll_pie_chart_automatically"
         app:summary="@string/scroll_pie_chart_automatically_summary"
         app:title="@string/scroll_pie_chart_automatically_title" />
