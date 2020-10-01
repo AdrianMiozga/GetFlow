@@ -96,7 +96,7 @@ public final class Constants {
     public static final int DEFAULT_ANIMATION_LENGTH = 250;
 
     // Database
-    public static final String DATABASE_NAME = "Focus.db";
+    public static final String DATABASE_NAME = "GetFlow.db";
 
     // TimerNotification Ids
     static final int TIME_LEFT_NOTIFICATION = 1;
