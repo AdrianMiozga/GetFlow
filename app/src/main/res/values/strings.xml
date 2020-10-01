@@ -62,10 +62,10 @@
     <string name="app_lock_switch_description">Block applications when the work session is on</string>
     <string name="accessibility_not_enabled_dialog">To allow GetFlow to block other Android applications you need to
         enable accessibility service.</string>
-    <string name="new_activity_name">New Activity Name</string>
+    <string name="new_activity_name">New activity name</string>
     <string name="OK">OK</string>
-    <string name="activity_name">Activity Name</string>
-    <string name="delete_activity">Delete Activity</string>
+    <string name="activity_name">Activity name</string>
+    <string name="delete_activity">Delete activity</string>
     <string name="confirm">Confirm</string>
     <string name="delete_activity_message">This action cannot be undone.</string>
     <string name="cantDeleteDialog">You can not delete your last activity.</string>
@@ -77,8 +77,8 @@
     <string name="automatically_start_new_activities">Automatically start activities</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="you_have_data_with_this_activity">All statistics associated with this activity will be deleted. This
-        action cannot be undone.</string>
+    <string name="you_have_data_with_this_activity">All statistics associated with this activity will be deleted.
+        \n\nThis action cannot be undone.</string>
     <string name="automatically_start_activities_summary">Selecting activity will automatically
         start the timer</string>
     <string name="activities">Activities</string>
@@ -100,22 +100,21 @@
     <string name="select_activities_positive_button">OK</string>
     <string name="select_activities_negative_button">Cancel</string>
     <string name="more">More</string>
-    <string name="never_show_neutral_button">Never Show</string>
-    <string name="ignore_battery_optimization_title">Ignore Battery Optimization</string>
+    <string name="never_show_neutral_button">Never show</string>
+    <string name="ignore_battery_optimization_title">Ignore battery optimization</string>
     <string name="ignore_battery_optimization_message">It is recommended to ignore battery optimization for this
         application. Not doing so might lead end timer notifications to arrive late or cancel them entirely.
         \n\nPressing confirm will show appropriate dialog.</string>
     <string name="about_menu_item">About</string>
-    <string name="application_icon_content_description">Application Icon</string>
+    <string name="application_icon_content_description">Application icon</string>
     <string name="view_source_code_at_github">View source code at GitHub</string>
     <string name="send_feedback">Send feedback</string>
     <string name="troubleshooting">Troubleshooting</string>
     <string name="application_getting_killed_message">If you experience problems with application getting killed
         even with battery optimization disabled, check out DontKillMyApp.com</string>
-    <string name="application_getting_killed_title">Application Getting Killed</string>
-    <string name="open_website">Open Website</string>
+    <string name="application_getting_killed_title">Application getting killed</string>
+    <string name="open_website">Open website</string>
     <string name="about_version_number">Version %s</string>
-    <string name="activity_settings_name">Activity Settings</string>
     <string name="about_activity_name">About</string>
     <string name="activities_name">Activities</string>
     <string name="tutorial">Tutorial</string>

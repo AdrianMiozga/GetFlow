@@ -77,7 +77,6 @@
         <activity
             android:name="com.wentura.focus.activities.ActivitySettings"
             android:configChanges="orientation"
-            android:label="@string/activity_settings_name"
             android:parentActivityName="com.wentura.focus.activities.Activities"
             android:theme="@style/Theme.NoPreviewWindow"
             android:windowSoftInputMode="adjustNothing" />
