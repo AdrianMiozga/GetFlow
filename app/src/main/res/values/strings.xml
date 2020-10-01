@@ -80,7 +80,7 @@
     <string name="you_have_data_with_this_activity">All statistics associated with this activity will be deleted. This
         action cannot be undone.</string>
     <string name="automatically_start_activities_summary">Selecting activity will automatically
-        start the timer.</string>
+        start the timer</string>
     <string name="activities">Activities</string>
     <string name="activity_legend_percent_1" translatable="false">%.2f%%</string>
     <string name="activity_legend_percent_2" translatable="false">%.0f%%</string>
@@ -91,7 +91,7 @@
     <string name="last_month">Last Month</string>
     <string name="activity_pie_chart_no_data">No data for this period</string>
     <string name="scroll_pie_chart_automatically_summary">Scrolls activity chart in statistics to show Others section
-        when changing time period.</string>
+        when changing time period</string>
     <string name="scroll_pie_chart_automatically_title">Scroll chart automatically</string>
     <string name="full_screen_mode_title">Full screen mode</string>
     <string name="weeks">Weeks</string>

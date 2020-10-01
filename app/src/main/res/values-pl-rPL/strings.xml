@@ -72,12 +72,15 @@
     <string name="default_activity_name">Domyślna</string>
     <string name="activity_with_that_name_exists">Aktywność z tą nazwą już istnieje</string>
     <string name="Confirmation">Potwierdzenie</string>
-    <string name="activity_already_running_dialog_message">Jesteś w trakcie sesji. Zmiana aktywności ją zatrzyma.</string>
-    <string name="automatically_start_new_activities">Automatycznie rozpocznij aktywności</string>
+    <string name="activity_already_running_dialog_message">Jesteś w trakcie sesji.
+        Zmiana aktywności ją zatrzyma.</string>
+    <string name="automatically_start_new_activities">Automatycznie rozpoczynaj aktywności</string>
     <string name="edit">Edytuj</string>
     <string name="delete">Usuń</string>
-    <string name="you_have_data_with_this_activity">Wszystkie statystyki powiązane z tą aktywnością zostaną usunięte. Ta akcja jest nieodwracalna.</string>
-    <string name="automatically_start_activities_summary">Wybranie aktywności spowoduje automatyczne jej rozpoczęcie.</string>
+    <string name="you_have_data_with_this_activity">Wszystkie statystyki powiązane z tą aktywnością zostaną usunięte.
+        Ta akcja jest nieodwracalna.</string>
+    <string name="automatically_start_activities_summary">Wybranie aktywności spowoduje automatyczne jej
+        rozpoczęcie</string>
     <string name="activities">Aktywności</string>
     <string name="others_text">Inne (%.0f%%) składa się z</string>
     <string name="others_activity_name">Inne</string>
