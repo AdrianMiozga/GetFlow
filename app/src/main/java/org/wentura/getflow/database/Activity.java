@@ -34,15 +34,18 @@ public final class Activity {
     @ColumnInfo(name = "Name")
     private final String name;
 
+    /** Work duration, in minutes. */
     @ColumnInfo(name = "WorkDuration")
     private final int workDuration;
 
+    /** Break duration, in minutes. */
     @ColumnInfo(name = "BreakDuration")
     private final int breakDuration;
 
     @ColumnInfo(name = "LongBreaks")
     private final boolean longBreaks;
 
+    /** Long break duration, in minutes. */
     @ColumnInfo(name = "LongBreakDuration")
     private final int longBreakDuration;
 
