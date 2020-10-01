@@ -17,7 +17,7 @@
 
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wentura.focus">
+    package="org.wentura.getflow">
 
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -34,10 +34,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name="com.wentura.focus.TimerActionReceiver" />
+        <receiver android:name="org.wentura.getflow.TimerActionReceiver" />
 
         <activity
-            android:name="com.wentura.focus.MainActivity"
+            android:name="org.wentura.getflow.MainActivity"
             android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,53 +46,53 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.wentura.focus.settings.SettingsActivity"
+            android:name="org.wentura.getflow.settings.SettingsActivity"
             android:configChanges="orientation"
             android:label="@string/settings"
-            android:parentActivityName="com.wentura.focus.MainActivity"
+            android:parentActivityName="org.wentura.getflow.MainActivity"
             android:theme="@style/Theme.NoPreviewWindow" />
 
         <activity
-            android:name="com.wentura.focus.statistics.StatisticsActivity"
+            android:name="org.wentura.getflow.statistics.StatisticsActivity"
             android:configChanges="orientation"
             android:label="@string/statistics"
-            android:parentActivityName="com.wentura.focus.MainActivity"
+            android:parentActivityName="org.wentura.getflow.MainActivity"
             android:theme="@style/Theme.NoPreviewWindow" />
 
         <activity
-            android:name="com.wentura.focus.applicationlock.ApplicationLockActivity"
+            android:name="org.wentura.getflow.applicationlock.ApplicationLockActivity"
             android:configChanges="orientation"
             android:label="@string/app_lock"
-            android:parentActivityName="com.wentura.focus.settings.SettingsActivity"
+            android:parentActivityName="org.wentura.getflow.settings.SettingsActivity"
             android:theme="@style/Theme.NoPreviewWindow" />
 
         <activity
-            android:name="com.wentura.focus.activities.Activities"
+            android:name="org.wentura.getflow.activities.Activities"
             android:configChanges="orientation"
             android:label="@string/activities_name"
-            android:parentActivityName="com.wentura.focus.MainActivity"
+            android:parentActivityName="org.wentura.getflow.MainActivity"
             android:theme="@style/Theme.NoPreviewWindow"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.wentura.focus.activities.ActivitySettings"
+            android:name="org.wentura.getflow.activities.ActivitySettings"
             android:configChanges="orientation"
-            android:parentActivityName="com.wentura.focus.activities.Activities"
+            android:parentActivityName="org.wentura.getflow.activities.Activities"
             android:theme="@style/Theme.NoPreviewWindow"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.wentura.focus.AboutActivity"
+            android:name="org.wentura.getflow.AboutActivity"
             android:configChanges="orientation"
             android:label="@string/about_activity_name"
-            android:parentActivityName="com.wentura.focus.MainActivity"
+            android:parentActivityName="org.wentura.getflow.MainActivity"
             android:theme="@style/Theme.NoPreviewWindow" />
 
-        <service android:name="com.wentura.focus.NotificationService" />
-        <service android:name="com.wentura.focus.EndNotificationService" />
+        <service android:name="org.wentura.getflow.NotificationService" />
+        <service android:name="org.wentura.getflow.EndNotificationService" />
 
         <service
-            android:name="com.wentura.focus.applicationlock.ApplicationLockService"
+            android:name="org.wentura.getflow.applicationlock.ApplicationLockService"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>

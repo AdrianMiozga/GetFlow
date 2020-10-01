@@ -17,19 +17,19 @@
 
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wentura.focus">
+    package="org.wentura.getflow">
 
     <application>
         <activity
-            android:name=".statistics.StatisticsActivity"
+            android:name="org.wentura.getflow.statistics.StatisticsActivity"
             android:exported="true" />
 
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="org.wentura.getflow.settings.SettingsActivity"
             android:exported="true" />
 
         <activity
-            android:name=".applicationlock.ApplicationLockActivity"
+            android:name="org.wentura.getflow.applicationlock.ApplicationLockActivity"
             android:exported="true" />
     </application>
 
