@@ -56,9 +56,9 @@
     <string name="app_lock">Blokada aplikacji</string>
     <string name="application_icon">Ikona aplikacji</string>
     <string name="app_lock_switch_description">Blokuj dostęp do aplikacji podczas pracy</string>
-    <string name="accessibility_service_description">Aby zezwolić aplikacji Focus na blokadę innych aplikacji podczas
+    <string name="accessibility_service_description">Aby zezwolić aplikacji GetFlow na blokadę innych aplikacji podczas
         pracy, włącz tę usługę.</string>
-    <string name="accessibility_not_enabled_dialog">Aby zezwolić aplikacji Focus na blokadę innych aplikacji podczas
+    <string name="accessibility_not_enabled_dialog">Aby zezwolić aplikacji GetFlow na blokadę innych aplikacji podczas
         pracy, włącz usługę ułatwienia dostępu.</string>
     <string name="time">%dm</string>
     <string name="swipe_timer_snackbar_message">Przesuń palcem w lewo po liczniku, aby pominąć bieżącą sesję</string>
