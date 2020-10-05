@@ -108,7 +108,7 @@
     <string name="about_activity_name">O aplikacji</string>
     <string name="activities_name">Aktywności</string>
     <string name="ignore_battery_optimization_message">Zalecane jest, aby wyłączyć optymalizację baterii dla tej
-        aplikacji. Nie zrobienie tego może spowodować opóźnienie w otrzymywaniu powiadomienia o końcu sesji
+        aplikacji. Nie zrobienie tego może spowodować opóźnienie w otrzymywaniu powiadomień o końcu sesji
         bądź całkowicie je usunie.\n\nWybranie potwierdź, pokaże odpowiednie okno.</string>
     <string name="application_getting_killed_title">Aplikacja zostaje zatrzymywana</string>
     <string name="application_getting_killed_message">Jeśli doświadczasz problemów z samoczynnym zatrzymywaniem się
