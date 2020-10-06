@@ -19,7 +19,7 @@ and show how you improve over time. It is entirely ad-free and open-source.
 * Start, pause, skip and stop timer using gestures
 * Support for short and long breaks
 * User-created activities such as reading, programming
-* Support for different settings in each activity
+* Support for different timer settings in each activity
 * Block applications during work
 * Enable Do Not Disturb and disable Wi-Fi during work
 * Full screen mode

@@ -1,0 +1,23 @@
+GetFlow is an application based on the Pomodoro Technique that helps you stay productive and accomplish your long-term goals. Statistics will give you the motivation to stay focused and show how you improve over time.
+
+<b>How It Works</b>
+1. Pick a task you want to accomplish.
+2. Work on the task for 25 minutes.
+3. Take a 5-minute break.
+4. After four sessions, take a 20-minute break.
+
+<b>Features</b>
+* Start, pause, skip and stop timer using gestures
+* Support for short and long breaks
+* User-created activities such as reading, programming
+* Support for different timer settings in each activity
+* Block applications during work
+* Enable Do Not Disturb and disable Wi-Fi during work
+* Full screen mode
+* Keep screen on
+* AMOLED-friendly
+* Statistics with an overview, history chart, and activity distribution
+* Entirely ad-free and open-source
+* All features available to all users, no in-app purchases
+* Doesn’t require an internet connection or account registration
+* Your data is never sent to anyone
