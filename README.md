@@ -5,6 +5,13 @@ GetFlow is an Android application that helps you stay productive and accomplish
 your long-term goals. Statistics will give you the motivation to stay focused
 and show how you improve over time. It is entirely ad-free and open-source.
 
+<p align="center">
+  <a href="https://f-droid.org/en/packages/org.wentura.getflow/">
+    <img src="https://f-droid.org/wiki/images/0/06/F-Droid-button_get-it-on.png"
+    alt="Get it on F-Droid">
+  </a>
+</p>
+
 ## Screenshots :eyes:
 <p align="middle">
   <img src="/metadata/en-US/images/phoneScreenshots/1.png" width="250"/>
