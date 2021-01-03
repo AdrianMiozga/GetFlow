@@ -42,8 +42,7 @@
     <string name="break_icon">Przerwa</string>
     <string name="do_not_disturb_summary">Włącz tryb nie przeszkadzać podczas pracy</string>
     <string name="do_not_disturb_title">Nie przeszkadzać</string>
-    <string name="dialog_access_policy_not_granted">Musisz zezwolić na dostęp do trybu Nie
-        przeszkadzać dla tej aplikacji</string>
+    <string name="dialog_access_policy_not_granted">Musisz zezwolić na dostęp do trybu Nie przeszkadzać dla tej aplikacji</string>
     <string name="do_not_disturb_break_summary">Utrzymuj nie przeszkadzać podczas przerwy</string>
     <string name="keep_screen_on">Utrzymuj włączony ekran</string>
     <string name="days">Dni</string>
@@ -57,10 +56,8 @@
     <string name="app_lock">Blokada aplikacji</string>
     <string name="application_icon">Ikona aplikacji</string>
     <string name="app_lock_switch_description">Blokuj dostęp do aplikacji podczas pracy</string>
-    <string name="accessibility_service_description">Aby zezwolić aplikacji GetFlow na blokadę innych aplikacji podczas
-        pracy, włącz tę usługę.</string>
-    <string name="accessibility_not_enabled_dialog">Aby zezwolić aplikacji GetFlow na blokadę innych aplikacji podczas
-        pracy, włącz usługę ułatwienia dostępu.</string>
+    <string name="accessibility_service_description">Aby zezwolić aplikacji GetFlow na blokadę innych aplikacji podczas pracy, włącz tę usługę.</string>
+    <string name="accessibility_not_enabled_dialog">Aby zezwolić aplikacji GetFlow na blokadę innych aplikacji podczas pracy, włącz usługę ułatwienia dostępu.</string>
     <string name="time">%dm</string>
     <string name="swipe_timer_snackbar_message">Przesuń palcem w lewo po liczniku, aby pominąć bieżącą sesję</string>
     <string name="new_activity_name">Nowa nazwa aktywności</string>
@@ -73,15 +70,12 @@
     <string name="default_activity_name">Domyślna</string>
     <string name="activity_with_that_name_exists">Aktywność z tą nazwą już istnieje</string>
     <string name="Confirmation">Potwierdzenie</string>
-    <string name="activity_already_running_dialog_message">Jesteś w trakcie sesji.
-        Zmiana aktywności ją zatrzyma.</string>
+    <string name="activity_already_running_dialog_message">Jesteś w trakcie sesji. Zmiana aktywności ją zatrzyma.</string>
     <string name="automatically_start_new_activities">Automatycznie rozpoczynaj aktywności</string>
     <string name="edit">Edytuj</string>
     <string name="delete">Usuń</string>
-    <string name="you_have_data_with_this_activity">Wszystkie statystyki powiązane z tą aktywnością zostaną usunięte.
-        \n\nTa akcja jest nieodwracalna.</string>
-    <string name="automatically_start_activities_summary">Wybranie aktywności spowoduje automatyczne jej
-        rozpoczęcie</string>
+    <string name="you_have_data_with_this_activity">Wszystkie statystyki powiązane z tą aktywnością zostaną usunięte.\n\nTa akcja jest nieodwracalna.</string>
+    <string name="automatically_start_activities_summary">Wybranie aktywności spowoduje automatyczne jej rozpoczęcie</string>
     <string name="activities">Aktywności</string>
     <string name="others_text">Inne (%.0f%%) składa się z</string>
     <string name="others_activity_name">Inne</string>
@@ -107,12 +101,9 @@
     <string name="about_version_number">Wersja %s</string>
     <string name="about_activity_name">O aplikacji</string>
     <string name="activities_name">Aktywności</string>
-    <string name="ignore_battery_optimization_message">Zalecane jest, aby wyłączyć optymalizację baterii dla tej
-        aplikacji. Nie zrobienie tego może spowodować opóźnienie w otrzymywaniu powiadomień o końcu sesji
-        bądź całkowicie je usunie.\n\nWybranie potwierdź, pokaże odpowiednie okno.</string>
+    <string name="ignore_battery_optimization_message">Zalecane jest, aby wyłączyć optymalizację baterii dla tej aplikacji. Nie zrobienie tego może spowodować opóźnienie w otrzymywaniu powiadomień o końcu sesji bądź całkowicie je usunie.\n\nWybranie potwierdź, pokaże odpowiednie okno.</string>
     <string name="application_getting_killed_title">Aplikacja zostaje zatrzymywana</string>
-    <string name="application_getting_killed_message">Jeśli doświadczasz problemów z samoczynnym zatrzymywaniem się
-        aplikacji, przeczytaj informacje na stronie DontKillMyApp.com (strona jest w języku angielskim)</string>
+    <string name="application_getting_killed_message">Jeśli doświadczasz problemów z samoczynnym zatrzymywaniem się aplikacji, przeczytaj informacje na stronie DontKillMyApp.com (strona jest w języku angielskim)</string>
     <string name="tutorial">Samouczek</string>
     <string name="ignore_optimization_dialog">Ignoruj optymalizację baterii</string>
 </resources>
