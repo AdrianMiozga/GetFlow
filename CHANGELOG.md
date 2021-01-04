@@ -6,6 +6,7 @@
 
 - Feature graphic
 - Seven and ten inch screenshots
+- [#3](https://github.com/AdrianMiozga/GetFlow/pull/3) Spanish translation
 
 ### Fixed
 
