@@ -71,7 +71,7 @@
     <string name="default_activity_name">Predeterminado</string>
     <string name="activity_with_that_name_exists">La actividad con ese nombre ya existe</string>
     <string name="Confirmation">Confirmación</string>
-    <string name="activity_already_running_dialog_message">Ya tiene el temporizador funcionando.Cambiar la actividad lo detendrá.</string>
+    <string name="activity_already_running_dialog_message">Ya tiene el temporizador funcionando. Cambiar la actividadlo detendrá.</string>
     <string name="automatically_start_new_activities">Iniciar actividades automáticamente</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
