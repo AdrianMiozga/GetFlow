@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2020 Adrian Miozga <AdrianMiozga@outlook.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="work_icon">Trabajo</string>
+    <string name="break_icon">Descanso</string>
+    <string name="do_not_disturb_summary">Habilitar No molestar durante la sesión de trabajo</string>
+    <string name="settings">Ajustes</string>
+    <string name="do_not_disturb_title">No molestar</string>
+    <string name="work_duration_title">Duración del trabajo</string>
+    <string name="break_duration_title">Duración del descanso</string>
+    <string name="dialog_access_policy_not_granted">Necesita conceder acceso a No molestar para esta aplicación</string>
+    <string name="dialog_go_to_settings">Ir a los ajustes</string>
+    <string name="cancel">Cancelar</string>
+    <string name="skip">Saltar</string>
+    <string name="pause">Pausar</string>
+    <string name="stop">Detener</string>
+    <string name="resume">Reanudar</string>
+    <string name="work_time">¡Hora de trabajar!</string>
+    <string name="break_time">¡Hora de descansar!</string>
+    <string name="break_time_left">Tiempo de descanso restante: %s</string>
+    <string name="work_time_left">Tiempo de trabajo restante: %s</string>
+    <string name="statistics">Estadísticas</string>
+    <string name="today">Hoy</string>
+    <string name="total">Total</string>
+    <string name="do_not_disturb_break_summary">Mantener No molestar en los descansos</string>
+    <string name="overview">Resumen</string>
+    <string name="week">Semana</string>
+    <string name="month">Mes</string>
+    <string name="history">Historial</string>
+    <string name="loading_chart">Cargando…</string>
+    <string name="keep_screen_on">Mantener la pantalla encendida</string>
+    <string name="days">Días</string>
+    <string name="time">%dm</string>
+    <string name="months">Meses</string>
+    <string name="press_on_timer_snackbar_message">Pulse el temporizador para iniciar o pausar</string>
+    <string name="long_press_on_timer_snackbar_message">Pulsación larga en el temporizador para detenerlo</string>
+    <string name="swipe_timer_snackbar_message">Deslize el temporizador de derecha a izquiereda para saltárselo</string>
+    <string name="enable_long_breaks_title">Habilitar descansos largos</string>
+    <string name="long_break_duration_title">Duración del descanso largo</string>
+    <string name="disable_wifi_title">Desactivar Wi-Fi</string>
+    <string name="disable_wifi_summary">Desactiva el Wi-Fi durante la sesión de trabajo</string>
+    <string name="app_lock">Bloquear las aplicaciones</string>
+    <string name="application_icon">Icono de la aplicación</string>
+    <string name="accessibility_service_description">Para permitir que GetFlow bloquee otras aplicaciones durante la sesión de trabajo habilite este servicio de accesibilidad.</string>
+    <string name="app_lock_switch_description">Bloquear las aplicaciones cuando la sesión de trabajo está en marcha</string>
+    <string name="accessibility_not_enabled_dialog">Para permitir que GetFlow bloquee otras aplicaciones de Android necesita habilitar el servicio de accesibilidad.</string>
+    <string name="new_activity_name">Nuevo nombre de la actividad</string>
+    <string name="OK">VALE</string>
+    <string name="activity_name">Nombre de la actividad</string>
+    <string name="delete_activity">Eliminar actividad</string>
+    <string name="confirm">Confirmar</string>
+    <string name="delete_activity_message">Esta acción no puede deshacerse.</string>
+    <string name="cantDeleteDialog">No puede borrar su última actividad.</string>
+    <string name="default_activity_name">Predeterminado</string>
+    <string name="activity_with_that_name_exists">La actividad con ese nombre ya existe</string>
+    <string name="Confirmation">Confirmación</string>
+    <string name="activity_already_running_dialog_message">Ya tiene el temporizador funcionando. Cambiar la actividad lo detendrá.</string>
+    <string name="automatically_start_new_activities">Iniciar actividades automáticamente</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="you_have_data_with_this_activity">Todas las estadísticas asociadas a esta actividad serán eliminadas.\n\nEsta acción no puede deshacerse.</string>
+    <string name="automatically_start_activities_summary">Seleccionar la actividad iniciará el temporizador automáticamente</string>
+    <string name="activities">Actividades</string>
+    <string name="others_text">Otras (%.0f%%) consisten en</string>
+    <string name="others_activity_name">Otras</string>
+    <string name="day">Día</string>
+    <string name="last_week">Semana pasada</string>
+    <string name="last_month">Mes pasado</string>
+    <string name="activity_pie_chart_no_data">No hay datos para este período</string>
+    <string name="scroll_pie_chart_automatically_summary">Desplaza el gráfico de actividad en las estadísticas para mostrar la sección de Otras al cambiar el período de tiempo</string>
+    <string name="scroll_pie_chart_automatically_title">Desplazar gráfico automáticamente</string>
+    <string name="full_screen_mode_title">Modo pantalla completa</string>
+    <string name="weeks">Semanas</string>
+    <string name="sessions_before_a_long_break_title">Sesiones antes de un descanso largo</string>
+    <string name="select_activities_dialog_title">Seleccionar actividades</string>
+    <string name="select_activities_positive_button">VALE</string>
+    <string name="select_activities_negative_button">Cancelar</string>
+    <string name="more">Más</string>
+    <string name="never_show_neutral_button">No mostrar nunca</string>
+    <string name="ignore_battery_optimization_title">Ignorar la optimización de la batería</string>
+    <string name="ignore_battery_optimization_message">Se recomienda ignorar la optimización de la batería para esta aplicación. Si no lo hace, las notificaciones de los temporizadores finales podrían llegar tarde o ser canceladas por completo.\n\nAl pulsar confirmar se mostrará el diálogo apropiado.</string>
+    <string name="about_menu_item">Acerca de</string>
+    <string name="application_icon_content_description">Icono de la aplicación</string>
+    <string name="view_source_code_at_github">Ver el código fuente en GitHub</string>
+    <string name="send_feedback">Enviar comentarios</string>
+    <string name="troubleshooting">Solución de problemas</string>
+    <string name="application_getting_killed_message">Si experimentas problemas con la aplicación que se cierra incluso con la optimización de la batería desactivada, mira DontKillMyApp.com</string>
+    <string name="application_getting_killed_title">La aplicación se está cerrando</string>
+    <string name="open_website">Abrir página web</string>
+    <string name="about_version_number">Versión %s</string>
+    <string name="about_activity_name">Acerca de</string>
+    <string name="activities_name">Actividades</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="ignore_optimization_dialog">Ignorar el diálogo de optimización de la batería</string>
+</resources>
