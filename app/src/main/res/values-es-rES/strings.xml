@@ -17,7 +17,6 @@
   -->
 
 <resources>
-    <string name="app_name">GetFlow</string>
     <string name="work_icon">Trabajo</string>
     <string name="break_icon">Descanso</string>
     <string name="do_not_disturb_summary">Habilitar No molestar durante la sesión de trabajo</string>
