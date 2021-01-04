@@ -71,11 +71,11 @@
     <string name="default_activity_name">Predeterminado</string>
     <string name="activity_with_that_name_exists">La actividad con ese nombre ya existe</string>
     <string name="Confirmation">Confirmación</string>
-    <string name="activity_already_running_dialog_message">Ya tiene el temporizador funcionando.\n        Cambiar la actividad lo detendrá.</string>
+    <string name="activity_already_running_dialog_message">Ya tiene el temporizador funcionando.Cambiar la actividad lo detendrá.</string>
     <string name="automatically_start_new_activities">Iniciar actividades automáticamente</string>
     <string name="edit">Editar</string>
     <string name="delete">Eliminar</string>
-    <string name="you_have_data_with_this_activity">Todas las estadísticas asociadas a esta actividad serán eliminadas.\n        \n\nEsta acción no puede deshacerse.</string>
+    <string name="you_have_data_with_this_activity">Todas las estadísticas asociadas a esta actividad serán eliminadas.\n\nEsta acción no puede deshacerse.</string>
     <string name="automatically_start_activities_summary">Seleccionar la actividad iniciará el temporizador automáticamente</string>
     <string name="activities">Actividades</string>
     <string name="others_text">Otras (%.0f%%) consisten en</string>
@@ -95,7 +95,7 @@
     <string name="more">Más</string>
     <string name="never_show_neutral_button">No mostrar nunca</string>
     <string name="ignore_battery_optimization_title">Ignorar la optimización de la batería</string>
-    <string name="ignore_battery_optimization_message">Se recomienda ignorar la optimización de la batería para esta aplicación. Si no lo hace, las notificaciones de los temporizadores finales podrían llegar tarde o ser canceladas por completo.\n        \n\nAl pulsar confirmar se mostrará el diálogo apropiado.</string>
+    <string name="ignore_battery_optimization_message">Se recomienda ignorar la optimización de la batería para esta aplicación. Si no lo hace, las notificaciones de los temporizadores finales podrían llegar tarde o ser canceladas por completo.\n\nAl pulsar confirmar se mostrará el diálogo apropiado.</string>
     <string name="about_menu_item">Acerca de</string>
     <string name="application_icon_content_description">Icono de la aplicación</string>
     <string name="view_source_code_at_github">Ver el código fuente en GitHub</string>
