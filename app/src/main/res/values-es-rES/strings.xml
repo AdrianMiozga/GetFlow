@@ -50,7 +50,7 @@
     <string name="months">Meses</string>
     <string name="press_on_timer_snackbar_message">Pulse el temporizador para iniciar o pausar</string>
     <string name="long_press_on_timer_snackbar_message">Pulsación larga en el temporizador para detenerlo</string>
-    <string name="swipe_timer_snackbar_message">Deslize el temporizador de derecha a izquiereda para saltárselo</string>
+    <string name="swipe_timer_snackbar_message">Deslice el temporizador de derecha a izquierda para saltárselo</string>
     <string name="enable_long_breaks_title">Habilitar descansos largos</string>
     <string name="long_break_duration_title">Duración del descanso largo</string>
     <string name="disable_wifi_title">Desactivar Wi-Fi</string>
@@ -60,7 +60,7 @@
     <string name="accessibility_service_description">Para permitir que GetFlow bloquee otras aplicaciones durante la sesión de trabajo habilite este servicio de accesibilidad.</string>
     <string name="app_lock_switch_description">Bloquear las aplicaciones cuando la sesión de trabajo está en marcha</string>
     <string name="accessibility_not_enabled_dialog">Para permitir que GetFlow bloquee otras aplicaciones de Android necesita habilitar el servicio de accesibilidad.</string>
-    <string name="new_activity_name">Nuevo nombre de la actividad</string>
+    <string name="new_activity_name">Nombre nuevo de la actividad</string>
     <string name="OK">VALE</string>
     <string name="activity_name">Nombre de la actividad</string>
     <string name="delete_activity">Eliminar actividad</string>
@@ -83,7 +83,7 @@
     <string name="last_week">Semana pasada</string>
     <string name="last_month">Mes pasado</string>
     <string name="activity_pie_chart_no_data">No hay datos para este período</string>
-    <string name="scroll_pie_chart_automatically_summary">Desplaza el gráfico de actividad en las estadísticas para mostrar la sección de Otras al cambiar el período de tiempo</string>
+    <string name="scroll_pie_chart_automatically_summary">Desplace el gráfico de actividad en las estadísticas para mostrar la sección de Otras al cambiar el período de tiempo</string>
     <string name="scroll_pie_chart_automatically_title">Desplazar gráfico automáticamente</string>
     <string name="full_screen_mode_title">Modo pantalla completa</string>
     <string name="weeks">Semanas</string>
@@ -100,7 +100,7 @@
     <string name="view_source_code_at_github">Ver el código fuente en GitHub</string>
     <string name="send_feedback">Enviar comentarios</string>
     <string name="troubleshooting">Solución de problemas</string>
-    <string name="application_getting_killed_message">Si experimentas problemas con la aplicación que se cierra incluso con la optimización de la batería desactivada, mira DontKillMyApp.com</string>
+    <string name="application_getting_killed_message">Si experimenta problemas con la aplicación que se cierra incluso con la optimización de la batería desactivada, mire DontKillMyApp.com</string>
     <string name="application_getting_killed_title">La aplicación se está cerrando</string>
     <string name="open_website">Abrir página web</string>
     <string name="about_version_number">Versión %s</string>
