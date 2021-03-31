@@ -1,0 +1,116 @@
+<!--
+  ~ Copyright (C) 2020 Adrian Miozga <AdrianMiozga@outlook.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="work_icon">Работа</string>
+    <string name="break_icon">Перерыв</string>
+    <string name="do_not_disturb_summary">Режим \"не беспокоить\" в рабочее время</string>
+    <string name="settings">Настройки</string>
+    <string name="do_not_disturb_title">Не беспокоить</string>
+    <string name="work_duration_title">Рабочее время</string>
+    <string name="break_duration_title">Продолжительность перерыва</string>
+    <string name="dialog_access_policy_not_granted">Вам необходимо предоставить этому приложению доступ к \"Не беспокоить\"</string>
+    <string name="dialog_go_to_settings">В настройки</string>
+    <string name="cancel">Отмена</string>
+    <string name="skip">Пропустить</string>
+    <string name="pause">Пауза</string>
+    <string name="stop">Стоп</string>
+    <string name="resume">Продолжить</string>
+    <string name="work_time">Время работать!</string>
+    <string name="break_time">Время отдохнуть!</string>
+    <string name="break_time_left">Оставшееся время отдыха: %s</string>
+    <string name="work_time_left">Осталось работать:% s</string>
+    <string name="statistics">Статистика</string>
+    <string name="today">Сегодня</string>
+    <string name="total">Всего</string>
+    <string name="do_not_disturb_break_summary">Сохранять \"не беспокоить\" на время перерывов</string>
+    <string name="overview">Обзор</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="history">История</string>
+    <string name="loading_chart">Загрузка…</string>
+    <string name="keep_screen_on">Держать экран включеным</string>
+    <string name="days">Дни</string>
+    <string name="time">%dm</string>
+    <string name="months">Месяца</string>
+    <string name="press_on_timer_snackbar_message">Нажмите на таймер для старта или паузы</string>
+    <string name="long_press_on_timer_snackbar_message">Удерживайте таймер для остановки</string>
+    <string name="swipe_timer_snackbar_message">Проведите по таймеру справа налево, чтобы пропустить его</string>
+    <string name="enable_long_breaks_title">Включить большие перерывы</string>
+    <string name="long_break_duration_title">Большой перерыв</string>
+    <string name="disable_wifi_title">Отключить WI-FI</string>
+    <string name="disable_wifi_summary">Отключить WI-FI на время работы</string>
+    <string name="app_lock">Блокировать приложения</string>
+    <string name="application_icon">Иконка приложения</string>
+    <string name="accessibility_service_description">Чтобы разрешить GetFlow блокировать другие приложения Android во время рабочего сеанса, включите службу специальных возможностей.</string>
+    <string name="app_lock_switch_description">Блокировать приложения пока рабочее время активно</string>
+    <string name="accessibility_not_enabled_dialog">Чтобы разрешить GetFlow блокировать другие приложения Android, вам необходимо включить службу специальных возможностей.</string>
+    <string name="new_activity_name">Название нового занятия</string>
+    <string name="OK">ОК</string>
+    <string name="activity_name">Название занятия</string>
+    <string name="delete_activity">Удалить активность</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="delete_activity_message">Это действие не может быть отменено.</string>
+    <string name="cantDeleteDialog">Вы не можете удалить свою последнюю активность.</string>
+    <string name="default_activity_name">По-умолчанию</string>
+    <string name="activity_with_that_name_exists">Занятие с таким названием существует</string>
+    <string name="Confirmation">Подтверждение</string>
+    <string name="activity_already_running_dialog_message">У вас уже работает таймер. Изменение вида деятельности остановит его.</string>
+    <string name="automatically_start_new_activities">Автоматически начинать занятие</string>
+    <string name="edit">Изменить</string>
+    <string name="delete">Удалить</string>
+    <string name="you_have_data_with_this_activity">Вся статистика, связанная с этим действием, будет удалена.\n
+ \n
+ Это действие не может быть отменено.</string>
+    <string name="automatically_start_activities_summary">Выбор занятия автоматически запустит таймер.</string>
+    <string name="activities">Занятия</string>
+    <string name="others_text">Остальные (%.0f%%) состоят из</string>
+    <string name="others_activity_name">Остальное</string>
+    <string name="day">День</string>
+    <string name="last_week">Последняя неделя</string>
+    <string name="last_month">Последний месяц</string>
+    <string name="activity_pie_chart_no_data">Нет данных за этот период</string>
+    <string name="scroll_pie_chart_automatically_summary">Листайие диаграмму активности в статистике, чтобы отобразить раздел \"остальное\" при изменении периода времени</string>
+    <string name="scroll_pie_chart_automatically_title">Автоматическая прокрутка диаграммы</string>
+    <string name="full_screen_mode_title">Полноэкранный режим</string>
+    <string name="weeks">Недели</string>
+    <string name="sessions_before_a_long_break_title">Сеансы перед большим перерывом</string>
+    <string name="select_activities_dialog_title">Выбрать занятия</string>
+    <string name="select_activities_positive_button">ОК</string>
+    <string name="select_activities_negative_button">Отмена</string>
+    <string name="more">Больше</string>
+    <string name="never_show_neutral_button">Никогда не показывать</string>
+    <string name="ignore_battery_optimization_title">Игнорировать оптимизацию батареи</string>
+    <string name="ignore_battery_optimization_message">Рекомендуется игнорировать оптимизацию батареи для этого приложения.  Невыполнение этого требования может привести к тому, что уведомления о завершении таймера будут поступать поздно или полностью их отменить.\n
+ \n
+ Нажатие подтверждения отобразит соответствующий диалог.</string>
+    <string name="about_menu_item">О приложении</string>
+    <string name="application_icon_content_description">Иконка приложения</string>
+    <string name="view_source_code_at_github">Просмотреть исходный код на GitHub</string>
+    <string name="send_feedback">Отправить отзыв</string>
+    <string name="troubleshooting">Исправление проблем</string>
+    <string name="application_getting_killed_message">Если у вас возникли проблемы с завершением работы приложения даже при отключенной оптимизации заряда батареи, посетите DontKillMyApp.com.</string>
+    <string name="application_getting_killed_title">Приложение останавливается</string>
+    <string name="open_website">Перейти на сайт</string>
+    <string name="about_version_number">Версия %s</string>
+    <string name="about_activity_name">О приложении</string>
+    <string name="activities_name">Занятия</string>
+    <string name="tutorial">Обучение</string>
+    <string name="ignore_optimization_dialog">Диалог игнорирования оптимизации батареи</string>
+
+
+</resources>
