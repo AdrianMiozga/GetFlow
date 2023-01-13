@@ -7,8 +7,9 @@ and show how you improve over time. It is entirely ad-free and open-source.
 
 <p align="center">
   <a href="https://f-droid.org/en/packages/org.wentura.getflow/">
-    <img src="https://f-droid.org/wiki/images/0/06/F-Droid-button_get-it-on.png"
-    alt="Get it on F-Droid">
+    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Get it on F-Droid"
+    height="80">
   </a>
 </p>
 
