@@ -33,6 +33,7 @@ local.properties
 # Intellij
 .idea/caches
 .idea/assetWizardSettings.xml
+.idea/deploymentTargetDropDown.xml
 .idea/gradle.xml
 
 # OS-specific files
